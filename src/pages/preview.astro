@@ -1,0 +1,85 @@
+---
+import Landing from "../components/Landing.astro";
+// Preview route: renders the SAME Landing component with default content.
+// CMS entry data arrives via ?data=<encoded JSON> (or postMessage) and the
+// generic applier below maps it onto [data-cms] nodes — no per-field code,
+// so this preview can never drift from the live site.
+---
+<Landing d={{}} />
+<script is:inline>
+(function () {
+  function getPath(obj, path) {
+    try {
+      var parts = String(path).split('.');
+      var cur = obj;
+      for (var i = 0; i < parts.length; i++) {
+        if (cur == null) return undefined;
+        cur = cur[parts[i]];
+      }
+      return cur;
+    } catch (e) { return undefined; }
+  }
+  function applyCmsData(d) {
+    if (!d || typeof d !== 'object') return;
+    document.querySelectorAll('[data-cms]').forEach(function (el) {
+      var v = getPath(d, el.getAttribute('data-cms'));
+      if (v == null || typeof v === 'object') return;
+      el.textContent = String(v);
+    });
+    document.querySelectorAll('[data-cms-src]').forEach(function (el) {
+      var v = getPath(d, el.getAttribute('data-cms-src'));
+      if (v == null || typeof v === 'object') return;
+      el.setAttribute('src', String(v));
+    });
+    document.querySelectorAll('[data-cms-href]').forEach(function (el) {
+      var v = getPath(d, el.getAttribute('data-cms-href'));
+      if (v == null || typeof v === 'object') return;
+      el.setAttribute('href', String(v));
+    });
+    document.querySelectorAll('[data-cms-ph]').forEach(function (el) {
+      var v = getPath(d, el.getAttribute('data-cms-ph'));
+      if (v == null || typeof v === 'object') return;
+      el.setAttribute('placeholder', String(v));
+      el.setAttribute('aria-label', String(v));
+    });
+  }
+  function forceRevealsVisible() {
+    var st = document.createElement('style');
+    st.setAttribute('data-hh-preview', '1');
+    st.textContent = '.reveal{opacity:1!important;transform:none!important;will-change:auto!important}';
+    document.head.appendChild(st);
+  }
+  function dataFromSearch() {
+    try {
+      var q = new URLSearchParams(location.search).get('data');
+      if (!q) return null;
+      return JSON.parse(decodeURIComponent(q));
+    } catch (e) { return null; }
+  }
+  var params = new URLSearchParams(location.search);
+  var editMode = params.get('edit') === '1';
+  if (editMode) forceRevealsVisible();
+  var initial = dataFromSearch();
+  if (initial) applyCmsData(initial);
+  window.addEventListener('message', function (ev) {
+    if (!ev.data || ev.data.type !== 'hh-cms-data') return;
+    applyCmsData(ev.data.data);
+  });
+  if (editMode) {
+    var last = null;
+    document.addEventListener('click', function (ev) {
+      var t = ev.target && ev.target.closest ? ev.target.closest('[data-cms],[data-cms-src]') : null;
+      if (!t) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (last) last.style.outline = '';
+      last = t;
+      t.style.outline = '3px solid #D99E4F';
+      t.style.outlineOffset = '2px';
+      var field = t.getAttribute('data-cms') || t.getAttribute('data-cms-src');
+      try { window.parent.postMessage({ type: 'hh-cms-focus', field: field }, '*'); } catch (e) {}
+    }, true);
+  }
+  try { window.__hhApplyCmsData = applyCmsData; } catch (e) {}
+})();
+</script>
