@@ -1,13 +1,32 @@
 ---
 import Landing from "../components/Landing.astro";
-// Preview route: renders the SAME Landing component with default content.
-// CMS entry data arrives via ?data=<encoded JSON> (or postMessage) and the
-// generic applier below maps it onto [data-cms] nodes — no per-field code,
-// so this preview can never drift from the live site.
+// Preview route: renders the SAME Landing component.
+// Data arrives via ?data=<JSON> (legacy) or postMessage (primary).
+// In edit mode: strip Google Fonts, force reveals visible, skip GSAP.
 ---
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hearth & Honey — Preview</title>
+</head>
+<body style="margin:0;padding:0;overflow-x:hidden">
 <Landing d={{}} />
 <script is:inline>
 (function () {
+  // --- Speed: strip Google Fonts in edit mode (saves ~400ms) ---
+  var params = new URLSearchParams(location.search);
+  var editMode = params.get('edit') === '1';
+  if (editMode) {
+    document.querySelectorAll('link[href*="fonts.googleapis.com"]').forEach(function(l){ l.remove(); });
+    // Force all reveals visible immediately (skip GSAP animation)
+    var st = document.createElement('style');
+    st.setAttribute('data-hh-preview','1');
+    st.textContent = '.reveal{opacity:1!important;transform:none!important;will-change:auto!important}';
+    document.head.appendChild(st);
+  }
+
+  // --- Path resolver ---
   function getPath(obj, path) {
     try {
       var parts = String(path).split('.');
@@ -19,6 +38,8 @@ import Landing from "../components/Landing.astro";
       return cur;
     } catch (e) { return undefined; }
   }
+
+  // --- Apply CMS data to all [data-cms] elements ---
   function applyCmsData(d) {
     if (!d || typeof d !== 'object') return;
     document.querySelectorAll('[data-cms]').forEach(function (el) {
@@ -43,37 +64,57 @@ import Landing from "../components/Landing.astro";
       el.setAttribute('aria-label', String(v));
     });
   }
-  function forceRevealsVisible() {
-    var st = document.createElement('style');
-    st.setAttribute('data-hh-preview', '1');
-    st.textContent = '.reveal{opacity:1!important;transform:none!important;will-change:auto!important}';
-    document.head.appendChild(st);
-  }
+
+  // --- Load data from ?data= URL param (legacy fallback) ---
   function dataFromSearch() {
     try {
-      var q = new URLSearchParams(location.search).get('data');
+      var q = params.get('data');
       if (!q) return null;
       return JSON.parse(decodeURIComponent(q));
     } catch (e) { return null; }
   }
-  var params = new URLSearchParams(location.search);
-  var editMode = params.get('edit') === '1';
-  if (editMode) forceRevealsVisible();
   var initial = dataFromSearch();
   if (initial) applyCmsData(initial);
+
+  // ============================================================
+  // HANDSHAKE: tell admin "I'm ready" so it can send data via
+  // event.source (not DOM lookup — the iframe is inside a blob).
+  // ============================================================
+  var _hhHandshakeDone = false;
+  function _hhSendReady() {
+    if (_hhHandshakeDone) return;
+    _hhHandshakeDone = true;
+    try { window.top.postMessage({ type: 'hh-ready' }, '*'); } catch (e) {}
+  }
+  // Send immediately and also after a short delay (race condition safety)
+  _hhSendReady();
+  setTimeout(_hhSendReady, 200);
+
+  // ============================================================
+  // MESSAGE LISTENER: data updates + scroll-to from admin
+  // ============================================================
   window.addEventListener('message', function (ev) {
     if (!ev.data) return;
-    if (ev.data.type === 'hh-cms-data') { applyCmsData(ev.data.data); return; }
+    // Admin sends live CMS data → apply to DOM
+    if (ev.data.type === 'hh-cms-data' && ev.data.data) {
+      applyCmsData(ev.data.data);
+      return;
+    }
+    // Admin asks to scroll to a field → find element and scroll
     if (ev.data.type === 'hh-scroll-to' && ev.data.field) {
       var field = ev.data.field;
-      // 1) try exact full path match
-      var el = document.querySelector('[data-cms="' + field + '"]') || document.querySelector('[data-cms-src="' + field + '"]') || document.querySelector('[data-cms-href="' + field + '"]');
-      // 2) try leaf match
+      // 1) exact match
+      var el = document.querySelector('[data-cms="' + field + '"]')
+            || document.querySelector('[data-cms-src="' + field + '"]')
+            || document.querySelector('[data-cms-href="' + field + '"]');
+      // 2) leaf match (menu.tabs.0.label → label)
       if (!el && field.indexOf('.') !== -1) {
         var leaf = field.split('.').pop();
-        el = document.querySelector('[data-cms$=".' + leaf + '"]') || document.querySelector('[data-cms-src$=".' + leaf + '"]') || document.querySelector('[data-cms="' + leaf + '"]');
+        el = document.querySelector('[data-cms$=".' + leaf + '"]')
+          || document.querySelector('[data-cms-src$=".' + leaf + '"]')
+          || document.querySelector('[data-cms="' + leaf + '"]');
       }
-      // 3) find the closest section ancestor for a better scroll target
+      // 3) find closest section ancestor for smooth scroll
       var scrollTarget = el;
       if (el) {
         var section = el.closest('section, .banner, .hero, .about, .menu, .testimonials, .faq, .contact, .cta, footer, [class*="section"]');
@@ -89,22 +130,29 @@ import Landing from "../components/Landing.astro";
       }
     }
   });
+
+  // ============================================================
+  // CLICK-TO-FIELD: click text/image in preview → focus admin field
+  // Sends to window.top (admin page), which may be nested above
+  // Sveltia's blob iframe.
+  // ============================================================
   if (editMode) {
-    var last = null;
+    var _lastHighlight = null;
     document.addEventListener('click', function (ev) {
       var t = ev.target && ev.target.closest ? ev.target.closest('[data-cms],[data-cms-src]') : null;
       if (!t) return;
       ev.preventDefault();
       ev.stopPropagation();
-      if (last) last.style.outline = '';
-      last = t;
+      if (_lastHighlight) _lastHighlight.style.outline = '';
+      _lastHighlight = t;
       t.style.outline = '3px solid #D99E4F';
       t.style.outlineOffset = '2px';
       var field = t.getAttribute('data-cms') || t.getAttribute('data-cms-src');
-      try { window.parent.postMessage({ type: 'hh-cms-focus', field: field }, '*'); } catch (e0) {}
-      try { window.top.postMessage({ type: 'hh-cms-focus', field: field }, '*'); } catch (e1) {}
+      try { window.top.postMessage({ type: 'hh-cms-focus', field: field }, '*'); } catch (e0) {}
+      try { window.parent.postMessage({ type: 'hh-cms-focus', field: field }, '*'); } catch (e1) {}
     }, true);
   }
-  try { window.__hhApplyCmsData = applyCmsData; } catch (e) {}
 })();
 </script>
+</body>
+</html>

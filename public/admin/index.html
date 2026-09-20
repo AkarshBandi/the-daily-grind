@@ -30,77 +30,70 @@
     </script>
     <script>
     // ============================================================
-    // Sveltia CMS Preview — LIVE updates via postMessage
+    // Sveltia CMS Preview Bridge
     //
-    // Architecture:
-    //   1. Iframe loads ONCE with static URL (fast, no data in URL)
-    //   2. Module-level _hhLatestD is updated on every template render
-    //   3. setCheck() polls every 300ms, sends postMessage only when data changed
-    //   4. No iframe reload = no loading spinner = instant feedback
-    //   5. Editor<->Preview bidirectional scroll via postMessage
+    // PROBLEM: Sveltia renders our template inside a blob: iframe.
+    // Our template returns <iframe id="hh-live-iframe"> inside that blob.
+    // document.getElementById('hh-live-iframe') on the admin page CANNOT
+    // reach into the blob's DOM → null → all messaging fails.
     //
-    // In Sveltia, entry IS the data object (plain JS, no getIn/toJS).
-    // Sveltia renders h() vnodes via React.createElement into blob: iframes.
+    // SOLUTION: event.source channel.
+    //   1. Preview page sends 'hh-ready' to window.top on load
+    //   2. Admin stores event.source as _hhPreviewWin
+    //   3. Admin sends data/scroll to _hhPreviewWin (direct channel)
+    //   4. Preview sends click-to-field to window.top (works same-origin)
+    //
+    // SPEED: Preview loads a full Astro page (~1s first load).
+    // After that, updates are instant via postMessage (<1ms).
     // ============================================================
     CMS.registerPreviewStyle("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap", { raw: false });
 
     var D = function(e) { return (e && typeof e.toJS === 'function') ? e.toJS() : (e || {}); };
     var esc = function(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
 
-    // --- Module-level state for live preview bridge ---
-    var _hhBase = 'https://the-daily-grind-7y2.pages.dev';
-    var _hhPreviewUrl = _hhBase + '/preview?edit=1';
-    var _hhLiveUrl = _hhBase + '/';
+    // --- Module-level state ---
+    var _hhPreviewBase = 'https://the-daily-grind-7y2.pages.dev';
+    var _hhPreviewUrl = _hhPreviewBase + '/preview?edit=1';
+    var _hhLiveUrl = _hhPreviewBase + '/';
     var _hhLatestD = null;           // updated on every template render
-    var _hhSentStr = '';              // last JSON.stringify we sent (avoid duplicates)
-    var _hhPollTimer = null;          // single interval, created once
-    var _hhIframeReady = false;       // true after iframe onload fires
+    var _hhSentStr = '';              // last JSON.stringify sent (skip duplicates)
+    var _hhPreviewWin = null;         // event.source from hh-ready (the preview window)
+    var _hhPollTimer = null;
 
-    // Poll: send data to iframe ONLY when it changed (instant, no reload)
+    // Poll: send data to preview ONLY when changed (instant, no reload)
     function _hhStartPolling() {
       if (_hhPollTimer) return;
       _hhPollTimer = setInterval(function () {
-        var ifr = document.getElementById('hh-live-iframe');
-        if (!ifr || !ifr.contentWindow) return;
-        if (!_hhLatestD) return;
+        if (!_hhPreviewWin || !_hhLatestD) return;
         var str = JSON.stringify(_hhLatestD);
-        if (str === _hhSentStr) return;          // nothing changed
+        if (str === _hhSentStr) return;
         _hhSentStr = str;
         try {
-          ifr.contentWindow.postMessage({ type: 'hh-cms-data', data: _hhLatestD }, '*');
-        } catch (e) {}
-      }, 200);
+          _hhPreviewWin.postMessage({ type: 'hh-cms-data', data: _hhLatestD }, '*');
+        } catch (e) { _hhPreviewWin = null; _hhPollTimer = clearInterval(_hhPollTimer); }
+      }, 150);
     }
 
     // --- HOME template ---
     CMS.registerPreviewTemplate("home", function (ctx) {
       try {
         var d = D(ctx.entry);
-        _hhLatestD = d;   // update module-level reference (no reload needed)
+        _hhLatestD = d;
+        if (!_hhPollTimer) _hhStartPolling();
 
-        // Start polling once iframe exists
-        if (!_hhPollTimer) {
-          // Try to find iframe and attach onload
-          setTimeout(function () {
-            var ifr = document.getElementById('hh-live-iframe');
-            if (ifr) {
-              ifr.addEventListener('load', function () {
-                _hhIframeReady = true;
-                _hhStartPolling();
-                // Send initial data immediately after load
-                if (_hhLatestD) {
-                  _hhSentStr = JSON.stringify(_hhLatestD);
-                  try {
-                    ifr.contentWindow.postMessage({ type: 'hh-cms-data', data: _hhLatestD }, '*');
-                  } catch (e) {}
-                }
-              }, { once: true });
+        // Also try polling via DOM (fallback for direct blob rendering)
+        setTimeout(function () {
+          if (_hhPreviewWin) return; // already connected via hh-ready
+          var ifr = document.getElementById('hh-live-iframe');
+          if (ifr && ifr.contentWindow) {
+            _hhPreviewWin = ifr.contentWindow;
+            if (_hhLatestD) {
+              _hhSentStr = JSON.stringify(_hhLatestD);
+              _hhPreviewWin.postMessage({ type: 'hh-cms-data', data: _hhLatestD }, '*');
             }
-            _hhStartPolling();
-          }, 50);
-        }
+          }
+        }, 100);
 
-        // Return vnodes — iframe loads ONCE, src never changes
         return h('div', { style: { maxWidth: '100%', padding: 0, fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 16px)', background: '#FFECCC' } },
           h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'space-between', background: '#FFECCC', border: '2px solid #1A472C', borderRadius: '12px', padding: '8px 12px', marginBottom: '8px', flexShrink: '0' } },
             h('span', { style: { fontSize: '13px', fontWeight: '600', color: '#1A472C' } }, 'Live preview — click any text to jump to its field'),
@@ -111,15 +104,13 @@
       }
     });
 
-    // --- Pages (additional markdown pages) ---
+    // --- Pages ---
     CMS.registerPreviewTemplate("pages", function (ctx) {
       try {
         var d = D(ctx.entry);
         var html = '<div style="font-family:\'DM Sans\',system-ui,sans-serif;background:#FFECCC;padding:24px"><div style="background:linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),url(\'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80\') center/cover;color:#fff;border-radius:24px;padding:32px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end"><h1 style="font-family:\'Fraunces\',serif;font-size:28px;margin:0">' + esc(d.title || 'New Page') + '</h1><p style="font-size:14px;margin:8px 0 0">' + esc(d.description || '') + '</p></div><div style="background:#fff;border:2px solid #000;border-radius:16px;padding:20px;margin-top:16px"><p style="color:#666">' + esc(d.body || 'No body yet — add markdown.') + '</p></div></div>';
         return h("div", { dangerouslySetInnerHTML: { __html: html } });
-      } catch(e) {
-        return h("div", { style: { padding: "24px", color: "red", fontFamily: "monospace" } }, "Preview error: " + e.message);
-      }
+      } catch(e) { return h("div", { style: { padding: "24px", color: "red", fontFamily: "monospace" } }, "Preview error: " + e.message); }
     });
 
     // --- Site Settings ---
@@ -128,9 +119,7 @@
         var d = D(ctx.entry);
         var html = '<div style="font-family:\'DM Sans\',system-ui,sans-serif;background:#FFECCC;padding:24px"><div style="background:linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),url(\'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80\') center/cover;color:#fff;border-radius:24px;padding:32px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end"><h1 style="font-family:\'Fraunces\',serif;font-size:28px;margin:0">' + esc(d.site_title || 'Hearth & Honey') + '</h1><p style="font-size:14px;margin:8px 0 0">' + esc(d.tagline || 'Warm mornings, soft light') + '</p></div><div style="background:#fff;border:2px solid #000;border-radius:16px;padding:20px;margin-top:16px"><h2 style="font-family:\'Fraunces\',serif;font-size:22px;margin:0 0 8px">Site Settings</h2><p>Edit site title and tagline here.</p></div></div>';
         return h("div", { dangerouslySetInnerHTML: { __html: html } });
-      } catch(e) {
-        return h("div", { style: { padding: "24px", color: "red", fontFamily: "monospace" } }, "Preview error: " + e.message);
-      }
+      } catch(e) { return h("div", { style: { padding: "24px", color: "red", fontFamily: "monospace" } }, "Preview error: " + e.message); }
     });
 
     // --- Work card preview ---
@@ -140,25 +129,30 @@
         var img = d.image ? '<img src="' + esc(d.image) + '" style="width:100%;display:block">' : '';
         var html = '<div style="font-family:\'DM Sans\',system-ui,sans-serif;padding:24px"><div style="border:2px solid #0A0A0A;max-width:600px;border-radius:12px;overflow:hidden"><div style="border-bottom:2px solid #0A0A0A;padding:8px 12px;font-size:12px;font-weight:700">' + esc(d.title || 'Preview') + '</div>' + img + '<div style="padding:16px"><h3>' + esc(d.title || '') + '</h3><p style="color:#555;font-size:14px">' + esc(d.excerpt || '') + '</p><div style="margin-top:12px;font-weight:800">Enquire →</div></div></div></div>';
         return h("div", { dangerouslySetInnerHTML: { __html: html } });
-      } catch(e) {
-        return h("div", { style: { padding: "24px", color: "red", fontFamily: "monospace" } }, "Preview error: " + e.message);
-      }
+      } catch(e) { return h("div", { style: { padding: "24px", color: "red", fontFamily: "monospace" } }, "Preview error: " + e.message); }
     });
 
     // ============================================================
-    // PREVIEW → EDITOR: click text in preview → focus left field
-    //
-    // Sveltia renders preview inside a blob: iframe.
-    // The blob iframe is created by Sveltia's JS which runs on the
-    // SAME origin as the admin page (both are same-origin).
-    // So window.top from /preview = the admin page window.
-    // Message flow: /preview → window.top (admin page) → listener below
+    // GLOBAL MESSAGE LISTENER (admin page level)
+    // Handles messages from the preview iframe (which may be nested
+    // inside Sveltia's blob iframe). Same-origin, so window.top works.
     // ============================================================
     window.addEventListener('message', function (ev) {
       var msg = ev.data;
       if (!msg) return;
 
-      // --- Preview → Editor: focus matching left-panel field ---
+      // --- Preview → Admin: handshake (preview is ready) ---
+      if (msg.type === 'hh-ready') {
+        _hhPreviewWin = ev.source;
+        // Send current data immediately
+        if (_hhLatestD) {
+          _hhSentStr = JSON.stringify(_hhLatestD);
+          try { _hhPreviewWin.postMessage({ type: 'hh-cms-data', data: _hhLatestD }, '*'); } catch (e) {}
+        }
+        return;
+      }
+
+      // --- Preview → Editor: click text in preview → focus left field ---
       if (msg.type === 'hh-cms-focus' && msg.field) {
         var field = String(msg.field);
         var leaf = field.split('.').pop().toLowerCase().replace(/[_-]+/g, ' ').trim();
@@ -167,7 +161,7 @@
         var fields = Array.prototype.slice.call(document.querySelectorAll('input, textarea, select'));
         var best = null, i, f, hay;
 
-        // 1) exact name match (Sveltia sets name="menu.tag" etc.)
+        // 1) exact name match
         for (i = 0; i < fields.length; i++) {
           f = fields[i];
           if (f.getAttribute('name') === field) { best = f; break; }
@@ -201,32 +195,25 @@
 
     // ============================================================
     // EDITOR → PREVIEW: focus left field → scroll preview section
-    //
-    // When user focuses an input in the left panel, send its
-    // field name to the preview iframe so it scrolls to that section.
+    // Uses _hhPreviewWin (event.source) not DOM lookup.
     // ============================================================
     (function () {
       function fieldFromInput(el) {
         if (!el) return null;
-        // Sveltia inputs often have name="menu.tag", "banner.heading", etc.
         var n = el.getAttribute('name');
         if (n && n.indexOf('.') !== -1) return n;
         return null;
       }
       function scrollPreviewTo(field) {
-        if (!field) return;
-        var ifr = document.getElementById('hh-live-iframe');
-        if (!ifr || !ifr.contentWindow) return;
-        try { ifr.contentWindow.postMessage({ type: 'hh-scroll-to', field: field }, '*'); } catch (e) {}
+        if (!field || !_hhPreviewWin) return;
+        try { _hhPreviewWin.postMessage({ type: 'hh-scroll-to', field: field }, '*'); } catch (e) {}
       }
-      // Focus on input → send field path to preview
       document.addEventListener('focusin', function (ev) {
         var t = ev.target;
         if (!t || !t.matches || !t.matches('input, textarea, select')) return;
         var f = fieldFromInput(t);
         if (f) scrollPreviewTo(f);
       });
-      // Click on label → find input → send field path
       document.addEventListener('click', function (ev) {
         var t = ev.target && ev.target.closest ? ev.target.closest('label') : null;
         if (!t) return;

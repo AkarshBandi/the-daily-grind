@@ -647,40 +647,44 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <script>
-  import gsap from 'gsap';
-  import ScrollTrigger from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
-  // Astro island: animate .reveal on enter with spacing-aware stagger
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!prefersReduced) {
-    gsap.utils.toArray('.reveal').forEach((el) => {
-      gsap.from(el, {
-        y: 28,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 88%',
-          toggleActions: 'play none none reverse'
+  // Skip GSAP in CMS preview edit mode (faster load, reveals already forced visible)
+  if (!new URLSearchParams(location.search).get('edit')) {
+    import('gsap').then(function(mod) {
+      var gsap = mod.default;
+      import('gsap/ScrollTrigger').then(function(smod) {
+        var ScrollTrigger = smod.default;
+        gsap.registerPlugin(ScrollTrigger);
+        var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!prefersReduced) {
+          gsap.utils.toArray('.reveal').forEach(function(el) {
+            gsap.from(el, {
+              y: 28,
+              opacity: 0,
+              duration: 0.7,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 88%',
+                toggleActions: 'play none none reverse'
+              }
+            });
+          });
+          var hero = document.querySelector('.hero');
+          if (hero) {
+            gsap.to(hero, {
+              backgroundPosition: '50% 30%',
+              ease: 'none',
+              scrollTrigger: {
+                trigger: hero,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+              }
+            });
+          }
         }
       });
     });
-    // spacing-aware parallax for hero image (subtle)
-    const hero = document.querySelector('.hero');
-    if (hero) {
-      gsap.to(hero, {
-        backgroundPosition: '50% 30%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true
-        }
-      });
-    }
-    // tabs: no opacity animation to avoid orange flash, instant show
   }
 </script>
 </body>
