@@ -77,7 +77,8 @@ import Landing from "../components/Landing.astro";
       t.style.outline = '3px solid #D99E4F';
       t.style.outlineOffset = '2px';
       var field = t.getAttribute('data-cms') || t.getAttribute('data-cms-src');
-      try { window.parent.postMessage({ type: 'hh-cms-focus', field: field }, '*'); } catch (e) {}
+      try { window.parent.postMessage({ type: 'hh-cms-focus', field: field }, '*'); } catch (e0) {}
+      try { window.top.postMessage({ type: 'hh-cms-focus', field: field }, '*'); } catch (e1) {}
     }, true);
   }
   try { window.__hhApplyCmsData = applyCmsData; } catch (e) {}

@@ -2,7 +2,7 @@
 
 Session ID: 2026-09-20-preview-fix
 Created: 2026-09-20T00:00:00Z
-Status: in_progress
+Status: completed
 
 ## Current Request
 Preview right-pane shows only the peach background colour, not the full styled frontend sections. Fix it and verify each section before claiming done.
