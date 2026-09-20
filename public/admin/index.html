@@ -55,7 +55,7 @@
       const get = (entry, key, fallback='') => entry.getIn(['data', key]) || fallback;
 
       // Home landing preview — shows full Hearth & Honey page live, click any box to edit that field in left
-      CMS.registerPreviewTemplate("home", ({ entry }) => {
+      CMS.registerPreviewTemplate("home", "home", ({ entry }) => {
         const heroHeading = get(entry, 'hero_heading', 'Your neighborhood spot for coffee and good company');
         const heroText = get(entry, 'hero_text', 'We serve specialty coffee...');
         const aboutHeading = get(entry, 'about_heading', 'A good café is a clean, well-lighted place');
@@ -111,7 +111,7 @@
       });
 
       // Site Settings preview — also shows landing hero so not just text
-      CMS.registerPreviewTemplate("site", ({ entry }) => {
+      CMS.registerPreviewTemplate("site", "general", ({ entry }) => {
         const title = get(entry, 'site_title', 'Hearth & Honey');
         const tagline = get(entry, 'tagline', 'Warm mornings, soft light');
         return h("div", {className:"preview-wrap"},
