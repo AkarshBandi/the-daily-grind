@@ -2,6 +2,8 @@ backend:
   name: github
   repo: "AkarshBandi/the-daily-grind"
   branch: master
+  base_url: "https://hearth-honey-auth.akarshbandi82.workers.dev"
+  auth_endpoint: "auth"
 
 site_url: "https://the-daily-grind-7y2.pages.dev"
 display_url: "https://the-daily-grind-7y2.pages.dev"

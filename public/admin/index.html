@@ -12,9 +12,22 @@
   </head>
   <body>
     <!-- Sveltia CMS — free, open source, Git-based, drop-in Decap replacement -->
-    <!-- Method A active: GitHub OAuth via sveltia/sveltia-cms-auth Worker (one-time login) -->
-    <!-- For Method B (password-only), see docs/cms-auth.md and switch backend to proxy -->
     <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+    
+        <script>
+      // Keep only Login with GitHub (real OAuth) - hide Access Token fallback as requested
+      document.addEventListener('DOMContentLoaded', () => {
+        const hideAccessToken = () => {
+          for (const b of document.querySelectorAll('button')) {
+            if (b.innerText.includes('Access Token')) {
+              b.style.display = 'none';
+            }
+          }
+        };
+        hideAccessToken();
+        new MutationObserver(hideAccessToken).observe(document.body, {childList:true, subtree:true});
+      });
+    </script>
     <script>
       // Register live preview templates (mirrors site CSS so preview is WYSIWYG, like Elementor)
       CMS.registerPreviewStyle("/src/styles/global.css");
