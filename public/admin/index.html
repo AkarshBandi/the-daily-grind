@@ -29,104 +29,109 @@
       });
     </script>
     <script>
-      // Live preview: use the same preview for both site and figma so editor sees full landing page, like Elementor
-      CMS.registerPreviewStyle("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap");
-      CMS.registerPreviewStyle("/src/styles/global.css");
-      // Minimal landing preview CSS (mirrors Hearth & Honey landing)
-      const landingPreviewCSS = `
-        .preview-wrap{max-width:800px;margin:0 auto;font-family:'DM Sans',system-ui,sans-serif;color:#000;background:#FFECCC;padding:24px}
-        .preview-hero{background:linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80') center/cover; color:#fff; border-radius:24px; padding:32px; min-height:320px; display:flex; flex-direction:column; justify-content:flex-end}
-        .preview-hero h1{font-family:'Fraunces',serif;font-size:32px;line-height:1.1;margin:0}
-        .preview-hero p{font-size:14px;line-height:20px;margin:8px 0 0}
-        .preview-section{background:#fff;border:2px solid #000;border-radius:16px;padding:20px;margin-top:16px}
-        .preview-section h2{font-family:'Fraunces',serif;font-size:22px;margin:0 0 8px}
-        .preview-tag{font-family:'Great Vibes',cursive;font-size:20px;color:#005B4A}
-        .preview-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:24px}
-        .preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-        .preview-card{border:2px solid #000;border-radius:12px;padding:12px;background:#fff}
-        .preview-hint{font-size:11px;color:#666;text-align:center;margin-top:12px}
-      `;
-      const styleEl = document.createElement('style');
-      styleEl.textContent = landingPreviewCSS;
-      document.head.appendChild(styleEl);
-      CMS.registerPreviewStyle(landingPreviewCSS, { raw: true });
+      // ============================================================
+      // Sveltia CMS preview templates
+      // IMPORTANT: In Sveltia, `entry` IS the data object directly.
+      // Do NOT use entry.getIn(['data']) — that's Decap/Immutable.js.
+      // ============================================================
+      CMS.registerPreviewStyle("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap", { raw: false });
 
-      // Helper to get field
-      const get = (entry, key, fallback='') => entry.getIn(['data', key]) || fallback;
-
-      // Home landing preview — EXACT frontend live (iframe to /?cms_preview_data=...), not plain text
-      const HomeLivePreview = ({ entry }) => {
-        const data = entry.getIn(['data']).toJS();
-        const previewSrc = "https://the-daily-grind-7y2.pages.dev/?cms_preview_data=" + encodeURIComponent(JSON.stringify(data));
-        const liveSrc = "https://the-daily-grind-7y2.pages.dev/";
-        const onModeChange = (e) => {
-          const ifr = document.getElementById('hh-live-iframe');
-          if(ifr) ifr.src = e.target.value === 'live' ? liveSrc : previewSrc;
-        };
-        return h("div", {style:"max-width:100%;font-family:'DM Sans',system-ui,sans-serif"},
-          h("div", {style:"display:flex;gap:8px;align-items:center;justify-content:space-between;background:#FFECCC;border:2px solid #000;border-radius:12px;padding:8px 12px;margin-bottom:8px"},
-            h("label", {style:"font-size:12px;font-weight:600"}, "View: ",
-              h("select", {id:"hh-preview-mode", onChange:onModeChange, style:"margin-left:6px;padding:4px 8px;border-radius:6px;border:1px solid #000"},
+      // --- Home: iframe to the live site with cms_preview_data patch ---
+      CMS.registerPreviewTemplate("home", ({ entry }) => {
+        try {
+          // In Sveltia, entry IS the data (plain object). Serialize directly.
+          const data = typeof entry?.toJS === 'function' ? entry.toJS() : (entry || {});
+          const json = JSON.stringify(data);
+          const previewSrc = "https://the-daily-grind-7y2.pages.dev/?cms_preview_data=" + encodeURIComponent(json);
+          const liveSrc = "https://the-daily-grind-7y2.pages.dev/";
+          const toolbar = h("div", {style:"display:flex;gap:8px;align-items:center;justify-content:space-between;background:#FFECCC;border:2px solid #1A472C;border-radius:12px;padding:8px 12px;margin-bottom:8px;font-family:'DM Sans',system-ui,sans-serif"},
+            h("span", {style:"font-size:13px;font-weight:600;color:#1A472C"}, "\u2705 Live preview — edits apply as you type"),
+            h("div", {style:"display:flex;gap:12px;align-items:center"},
+              h("select", {id:"hh-preview-mode", onChange:(e)=>{ const ifr=document.getElementById('hh-live-iframe'); if(ifr) ifr.src=e.target.value==='live'?liveSrc:previewSrc; }, style:"padding:4px 8px;border-radius:6px;border:1px solid #1A472C;font-size:12px"},
                 h("option", {value:"preview"}, "Preview (live edit)"),
                 h("option", {value:"live"}, "View Live Site")
-              )
-            ),
-            h("a", {href:liveSrc, target:"_blank", style:"font-size:12px;color:#005B4A;text-decoration:underline"}, "Open live ↗")
-          ),
-          h("iframe", {id:"hh-live-iframe", src:previewSrc, title:"Hearth & Honey live preview", style:"width:100%;height:78vh;border:2px solid #000;border-radius:12px;background:#fff;display:block"})
-        );
-      };
-      CMS.registerPreviewTemplate("home", HomeLivePreview);
-
-      // Pages (additional pages) preview
-      CMS.registerPreviewTemplate("pages", ({ entry }) => {
-        const title = get(entry, 'title', 'New Page');
-        const desc = get(entry, 'description', '');
-        const body = entry.getIn(['data','body']) || '';
-        return h("div", {className:"preview-wrap"},
-          h("div", {className:"preview-hero", style:"min-height:200px"},
-            h("h1", {style:"font-size:28px"}, title),
-            h("p", {}, desc)
-          ),
-          h("div", {className:"preview-section"},
-            h("div", {}, body ? h("div", {dangerouslySetInnerHTML:{__html: body}}) : h("p", {style:"color:#666"}, "No body yet — add markdown. Preview at /{{slug}}"))
-          ),
-          h("div", {className:"preview-hint"}, "This page will be at /{{slug}} — Save → Workflow → Publish, then View on Live Site.")
-        );
-      });
-
-      // Site Settings preview — also shows landing hero so not just text
-      CMS.registerPreviewTemplate("site", "general", ({ entry }) => {
-        const title = get(entry, 'site_title', 'Hearth & Honey');
-        const tagline = get(entry, 'tagline', 'Warm mornings, soft light');
-        return h("div", {className:"preview-wrap"},
-          h("div", {className:"preview-hero", style:"min-height:200px"},
-            h("h1", {style:"font-size:28px"}, title),
-            h("p", {}, tagline)
-          ),
-          h("div", {className:"preview-section"},
-            h("h2", {}, "Site Settings live preview"),
-            h("p", {}, "This is just the site title/tagline. For full page, edit Home — Landing → Home.")
-          )
-        );
-      });
-
-      // Work card preview (existing, keep)
-      CMS.registerPreviewTemplate("work", ({ entry }) => {
-        const title = entry.getIn(["data", "title"]);
-        const excerpt = entry.getIn(["data", "excerpt"]);
-        const image = entry.getIn(["data", "image"]);
-        return h("div", { className: "wrap", style: "padding:24px; font-family: -apple-system, Helvetica, Arial, sans-serif;" },
-          h("div", { className: "browser", style: "border:2px solid #0A0A0A; max-width:600px" },
-            h("div", { style: "border-bottom:2px solid #0A0A0A; padding:8px 12px; font-size:12px; font-weight:700" }, title || "Preview"),
-            image ? h("img", { src: image, style: "width:100%; display:block;" }) : null,
-            h("div", { style: "padding:16px" },
-              h("h3", {}, title),
-              h("p", { style: "color:#555; font-size:14px" }, excerpt),
-              h("div", { style: "margin-top:12px; font-weight:800" }, "Enquire →")
+              ),
+              h("a", {href:liveSrc, target:"_blank", style:"font-size:12px;color:#1A472C;text-decoration:underline"}, "Open live \u2197")
             )
-          )
-        );
+          );
+          const iframe = h("iframe", {id:"hh-live-iframe", src:previewSrc, title:"Hearth & Honey live preview", style:"width:100%;height:78vh;border:2px solid #1A472C;border-radius:12px;background:#fff;display:block"});
+          return h("div", {style:"max-width:100%;font-family:'DM Sans',system-ui,sans-serif;padding:0"}, toolbar, iframe);
+        } catch(e) {
+          console.error('[HH Preview] Home template error:', e);
+          return h("div", {style:"padding:24px;color:red;font-family:monospace"}, "Preview error: " + e.message);
+        }
+      });
+
+      // --- Pages (additional markdown pages) ---
+      CMS.registerPreviewTemplate("pages", ({ entry }) => {
+        try {
+          const d = typeof entry?.toJS === 'function' ? entry.toJS() : (entry || {});
+          const title = d.title || 'New Page';
+          const desc = d.description || '';
+          const body = d.body || '';
+          const wrap = {maxWidth:800,margin:'0 auto',fontFamily:"'DM Sans',system-ui,sans-serif",color:'#000',background:'#FFECCC',padding:24};
+          const hero = {background:"linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80') center/cover",color:'#fff',borderRadius:24,padding:32,minHeight:200,display:'flex',flexDirection:'column',justifyContent:'flex-end'};
+          return h("div", {style: Object.entries(wrap).map(([k,v])=>k+':'+v).join(';')},
+            h("div", {style: Object.entries(hero).map(([k,v])=>k+':'+v).join(';')},
+              h("h1", {style:"font-family:'Fraunces',serif;font-size:28px;margin:0"}, title),
+              h("p", {style:"font-size:14px;margin:8px 0 0"}, desc)
+            ),
+            h("div", {style:"background:#fff;border:2px solid #000;border-radius:16px;padding:20px;margin-top:16px"},
+              body ? h("div", {dangerouslySetInnerHTML:{__html: body}}) : h("p", {style:"color:#666"}, "No body yet \u2014 add markdown. Preview at /{{slug}}")
+            ),
+            h("div", {style:"font-size:11px;color:#666;text-align:center;margin-top:12px"}, "This page will be at /{{slug}} \u2014 Save \u2192 Workflow \u2192 Publish, then View on Live Site.")
+          );
+        } catch(e) {
+          console.error('[HH Preview] Pages template error:', e);
+          return h("div", {style:"padding:24px;color:red;font-family:monospace"}, "Preview error: " + e.message);
+        }
+      });
+
+      // --- Site Settings (file collection: general.yaml) ---
+      // Register as "general" (file name) — Sveltia looks up by fileName first, then collectionName
+      CMS.registerPreviewTemplate("general", ({ entry }) => {
+        try {
+          const d = typeof entry?.toJS === 'function' ? entry.toJS() : (entry || {});
+          const title = d.site_title || 'Hearth & Honey';
+          const tagline = d.tagline || 'Warm mornings, soft light';
+          return h("div", {style:"max-width:800px;margin:0 auto;font-family:'DM Sans',system-ui,sans-serif;color:#000;background:#FFECCC;padding:24px"},
+            h("div", {style:"background:linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80') center/cover;color:#fff;borderRadius:24,padding:32,minHeight:200,display:'flex',flexDirection:'column',justifyContent:'flex-end'},
+              h("h1", {style:"font-family:'Fraunces',serif;font-size:28px;margin:0"}, title),
+              h("p", {style:"font-size:14px;margin:8px 0 0"}, tagline)
+            ),
+            h("div", {style:"background:#fff;border:2px solid #000;border-radius:16px;padding:20px;margin-top:16px"},
+              h("h2", {style:"font-family:'Fraunces',serif;font-size:22px;margin:0 0 8px"}, "Site Settings"),
+              h("p", {}, "Edit site title and tagline here. For the full page, edit Home \u2192 Landing \u2192 Home.")
+            )
+          );
+        } catch(e) {
+          console.error('[HH Preview] Site template error:', e);
+          return h("div", {style:"padding:24px;color:red;font-family:monospace"}, "Preview error: " + e.message);
+        }
+      });
+
+      // --- Work card preview ---
+      CMS.registerPreviewTemplate("work", ({ entry }) => {
+        try {
+          const d = typeof entry?.toJS === 'function' ? entry.toJS() : (entry || {});
+          const title = d.title || "Preview";
+          const excerpt = d.excerpt || '';
+          const image = d.image || null;
+          return h("div", {style:"padding:24px;font-family:-apple-system,Helvetica,Arial,sans-serif"},
+            h("div", {style:"border:2px solid #0A0A0A;max-width:600px"},
+              h("div", {style:"border-bottom:2px solid #0A0A0A;padding:8px 12px;font-size:12px;font-weight:700"}, title),
+              image ? h("img", {src:image, style:"width:100%;display:block"}) : null,
+              h("div", {style:"padding:16px"},
+                h("h3", {}, title),
+                h("p", {style:"color:#555;font-size:14px"}, excerpt),
+                h("div", {style:"margin-top:12px;font-weight:800"}, "Enquire \u2192")
+              )
+            )
+          );
+        } catch(e) {
+          console.error('[HH Preview] Work template error:', e);
+          return h("div", {style:"padding:24px;color:red;font-family:monospace"}, "Preview error: " + e.message);
+        }
       });
     </script>
   </body>
