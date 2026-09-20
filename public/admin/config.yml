@@ -66,6 +66,92 @@ collections:
                   - { label: "Item", name: "item", widget: "string" }
           - { label: "About Heading", name: "about_heading", widget: "string", default: "A good café is a clean, well-lighted place" }
           - { label: "About Text", name: "about_text", widget: "text", default: "We built Hearth & Honey to be simple and true. Good coffee, honest food, and a room that feels right." }
+          - label: "Banner"
+            name: "banner"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Enabled", name: "enabled", widget: "boolean", default: true }
+              - { label: "Heading", name: "heading", widget: "string", default: "Fresh pastries are half off after 3 pm" }
+              - { label: "Text", name: "text", widget: "string", default: "Join the list for the daily special" }
+              - { label: "Placeholder", name: "placeholder", widget: "string", default: "Enter your email" }
+              - { label: "Button", name: "button", widget: "string", default: "Sign up" }
+          - label: "About Section"
+            name: "about"
+            widget: "object"
+            fields:
+              - { label: "Tagline", name: "tagline", widget: "string", default: "About" }
+              - { label: "Heading", name: "heading", widget: "string", default: "A good café is a clean, well-lighted place" }
+              - { label: "Text", name: "text", widget: "text", default: "We built Hearth & Honey to be simple and true. Good coffee, honest food, and a room that feels right." }
+              - { label: "Image", name: "image", widget: "image", required: false }
+          - label: "Menu Section"
+            name: "menu"
+            widget: "object"
+            fields:
+              - { label: "Tag", name: "tag", widget: "string", default: "Menu" }
+              - { label: "Heading", name: "heading", widget: "string", default: "What we do well" }
+              - { label: "Text", name: "text", widget: "text", default: "A few things we make every day. They are simple and they are good." }
+              - label: "Tabs"
+                name: "tabs"
+                widget: "list"
+                max: 6
+                fields:
+                  - { label: "ID", name: "id", widget: "string" }
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Tag", name: "tag", widget: "string" }
+                  - { label: "Heading", name: "heading", widget: "string" }
+                  - { label: "Text", name: "text", widget: "text" }
+                  - { label: "Image", name: "image", widget: "image", required: false }
+          - label: "Testimonials Section"
+            name: "testimonials"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", default: "Customer testimonials" }
+              - { label: "Text", name: "text", widget: "string", default: "Come for the coffee. Stay for the moment." }
+              - label: "Items"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Quote", name: "quote", widget: "text" }
+                  - { label: "Stars", name: "stars", widget: "number", value_type: int, min: 1, max: 5, default: 5 }
+                  - { label: "Avatar", name: "avatar", widget: "image", required: false }
+                  - { label: "Name", name: "name", widget: "string" }
+                  - { label: "Role", name: "role", widget: "string" }
+          - label: "FAQ Section"
+            name: "faq"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", default: "FAQs" }
+              - { label: "Text", name: "text", widget: "string", default: "Find quick answers about your visit to Hearth & Honey" }
+              - label: "Items"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Q", name: "q", widget: "string" }
+                  - { label: "A", name: "a", widget: "text" }
+          - label: "Contact Section"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "Tagline", name: "tagline", widget: "string", default: "Visit Us" }
+              - { label: "Heading", name: "heading", widget: "string", default: "Contact us" }
+              - { label: "Text", name: "text", widget: "text", default: "Find us on Hearth Lane — open daily from 7am. Drop in, call ahead, or send a note." }
+              - label: "Items"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Heading", name: "heading", widget: "string" }
+                  - { label: "Text", name: "text", widget: "string" }
+                  - { label: "Link", name: "link", widget: "string", required: false }
+                  - { label: "Link Text", name: "link_text", widget: "string", required: false }
+              - { label: "Image", name: "image", widget: "image", required: false }
+          - label: "CTA Section"
+            name: "cta"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", default: "See you at the counter" }
+              - { label: "Text", name: "text", widget: "text", default: "Stop by for a coffee or stay for brunch. The kettle is on and the door is open." }
+              - { label: "Image", name: "image", widget: "image", required: false }
   - name: "pages"
     label: "Pages"
     description: "Additional pages (About, Contact, etc). Each page gets its own URL."

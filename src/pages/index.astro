@@ -3,15 +3,99 @@ import homeRaw from '../content/pages/home.yaml?raw';
 import * as yaml from 'js-yaml';
 let f:any={};
 try{ f = yaml.load(homeRaw) as any; }catch{}
-const t = (k:string, fallback:string)=> (f && f[k]) ? f[k] : fallback;
+// Live CMS preview override: when /?cms_preview_data={...} is present (from Sveltia iframe preview),
+// use that data instead of the file so right pane shows exact frontend live per keystroke
+try{
+  const previewParam = Astro.url.searchParams.get('cms_preview_data');
+  if(previewParam){
+    const previewData = JSON.parse(decodeURIComponent(previewParam));
+    if(previewData && typeof previewData === 'object'){ f = { ...f, ...previewData }; }
+  }
+}catch{}
+const t = (k:string, fallback:string)=> (f && f[k] != null && f[k] !== '') ? f[k] : fallback;
+const pick = (obj:any, key:string, fallback:string)=> (obj && obj[key] != null && obj[key] !== '') ? obj[key] : fallback;
 // preserve figma exact strings
 const seoTitle = t('seo_title','Hearth & Honey — Your neighborhood spot for coffee and good company');
 const heroHeading = t('hero_heading','Your neighborhood spot for coffee and good company');
 const heroText = t('hero_text','We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile.');
-const aboutHeading = t('about_heading','A good café is a clean, well-lighted place');
-const aboutText = t('about_text','We built Hearth & Honey to be simple and true. Good coffee, honest food, and a room that feels right.');
 const heroBtns = f?.hero_buttons || [{label:'Explore Menu',href:'#menu'},{label:'Book a Table',href:'#book'}];
 const navLinks = f?.navbar_links || [{label:'Our story',href:'#story'},{label:'Menu',href:'#menu'},{label:'Visit',href:'#visit',dropdown:['Hours','Location','Contact']}];
+// Banner (full content left)
+const banner = f?.banner || {};
+const bannerEnabled = banner.enabled !== false;
+const bannerHeading = pick(banner,'heading','Fresh pastries are half off after 3 pm');
+const bannerText = pick(banner,'text','Join the list for the daily special');
+const bannerPlaceholder = pick(banner,'placeholder','Enter your email');
+const bannerButton = pick(banner,'button','Sign up');
+// Navbar
+const navbarObj = f?.navbar || {};
+const navLogo = pick(navbarObj,'logo','Hearth & Honey');
+const navCtaLabel = pick(navbarObj,'cta_label','Book a Table');
+const navCtaHref = pick(navbarObj,'cta_href','#book');
+// About (supports both flat about_heading/about_text and nested about object for full left)
+const aboutObj = f?.about || {};
+const aboutTagline = pick(aboutObj,'tagline','About');
+const aboutHeading = pick(aboutObj,'heading', t('about_heading','A good café is a clean, well-lighted place'));
+const aboutText = pick(aboutObj,'text', t('about_text','We built Hearth & Honey to be simple and true. Good coffee, honest food, and a room that feels right.'));
+const aboutImage = pick(aboutObj,'image','/shots/figma-1.png');
+// Menu
+const menuObj = f?.menu || {};
+const menuTag = pick(menuObj,'tag','Menu');
+const menuHeading = pick(menuObj,'heading','What we do well');
+const menuText = pick(menuObj,'text','A few things we make every day. They are simple and they are good.');
+const menuTabs = (menuObj?.tabs && menuObj.tabs.length ? menuObj.tabs : [
+  {id:'coffee',label:'Coffee',tag:'Coffee',heading:'The flat white is true and strong',text:'We pull shots from beans roasted two miles away. The milk is steamed clean, no tricks.',image:'/shots/figma-2.png'},
+  {id:'breakfast',label:'Breakfast',tag:'Breakfast',heading:'Morning plates done right',text:'Eggs, sourdough, and seasonal sides — simple and satisfying.',image:'https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=800&q=80'},
+  {id:'brunch',label:'Brunch',tag:'Brunch',heading:'Long table, good coffee',text:'Bring friends. We keep the kitchen open till three.',image:'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80'},
+  {id:'pastries',label:'Pastries',tag:'Pastries',heading:'Baked every morning',text:'Croissants, buns, and half-price after 3 pm.',image:'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=800&q=80'},
+  {id:'light',label:'Light meals',tag:'Light meals',heading:'Soups and salads',text:'Fresh, honest, and quick.',image:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'},
+  {id:'drinks',label:'Drinks',tag:'Drinks',heading:'More than coffee',text:'Tea, juice, and cold brew on tap.',image:'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=80'},
+]);
+// Testimonials
+const testiObj = f?.testimonials || {};
+const testiHeading = pick(testiObj,'heading','Customer testimonials');
+const testiText = pick(testiObj,'text','Come for the coffee. Stay for the moment.');
+const testiItems = (testiObj?.items && testiObj.items.length ? testiObj.items : [
+  {quote:'The espresso is the best in the neighborhood. No argument.',stars:5,avatar:'/shots/avatar-0.jpg',name:'Maya Chen',role:'Regular'},
+  {quote:'A clean, bright room where a man can sit alone with a paper and not be bothered.',stars:5,avatar:'/shots/avatar-1.jpg',name:'Daniel Brooks',role:'Local writer'},
+  {quote:'The sourdough toast with eggs is honest food. It does not pretend.',stars:5,avatar:'/shots/avatar-2.jpg',name:'Sarah Kim',role:'Brunch regular'},
+]);
+// FAQ
+const faqObj = f?.faq || {};
+const faqHeading = pick(faqObj,'heading','FAQs');
+const faqText = pick(faqObj,'text','Find quick answers about your visit to Hearth & Honey');
+const faqItems = (faqObj?.items && faqObj.items.length ? faqObj.items : [
+  {q:'What are your hours?',a:'We are open Monday through Friday from 7 am to 4 pm. Weekends we open at 8 am and close at 3 pm.'},
+  {q:'Do you have Wi-Fi?',a:'Yes, the Wi-Fi is free and fast. Bring your laptop and settle in.'},
+  {q:'Do you offer vegan options?',a:'We always have oat and almond milk for coffee. The kitchen keeps a few vegan dishes on the menu each day.'},
+  {q:'Do I need a reservation?',a:'Walk-ins are always welcome. For groups of six or more, a quick call ahead helps us save you a table.'},
+  {q:'Is there gluten-free food?',a:'We bake a gluten-free banana bread most mornings. Ask at the counter for what is available that day.'},
+]);
+const faqStillHeading = pick(faqObj,'still_heading','Still have questions?');
+const faqStillText = pick(faqObj,'still_text',"Haven't found what you're looking for? Our team is happy to help — ask us anything.");
+const faqStillButton = pick(faqObj,'still_button','Get in Touch');
+// Contact
+const contactObj = f?.contact || {};
+const contactTagline = pick(contactObj,'tagline','Visit Us');
+const contactHeading = pick(contactObj,'heading','Contact us');
+const contactText = pick(contactObj,'text','Find us on Hearth Lane — open daily from 7am. Drop in, call ahead, or send a note.');
+const contactItems = (contactObj?.items && contactObj.items.length ? contactObj.items : [
+  {heading:'Email',text:'For general enquiries and catering',link:'hello@hearthandhoney.example',link_text:'hello@hearthandhoney.example'},
+  {heading:'Phone',text:'For reservations and takeaway orders',link:'tel:+61290001234',link_text:'+61 2 9000 1234'},
+  {heading:'Visit',text:'12 Hearth Lane, Surry Hills NSW 2010 AU',link:'#',link_text:'Get Directions'},
+]);
+const contactImage = pick(contactObj,'image','/shots/figma-3.png');
+// CTA
+const ctaObj = f?.cta || {};
+const ctaHeading = pick(ctaObj,'heading','See you at the counter');
+const ctaText = pick(ctaObj,'text','Stop by for a coffee or stay for brunch. The kettle is on and the door is open.');
+// Footer
+const footerObj = f?.footer || {};
+const footerNewsletterHeading = pick(footerObj,'newsletter_heading','Get in touch');
+const footerNewsletterText = pick(footerObj,'newsletter_text','Get the word on new roasts and weekend specials. No noise, just news.');
+const footerPlaceholder = pick(footerObj,'placeholder','Enter your email');
+const footerButton = pick(footerObj,'button','Subscribe');
+const footerFineprint = pick(footerObj,'fineprint','By subscribing you agree to our Privacy Policy');
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -265,13 +349,13 @@ img{display:block;max-width:100%}
       <div class="banner-left">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.3334 23.2537C23.3558 23.2537 25.0704 22.545 26.477 21.1277C27.8837 19.7101 28.587 17.9959 28.587 15.985C28.587 13.9739 27.8837 12.2647 26.477 10.8573C25.0704 9.45001 23.3558 8.74635 21.3334 8.74635C20.6969 8.74635 20.0783 8.82668 19.4774 8.98735C18.8763 9.14801 18.3164 9.37757 17.7977 9.67601C18.5375 10.5258 19.1227 11.4859 19.5534 12.5563C19.984 13.6268 20.1994 14.7752 20.1994 16.0017C20.1994 17.2281 19.984 18.376 19.5534 19.4453C19.1227 20.5147 18.5375 21.4742 17.7977 22.324C18.3164 22.6225 18.8763 22.852 19.4774 23.0127C20.0783 23.1733 20.6969 23.2537 21.3334 23.2537ZM16 20.8977C16.5947 20.2659 17.0635 19.5253 17.4064 18.676C17.749 17.8269 17.9204 16.9321 17.9204 15.9917C17.9204 15.0512 17.749 14.1592 17.4064 13.3157C17.0635 12.4719 16.5947 11.7341 16 11.1023C15.4054 11.7341 14.9366 12.4747 14.5937 13.324C14.251 14.1731 14.0797 15.0679 14.0797 16.0083C14.0797 16.9488 14.251 17.8408 14.5937 18.6843C14.9366 19.5281 15.4054 20.2659 16 20.8977ZM10.6667 23.2537C11.3031 23.2537 11.9218 23.1735 12.5227 23.013C13.1238 22.8523 13.6863 22.6227 14.21 22.324C13.4651 21.4742 12.8774 20.5141 12.4467 19.4437C12.016 18.3732 11.8007 17.2248 11.8007 15.9983C11.8007 14.7719 12.016 13.624 12.4467 12.5547C12.8774 11.4853 13.4651 10.5258 14.21 9.67601C13.6863 9.37735 13.1238 9.14768 12.5227 8.98701C11.9218 8.82657 11.3031 8.74635 10.6667 8.74635C8.65981 8.74635 6.94914 9.44957 5.5347 10.856C4.12026 12.2625 3.41303 13.9711 3.41303 15.982C3.41303 17.9931 4.12026 19.7078 5.5347 21.126C6.94914 22.5445 8.65981 23.2537 10.6667 23.2537ZM10.6667 25.5327C8.0147 25.5327 5.76292 24.6068 3.91137 22.755C2.05981 20.9032 1.13403 18.6511 1.13403 15.9987C1.13403 13.3465 2.05981 11.0949 3.91137 9.24401C5.76292 7.3929 8.0147 6.46735 10.6667 6.46735C11.6667 6.46735 12.6158 6.60923 13.514 6.89301C14.412 7.17657 15.2407 7.57968 16 8.10235C16.7594 7.57968 17.588 7.17657 18.486 6.89301C19.3843 6.60923 20.3334 6.46735 21.3334 6.46735C23.9854 6.46735 26.2371 7.39323 28.0887 9.24501C29.94 11.0968 30.8658 13.3485 30.8658 15.9987C30.8658 18.6492 29.94 20.9032 28.0887 22.755C26.2371 24.6068 23.9854 25.5327 21.3334 25.5327H10.6667Z" fill="white"/></svg>
         <div>
-          <h2>Fresh pastries are half off after 3 pm</h2>
-          <p>Join the list for the daily special</p>
+          <h2>{bannerHeading}</h2>
+          <p>{bannerText}</p>
         </div>
       </div>
       <div class="banner-form">
-        <label class="field"><input type="email" placeholder="Enter your email" aria-label="Enter your email" style="flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:16px;font-family:DM Sans;width:100%" /></label>
-        <button class="btn-yellow">Sign up</button>
+        <label class="field"><input type="email" placeholder={bannerPlaceholder} aria-label={bannerPlaceholder} style="flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:16px;font-family:DM Sans;width:100%" /></label>
+        <button class="btn-yellow">{bannerButton}</button>
         <div class="banner-x" aria-label="close"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M22.8353 22.364L22.3638 22.8354C22.1035 23.0957 21.6814 23.0957 21.421 22.8354L15.9999 17.4142L10.5787 22.8353C10.3184 23.0957 9.89626 23.0957 9.63591 22.8353L9.1645 22.3639C8.90415 22.1036 8.90415 21.6815 9.1645 21.4211L14.5857 16L9.1645 10.5788C8.90415 10.3185 8.90415 9.89638 9.1645 9.63603L9.6359 9.16463C9.89625 8.90428 10.3184 8.90428 10.5787 9.16463L15.9999 14.5858L21.421 9.16462C21.6814 8.90427 22.1035 8.90427 22.3638 9.16462L22.8353 9.63602C23.0956 9.89637 23.0956 10.3185 22.8353 10.5788L17.4141 16L22.8353 21.4211C23.0956 21.6815 23.0956 22.1036 22.8353 22.364Z" fill="white"/></svg></div>
       </div>
     </div>
@@ -280,12 +364,12 @@ img{display:block;max-width:100%}
   <!-- Navbar -->
   <nav class="navbar">
     <div class="inner nav-inner">
-      <a href="/" class="nav-logo" aria-label="Hearth & Honey" style="display:flex;align-items:center;font-family:'Fraunces',serif;font-weight:600;font-size:22px;letter-spacing:-0.02em;color:#000;white-space:nowrap">
-        Hearth & Honey
+      <a href="/" class="nav-logo" aria-label={navLogo} style="display:flex;align-items:center;font-family:'Fraunces',serif;font-weight:600;font-size:22px;letter-spacing:-0.02em;color:#000;white-space:nowrap">
+        {navLogo}
       </a>
       <div class="nav-mid"></div>
       <div class="nav-right">
-        <button class="nav-btn">Book a Table</button>
+        <a class="nav-btn" href={navCtaHref}>{navCtaLabel}</a>
         <div style="display:flex;gap:32px;align-items:center">
           {navLinks.map((l:any)=> l.dropdown ? (
             <div class="dropdown" id="visit-dropdown">
@@ -309,7 +393,7 @@ img{display:block;max-width:100%}
       <div class="hero-right reveal">
         <p class="sub">{heroText}</p>
         <div class="hero-actions">
-          {heroBtns.map((b:any)=> <a class={b.label.includes('Book') ? 'btn-outline-dark' : 'btn-mustard'} href={b.href} style={b.label==='Book' ? 'color:#fff;outline-color:#fff' : ''}>{b.label}</a>)}
+          {heroBtns.map((b:any)=> <a class={b.label.includes('Book') ? 'btn-outline-dark' : 'btn-mustard'} href={b.href} style={b.label.includes('Book') ? 'color:#fff;outline-color:#fff' : ''}>{b.label}</a>)}
         </div>
       </div>
     </div>
@@ -320,7 +404,7 @@ img{display:block;max-width:100%}
     <div class="inner about-grid">
       <div style="display:flex;flex-direction:column;gap:32px">
         <div style="display:flex;flex-direction:column;gap:16px">
-          <p class="tagline">About</p>
+          <p class="tagline">{aboutTagline}</p>
           <h2 class="reveal">{aboutHeading}</h2>
           <p>{aboutText}</p>
         </div>
@@ -329,7 +413,7 @@ img{display:block;max-width:100%}
           <a style="display:flex;align-items:center;gap:8px;font-weight:500" href="#book">Reserve Table <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9.38708 6.67285C9.48791 6.67285 9.56488 6.70326 9.64294 6.78125L14.5873 11.7256C14.6412 11.7795 14.6663 11.8215 14.6781 11.8496V11.8506C14.6929 11.8861 14.7015 11.9259 14.7015 11.9746C14.7015 12.0233 14.6929 12.0631 14.6781 12.0986V12.0996C14.6663 12.1277 14.6412 12.1697 14.5873 12.2236L9.61853 17.1924C9.54076 17.2702 9.47362 17.292 9.39294 17.2891C9.29892 17.2856 9.21805 17.2537 9.1322 17.168C9.05408 17.0898 9.02283 17.013 9.02283 16.9121C9.02283 16.8112 9.05408 16.7344 9.1322 16.6562L13.8138 11.9746L9.10681 7.26758C9.02915 7.18988 9.0072 7.12357 9.01013 7.04297C9.01358 6.9487 9.04615 6.86731 9.1322 6.78125C9.21013 6.70344 9.28649 6.67293 9.38708 6.67285Z" fill="black" stroke="black"/></svg></a>
         </div>
       </div>
-      <img class="about-img" src="/shots/figma-1.png" alt="Hearth & Honey interior" loading="lazy"/>
+      <img class="about-img" src={aboutImage} alt="Hearth & Honey interior" loading="lazy"/>
     </div>
   </section>
 
@@ -338,57 +422,49 @@ img{display:block;max-width:100%}
     <div class="inner">
       <div class="menu-card">
         <div class="menu-head">
-          <div class="tag">Menu</div>
-          <h2 class="reveal">What we do well</h2>
-          <p>A few things we make every day. They are simple and they are good.</p>
+          <div class="tag">{menuTag}</div>
+          <h2 class="reveal">{menuHeading}</h2>
+          <p>{menuText}</p>
         </div>
         <div class="tabs">
           <div class="tabs-menu" id="tabs-menu">
-            <button class="tab-btn active" data-tab="coffee">Coffee</button>
-            <button class="tab-btn" data-tab="breakfast">Breakfast</button>
-            <button class="tab-btn" data-tab="brunch">Brunch</button>
-            <button class="tab-btn" data-tab="pastries">Pastries</button>
-            <button class="tab-btn" data-tab="light">Light meals</button>
-            <button class="tab-btn" data-tab="drinks">Drinks</button>
+            {menuTabs.map((tab:any, i:number)=> (
+              <button class={`tab-btn ${i===0 ? 'active' : ''}`} data-tab={tab.id}>{tab.label}</button>
+            ))}
           </div>
-          <div class="tab-pane" id="tab-coffee">
-            <div style="display:flex;flex-direction:column;gap:32px">
-              <div style="display:flex;flex-direction:column;gap:16px">
-                <div class="tag">Coffee</div>
-                <h3>The flat white is true and strong</h3>
-                <p>We pull shots from beans roasted two miles away. The milk is steamed clean, no tricks.</p>
+          {menuTabs.map((tab:any, i:number)=> (
+            <div class="tab-pane" id={`tab-${tab.id}`} style={i===0 ? undefined : 'display:none'}>
+              <div style="display:flex;flex-direction:column;gap:32px">
+                <div style="display:flex;flex-direction:column;gap:16px">
+                  <div class="tag">{tab.tag}</div>
+                  <h3>{tab.heading}</h3>
+                  <p>{tab.text}</p>
+                </div>
+                <div style="display:flex;gap:24px;align-items:center">
+                  <a class="btn-outline-dark" style="color:#fff;outline-color:#fff" href="#menu">View Full Menu</a>
+                  <a style="display:flex;align-items:center;gap:8px;color:#fff;font-weight:500" href="#book">Reserve Table <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9.38708 6.67285C9.48791 6.67285 9.56488 6.70326 9.64294 6.78125L14.5873 11.7256C14.6412 11.7795 14.6663 11.8215 14.6781 11.8496V11.8506C14.6929 11.8861 14.7015 11.9259 14.7015 11.9746C14.7015 12.0233 14.6929 12.0631 14.6781 12.0986V12.0996C14.6663 12.1277 14.6412 12.1697 14.5873 12.2236L9.61853 17.1924C9.54076 17.2702 9.47362 17.292 9.39294 17.2891C9.29892 17.2856 9.21805 17.2537 9.1322 17.168C9.05408 17.0898 9.02283 17.013 9.02283 16.9121C9.02283 16.8112 9.05408 16.7344 9.1322 16.6562L13.8138 11.9746L9.10681 7.26758C9.02915 7.18988 9.0072 7.12357 9.01013 7.04297C9.01358 6.9487 9.04615 6.86731 9.1322 6.78125C9.21013 6.70344 9.28649 6.67293 9.38708 6.67285Z" fill="white" stroke="white"/></svg></a>
+                </div>
               </div>
-              <div style="display:flex;gap:24px;align-items:center">
-                <a class="btn-outline-dark" style="color:#fff;outline-color:#fff" href="#menu">View Full Menu</a>
-                <a style="display:flex;align-items:center;gap:8px;color:#fff;font-weight:500" href="#book">Reserve Table <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9.38708 6.67285C9.48791 6.67285 9.56488 6.70326 9.64294 6.78125L14.5873 11.7256C14.6412 11.7795 14.6663 11.8215 14.6781 11.8496V11.8506C14.6929 11.8861 14.7015 11.9259 14.7015 11.9746C14.7015 12.0233 14.6929 12.0631 14.6781 12.0986V12.0996C14.6663 12.1277 14.6412 12.1697 14.5873 12.2236L9.61853 17.1924C9.54076 17.2702 9.47362 17.292 9.39294 17.2891C9.29892 17.2856 9.21805 17.2537 9.1322 17.168C9.05408 17.0898 9.02283 17.013 9.02283 16.9121C9.02283 16.8112 9.05408 16.7344 9.1322 16.6562L13.8138 11.9746L9.10681 7.26758C9.02915 7.18988 9.0072 7.12357 9.01013 7.04297C9.01358 6.9487 9.04615 6.86731 9.1322 6.78125C9.21013 6.70344 9.28649 6.67293 9.38708 6.67285Z" fill="white" stroke="white"/></svg></a>
-              </div>
+              <img src={tab.image} alt={tab.label} loading="lazy"/>
             </div>
-            <img src="/shots/figma-2.png" alt="Flat white" loading="lazy"/>
-          </div>
-          <div class="tab-pane" id="tab-breakfast" style="display:none">
-            <div style="display:flex;flex-direction:column;gap:16px"><div class="tag">Breakfast</div><h3>Morning plates done right</h3><p>Eggs, sourdough, and seasonal sides — simple and satisfying.</p></div><img src="https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=800&q=80" alt="Breakfast"/>
-          </div>
-          <div class="tab-pane" id="tab-brunch" style="display:none"><div style="display:flex;flex-direction:column;gap:16px"><div class="tag">Brunch</div><h3>Long table, good coffee</h3><p>Bring friends. We keep the kitchen open till three.</p></div><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" alt="Brunch"/></div>
-          <div class="tab-pane" id="tab-pastries" style="display:none"><div style="display:flex;flex-direction:column;gap:16px"><div class="tag">Pastries</div><h3>Baked every morning</h3><p>Croissants, buns, and half-price after 3 pm.</p></div><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=800&q=80" alt="Pastries"/></div>
-          <div class="tab-pane" id="tab-light" style="display:none"><div style="display:flex;flex-direction:column;gap:16px"><div class="tag">Light meals</div><h3>Soups and salads</h3><p>Fresh, honest, and quick.</p></div><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" alt="Light meals"/></div>
-          <div class="tab-pane" id="tab-drinks" style="display:none"><div style="display:flex;flex-direction:column;gap:16px"><div class="tag">Drinks</div><h3>More than coffee</h3><p>Tea, juice, and cold brew on tap.</p></div><img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=80" alt="Drinks"/></div>
+          ))}
         </div>
       </div>
     </div>
-  </section>
+    </section>
 
   <!-- Testimonials -->
   <section class="testi reveal" id="reviews">
     <div class="inner">
       <div class="testi-head">
-        <h2 class="reveal">Customer testimonials</h2>
-        <p>Come for the coffee. Stay for the moment.</p>
+        <h2 class="reveal">{testiHeading}</h2>
+        <p>{testiText}</p>
       </div>
       <div class="testi-wrap">
         <div class="testi-grid">
-          <div class="testi-card"><div><div class="stars">{Array(5).fill(0).map(()=> <svg width="20" height="19" viewBox="0 0 20 19" fill="none" class="star-svg"><path d="M9.07 0.61C9.41-0.2 10.58-0.2 10.92 0.61L12.95 5.43C13.1 5.77 13.43 6.01 13.8 6.04L19.07 6.45C19.96 6.52 20.32 7.62 19.64 8.2L15.63 11.59C15.34 11.84 15.22 12.22 15.31 12.58L16.53 17.66C16.74 18.52 15.79 19.2 15.03 18.74L10.52 16.01C10.2 15.82 9.79 15.82 9.47 16.01L4.96 18.74C4.2 19.2 3.25 18.52 3.46 17.66L4.68 12.58C4.77 12.22 4.65 11.84 4.36 11.59L0.35 8.2C-0.32 7.62 0.03 6.52 0.92 6.45L6.19 6.04C6.56 6.01 6.89 5.77 7.04 5.43L9.07 0.61Z" fill="#FEC135"/></svg>)}</div><p class="quote" style="margin-top:24px">The espresso is the best in the neighborhood. No argument.</p></div><div class="avatar"><img src="/shots/avatar-0.jpg" alt="Maya Chen" width="48" height="48" style="border-radius:50%;object-fit:cover"/><div><b>Maya Chen</b><span>Regular</span></div></div></div>
-          <div class="testi-card"><div><div class="stars">{Array(5).fill(0).map(()=> <svg width="20" height="19" viewBox="0 0 20 19" fill="none" class="star-svg"><path d="M9.07 0.61C9.41-0.2 10.58-0.2 10.92 0.61L12.95 5.43C13.1 5.77 13.43 6.01 13.8 6.04L19.07 6.45C19.96 6.52 20.32 7.62 19.64 8.2L15.63 11.59C15.34 11.84 15.22 12.22 15.31 12.58L16.53 17.66C16.74 18.52 15.79 19.2 15.03 18.74L10.52 16.01C10.2 15.82 9.79 15.82 9.47 16.01L4.96 18.74C4.2 19.2 3.25 18.52 3.46 17.66L4.68 12.58C4.77 12.22 4.65 11.84 4.36 11.59L0.35 8.2C-0.32 7.62 0.03 6.52 0.92 6.45L6.19 6.04C6.56 6.01 6.89 5.77 7.04 5.43L9.07 0.61Z" fill="#FEC135"/></svg>)}</div><p class="quote" style="margin-top:24px">A clean, bright room where a man can sit alone with a paper and not be bothered.</p></div><div class="avatar"><img src="/shots/avatar-1.jpg" alt="Daniel Brooks" width="48" height="48" style="border-radius:50%;object-fit:cover"/><div><b>Daniel Brooks</b><span>Local writer</span></div></div></div>
-          <div class="testi-card"><div><div class="stars">{Array(5).fill(0).map(()=> <svg width="20" height="19" viewBox="0 0 20 19" fill="none" class="star-svg"><path d="M9.07 0.61C9.41-0.2 10.58-0.2 10.92 0.61L12.95 5.43C13.1 5.77 13.43 6.01 13.8 6.04L19.07 6.45C19.96 6.52 20.32 7.62 19.64 8.2L15.63 11.59C15.34 11.84 15.22 12.22 15.31 12.58L16.53 17.66C16.74 18.52 15.79 19.2 15.03 18.74L10.52 16.01C10.2 15.82 9.79 15.82 9.47 16.01L4.96 18.74C4.2 19.2 3.25 18.52 3.46 17.66L4.68 12.58C4.77 12.22 4.65 11.84 4.36 11.59L0.35 8.2C-0.32 7.62 0.03 6.52 0.92 6.45L6.19 6.04C6.56 6.01 6.89 5.77 7.04 5.43L9.07 0.61Z" fill="#FEC135"/></svg>)}</div><p class="quote" style="margin-top:24px">The sourdough toast with eggs is honest food. It does not pretend.</p></div><div class="avatar"><img src="/shots/avatar-2.jpg" alt="Sarah Kim" width="48" height="48" style="border-radius:50%;object-fit:cover"/><div><b>Sarah Kim</b><span>Brunch regular</span></div></div></div>
+          {testiItems.map((item:any)=> (
+            <div class="testi-card"><div><div class="stars">{Array(item.stars || 5).fill(0).map(()=> <svg width="20" height="19" viewBox="0 0 20 19" fill="none" class="star-svg"><path d="M9.07 0.61C9.41-0.2 10.58-0.2 10.92 0.61L12.95 5.43C13.1 5.77 13.43 6.01 13.8 6.04L19.07 6.45C19.96 6.52 20.32 7.62 19.64 8.2L15.63 11.59C15.34 11.84 15.22 12.22 15.31 12.58L16.53 17.66C16.74 18.52 15.79 19.2 15.03 18.74L10.52 16.01C10.2 15.82 9.79 15.82 9.47 16.01L4.96 18.74C4.2 19.2 3.25 18.52 3.46 17.66L4.68 12.58C4.77 12.22 4.65 11.84 4.36 11.59L0.35 8.2C-0.32 7.62 0.03 6.52 0.92 6.45L6.19 6.04C6.56 6.01 6.89 5.77 7.04 5.43L9.07 0.61Z" fill="#FEC135"/></svg>)}</div><p class="quote" style="margin-top:24px">{item.quote}</p></div><div class="avatar"><img src={item.avatar} alt={item.name} width="48" height="48" style="border-radius:50%;object-fit:cover"/><div><b>{item.name}</b><span>{item.role}</span></div></div></div>
+          ))}
         </div>
         <div class="dots"><div class="dot"></div><div class="dot dim"></div><div class="dot dim"></div><div class="dot dim"></div><div class="dot dim"></div><div class="dot dim"></div></div>
         <div class="slider-arrow left" aria-label="prev"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7.09 12.85L12.59 18.35C12.76 18.52 12.85 18.72 12.85 18.95C12.85 19.18 12.77 19.38 12.6 19.55C12.43 19.72 12.23 19.81 12 19.81C11.76 19.81 11.56 19.72 11.39 19.55L4.44 12.6C4.35 12.51 4.29 12.41 4.24 12.31C4.2 12.21 4.18 12.11 4.18 12C4.18 11.88 4.2 11.78 4.24 11.68C4.29 11.58 4.35 11.48 4.44 11.39L11.4 4.44C11.57 4.27 11.78 4.18 12 4.18C12.23 4.18 12.43 4.27 12.6 4.44C12.77 4.61 12.85 4.81 12.85 5.04C12.85 5.27 12.77 5.47 12.6 5.64L7.09 11.14H19.29C19.54 11.14 19.74 11.22 19.9 11.39C20.07 11.55 20.15 11.75 20.15 12C20.15 12.24 20.07 12.44 19.9 12.6C19.74 12.77 19.54 12.85 19.29 12.85H7.09Z" fill="#005B4A"/></svg></div>
@@ -401,20 +477,18 @@ img{display:block;max-width:100%}
   <section class="faq reveal" id="faq">
     <div class="inner">
       <div class="faq-head">
-        <h2 class="reveal">FAQs</h2>
-        <p>Find quick answers about your visit to Hearth & Honey</p>
+        <h2 class="reveal">{faqHeading}</h2>
+        <p>{faqText}</p>
       </div>
       <div class="accordion-list">
-        <div class="accordion"><div class="accordion-q"><b>What are your hours?</b><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17.5996 5.9248C17.7639 5.9248 17.8659 5.97331 17.9463 6.05371C18.0265 6.13402 18.0751 6.23551 18.0752 6.39941C18.0752 6.56362 18.0266 6.66571 17.9463 6.74609L12.6924 12L13.0459 12.3535L17.9463 17.2529C18.0267 17.3333 18.0752 17.4355 18.0752 17.5996C18.0752 17.7639 18.0267 17.8659 17.9463 17.9463C17.8659 18.0267 17.7639 18.0752 17.5996 18.0752C17.4355 18.0752 17.3333 18.0267 17.2529 17.9463L12.3535 13.0459L12 12.6924L6.74609 17.9463C6.66571 18.0266 6.56362 18.0752 6.39941 18.0752C6.23551 18.0751 6.13402 18.0265 6.05371 17.9463C5.97331 17.8659 5.9248 17.7639 5.9248 17.5996C5.92484 17.4355 5.97334 17.3333 6.05371 17.2529L11.3066 12L10.9531 11.6465L6.05371 6.74609C5.97331 6.66569 5.9248 6.56368 5.9248 6.39941C5.92488 6.23537 5.97337 6.13405 6.05371 6.05371C6.13405 5.97337 6.23537 5.92488 6.39941 5.9248C6.56368 5.9248 6.66569 5.97331 6.74609 6.05371L11.6465 10.9531L12 11.3066L17.2529 6.05371C17.3333 5.97334 17.4355 5.92484 17.5996 5.9248Z" fill="black" stroke="black"/></svg></div><div class="accordion-a"><p>We are open Monday through Friday from 7 am to 4 pm. Weekends we open at 8 am and close at 3 pm.</p></div></div>
-        <div class="accordion"><div class="accordion-q"><b>Do you have Wi-Fi?</b><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17.5996 5.9248C17.7639 5.9248 17.8659 5.97331 17.9463 6.05371C18.0265 6.13402 18.0751 6.23551 18.0752 6.39941C18.0752 6.56362 18.0266 6.66571 17.9463 6.74609L12.6924 12L13.0459 12.3535L17.9463 17.2529C18.0267 17.3333 18.0752 17.4355 18.0752 17.5996C18.0752 17.7639 18.0267 17.8659 17.9463 17.9463C17.8659 18.0267 17.7639 18.0752 17.5996 18.0752C17.4355 18.0752 17.3333 18.0267 17.2529 17.9463L12.3535 13.0459L12 12.6924L6.74609 17.9463C6.66571 18.0266 6.56362 18.0752 6.39941 18.0752C6.23551 18.0751 6.13402 18.0265 6.05371 17.9463C5.97331 17.8659 5.9248 17.7639 5.9248 17.5996C5.92484 17.4355 5.97334 17.3333 6.05371 17.2529L11.3066 12L10.9531 11.6465L6.05371 6.74609C5.97331 6.66569 5.9248 6.56368 5.9248 6.39941C5.92488 6.23537 5.97337 6.13405 6.05371 6.05371C6.13405 5.97337 6.23537 5.92488 6.39941 5.9248C6.56368 5.9248 6.66569 5.97331 6.74609 6.05371L11.6465 10.9531L12 11.3066L17.2529 6.05371C17.3333 5.97334 17.4355 5.92484 17.5996 5.9248Z" fill="black" stroke="black"/></svg></div><div class="accordion-a"><p>Yes, the Wi-Fi is free and fast. Bring your laptop and settle in.</p></div></div>
-        <div class="accordion"><div class="accordion-q"><b>Do you offer vegan options?</b><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17.5996 5.9248C17.7639 5.9248 17.8659 5.97331 17.9463 6.05371C18.0265 6.13402 18.0751 6.23551 18.0752 6.39941C18.0752 6.56362 18.0266 6.66571 17.9463 6.74609L12.6924 12L13.0459 12.3535L17.9463 17.2529C18.0267 17.3333 18.0752 17.4355 18.0752 17.5996C18.0752 17.7639 18.0267 17.8659 17.9463 17.9463C17.8659 18.0267 17.7639 18.0752 17.5996 18.0752C17.4355 18.0752 17.3333 18.0267 17.2529 17.9463L12.3535 13.0459L12 12.6924L6.74609 17.9463C6.66571 18.0266 6.56362 18.0752 6.39941 18.0752C6.23551 18.0751 6.13402 18.0265 6.05371 17.9463C5.97331 17.8659 5.9248 17.7639 5.9248 17.5996C5.92484 17.4355 5.97334 17.3333 6.05371 17.2529L11.3066 12L10.9531 11.6465L6.05371 6.74609C5.97331 6.66569 5.9248 6.56368 5.9248 6.39941C5.92488 6.23537 5.97337 6.13405 6.05371 6.05371C6.13405 5.97337 6.23537 5.92488 6.39941 5.9248C6.56368 5.9248 6.66569 5.97331 6.74609 6.05371L11.6465 10.9531L12 11.3066L17.2529 6.05371C17.3333 5.97334 17.4355 5.92484 17.5996 5.9248Z" fill="black" stroke="black"/></svg></div><div class="accordion-a"><p>We always have oat and almond milk for coffee. The kitchen keeps a few vegan dishes on the menu each day.</p></div></div>
-        <div class="accordion"><div class="accordion-q"><b>Do I need a reservation?</b><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17.5996 5.9248C17.7639 5.9248 17.8659 5.97331 17.9463 6.05371C18.0265 6.13402 18.0751 6.23551 18.0752 6.39941C18.0752 6.56362 18.0266 6.66571 17.9463 6.74609L12.6924 12L13.0459 12.3535L17.9463 17.2529C18.0267 17.3333 18.0752 17.4355 18.0752 17.5996C18.0752 17.7639 18.0267 17.8659 17.9463 17.9463C17.8659 18.0267 17.7639 18.0752 17.5996 18.0752C17.4355 18.0752 17.3333 18.0267 17.2529 17.9463L12.3535 13.0459L12 12.6924L6.74609 17.9463C6.66571 18.0266 6.56362 18.0752 6.39941 18.0752C6.23551 18.0751 6.13402 18.0265 6.05371 17.9463C5.97331 17.8659 5.9248 17.7639 5.9248 17.5996C5.92484 17.4355 5.97334 17.3333 6.05371 17.2529L11.3066 12L10.9531 11.6465L6.05371 6.74609C5.97331 6.66569 5.9248 6.56368 5.9248 6.39941C5.92488 6.23537 5.97337 6.13405 6.05371 6.05371C6.13405 5.97337 6.23537 5.92488 6.39941 5.9248C6.56368 5.9248 6.66569 5.97331 6.74609 6.05371L11.6465 10.9531L12 11.3066L17.2529 6.05371C17.3333 5.97334 17.4355 5.92484 17.5996 5.9248Z" fill="black" stroke="black"/></svg></div><div class="accordion-a"><p>Walk-ins are always welcome. For groups of six or more, a quick call ahead helps us save you a table.</p></div></div>
-        <div class="accordion"><div class="accordion-q"><b>Is there gluten-free food?</b><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17.5996 5.9248C17.7639 5.9248 17.8659 5.97331 17.9463 6.05371C18.0265 6.13402 18.0751 6.23551 18.0752 6.39941C18.0752 6.56362 18.0266 6.66571 17.9463 6.74609L12.6924 12L13.0459 12.3535L17.9463 17.2529C18.0267 17.3333 18.0752 17.4355 18.0752 17.5996C18.0752 17.7639 18.0267 17.8659 17.9463 17.9463C17.8659 18.0267 17.7639 18.0752 17.5996 18.0752C17.4355 18.0752 17.3333 18.0267 17.2529 17.9463L12.3535 13.0459L12 12.6924L6.74609 17.9463C6.66571 18.0266 6.56362 18.0752 6.39941 18.0752C6.23551 18.0751 6.13402 18.0265 6.05371 17.9463C5.97331 17.8659 5.9248 17.7639 5.9248 17.5996C5.92484 17.4355 5.97334 17.3333 6.05371 17.2529L11.3066 12L10.9531 11.6465L6.05371 6.74609C5.97331 6.66569 5.9248 6.56368 5.9248 6.39941C5.92488 6.23537 5.97337 6.13405 6.05371 6.05371C6.13405 5.97337 6.23537 5.92488 6.39941 5.9248C6.56368 5.9248 6.66569 5.97331 6.74609 6.05371L11.6465 10.9531L12 11.3066L17.2529 6.05371C17.3333 5.97334 17.4355 5.92484 17.5996 5.9248Z" fill="black" stroke="black"/></svg></div><div class="accordion-a"><p>We bake a gluten-free banana bread most mornings. Ask at the counter for what is available that day.</p></div></div>
+        {faqItems.map((item:any)=> (
+          <div class="accordion"><div class="accordion-q"><b>{item.q}</b><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17.5996 5.9248C17.7639 5.9248 17.8659 5.97331 17.9463 6.05371C18.0265 6.13402 18.0751 6.23551 18.0752 6.39941C18.0752 6.56362 18.0266 6.66571 17.9463 6.74609L12.6924 12L13.0459 12.3535L17.9463 17.2529C18.0267 17.3333 18.0752 17.4355 18.0752 17.5996C18.0752 17.7639 18.0267 17.8659 17.9463 17.9463C17.8659 18.0267 17.7639 18.0752 17.5996 18.0752C17.4355 18.0752 17.3333 18.0267 17.2529 17.9463L12.3535 13.0459L12 12.6924L6.74609 17.9463C6.66571 18.0266 6.56362 18.0752 6.39941 18.0752C6.23551 18.0751 6.13402 18.0265 6.05371 17.9463C5.97331 17.8659 5.9248 17.7639 5.9248 17.5996C5.92484 17.4355 5.97334 17.3333 6.05371 17.2529L11.3066 12L10.9531 11.6465L6.05371 6.74609C5.97331 6.66569 5.9248 6.56368 5.9248 6.39941C5.92488 6.23537 5.97337 6.13405 6.05371 6.05371C6.13405 5.97337 6.23537 5.92488 6.39941 5.9248C6.56368 5.9248 6.66569 5.97331 6.74609 6.05371L11.6465 10.9531L12 11.3066L17.2529 6.05371C17.3333 5.97334 17.4355 5.92484 17.5996 5.9248Z" fill="black" stroke="black"/></svg></div><div class="accordion-a"><p>{item.a}</p></div></div>
+        ))}
       </div>
       <div class="still">
-        <h3>Still have questions?</h3>
-        <p>Haven't found what you're looking for? Our team is happy to help — ask us anything.</p>
-        <a class="btn-outline-dark" href="#contact">Get in Touch</a>
+        <h3>{faqStillHeading}</h3>
+        <p>{faqStillText}</p>
+        <a class="btn-outline-dark" href="#contact">{faqStillButton}</a>
       </div>
     </div>
   </section>
@@ -423,26 +497,22 @@ img{display:block;max-width:100%}
   <section class="contact reveal" id="contact">
     <div class="inner">
       <div class="contact-head">
-        <div class="tagline">Visit Us</div>
-        <h2>Contact us</h2>
-        <p>Find us on Hearth Lane — open daily from 7am. Drop in, call ahead, or send a note.</p>
+        <div class="tagline">{contactTagline}</div>
+        <h2>{contactHeading}</h2>
+        <p>{contactText}</p>
       </div>
       <div class="contact-grid">
         <div class="contact-infos">
-          <div class="contact-item">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M4.73877 5.62646H27.2612C27.7386 5.62646 28.1473 5.79554 28.5093 6.15771C28.8715 6.51972 29.0405 6.92841 29.0405 7.40576V24.5952C29.0405 25.0698 28.8713 25.4758 28.5093 25.8364C28.1474 26.1972 27.7391 26.3667 27.2612 26.3667H4.73877C4.32308 26.3667 3.95997 26.2372 3.63428 25.9634L3.49658 25.8374C3.13594 25.4769 2.96729 25.0703 2.96729 24.5952V7.40576C2.96729 6.92799 3.13602 6.51949 3.49658 6.15771H3.49756C3.85816 5.79569 4.26423 5.62646 4.73877 5.62646ZM4.23877 7.56592V25.0952H27.7612V8.49463L26.9868 9.00439L16.3657 15.9966C16.2804 16.0414 16.2047 16.0775 16.1372 16.104C16.116 16.1124 16.0731 16.1235 15.9995 16.1235C15.9262 16.1235 15.884 16.1123 15.8628 16.104C15.7951 16.0774 15.719 16.0416 15.6333 15.9966L5.23877 9.15283V8.22119L15.7261 15.0903L15.9995 15.27L16.2729 15.0903L27.4019 7.82373L28.8081 6.90576H3.229L4.23877 7.56592Z" fill="black" stroke="black"/></svg>
-            <div><h3>Email</h3><p>For general enquiries and catering</p><a href="mailto:hello@hearthandhoney.example">hello@hearthandhoney.example</a></div>
-          </div>
-          <div class="contact-item">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M5.49207 4.29297H10.1591C10.4429 4.29305 10.6543 4.37934 10.827 4.54199C11.0199 4.72357 11.1656 4.97248 11.2509 5.3125L12.1405 9.34082C12.1874 9.6688 12.1776 9.93944 12.1249 10.1611C12.0758 10.3672 11.9768 10.5392 11.8212 10.6875L11.8153 10.6943L8.45789 14.0049L8.17859 14.2803L8.37878 14.6172C8.94459 15.568 9.5456 16.458 10.1815 17.2871C10.8202 18.1199 11.5294 18.912 12.3085 19.6631C13.1221 20.5033 13.9723 21.2654 14.8593 21.9482C15.7522 22.6357 16.6848 23.2372 17.6571 23.752L17.9882 23.9277L18.2499 23.6592L21.4559 20.3691L21.4657 20.3584C21.6698 20.1369 21.8904 19.9983 22.1298 19.9268L22.1307 19.9277C22.3248 19.8702 22.5181 19.8482 22.7128 19.8623L22.9081 19.8887L26.6815 20.7236C27.0066 20.8142 27.2513 20.9736 27.4364 21.1973C27.6173 21.4158 27.7068 21.6631 27.7069 21.96V26.5078C27.7069 26.8656 27.5921 27.1386 27.3671 27.3613C27.1393 27.5866 26.866 27.6992 26.5155 27.6992C23.9879 27.6991 21.4041 27.0919 18.7596 25.8633C16.116 24.6351 13.6586 22.8892 11.3885 20.6191C9.26054 18.4911 7.59227 16.1973 6.37781 13.7383L6.1405 13.2451L5.91687 12.749C4.83533 10.2746 4.30066 7.85669 4.30066 5.49219C4.30068 5.17911 4.38847 4.92968 4.5614 4.7207L4.6405 4.63379C4.86545 4.40761 5.13801 4.29297 5.49207 4.29297Z" fill="black" stroke="black"/></svg>
-            <div><h3>Phone</h3><p>For reservations and takeaway orders</p><a href="tel:+61290001234">+61 2 9000 1234</a></div>
-          </div>
-          <div class="contact-item">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16.0001 2.95947C18.7425 2.95952 21.1536 3.91573 23.2531 5.84717C25.3236 7.75196 26.374 10.3096 26.3741 13.5757C26.3741 14.9148 26.0791 16.2521 25.4806 17.5894C24.8709 18.9518 24.1054 20.2557 23.1847 21.5024C22.2579 22.7574 21.2512 23.9286 20.1642 25.0161C19.065 26.116 18.0394 27.0898 17.088 27.937L17.0831 27.9419L17.0773 27.9468C16.9383 28.0782 16.7783 28.1734 16.5919 28.2339C16.3813 28.3022 16.1809 28.3345 15.9894 28.3345C15.798 28.3345 15.6024 28.302 15.4005 28.2349C15.2223 28.1756 15.0695 28.0824 14.9366 27.9526L14.9279 27.9438L14.9181 27.936L14.1876 27.2769C13.4437 26.5944 12.6592 25.8408 11.8351 25.0161C10.7481 23.9287 9.74125 22.7573 8.81458 21.5024C7.89406 20.2559 7.13047 18.9514 6.52356 17.5894C5.92767 16.2521 5.63391 14.9151 5.63391 13.5757C5.63401 10.3095 6.68313 7.7519 8.7511 5.84717C10.8478 3.91586 13.2576 2.95947 16.0001 2.95947Z" fill="black" stroke="black"/></svg>
-            <div><h3>Visit</h3><p>12 Hearth Lane, Surry Hills NSW 2010 AU</p><a href="#" style="display:inline-flex;align-items:center;gap:8px;margin-top:8px">Get Directions <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9.38708 6.67285C9.48791 6.67285 9.56488 6.70326 9.64294 6.78125L14.5873 11.7256C14.6412 11.7795 14.6663 11.8215 14.6781 11.8496V11.8506C14.6929 11.8861 14.7015 11.9259 14.7015 11.9746C14.7015 12.0233 14.6929 12.0631 14.6781 12.0986V12.0996C14.6663 12.1277 14.6412 12.1697 14.5873 12.2236L9.61853 17.1924C9.54076 17.2702 9.47362 17.292 9.39294 17.2891C9.29892 17.2856 9.21805 17.2537 9.1322 17.168C9.05408 17.0898 9.02283 17.013 9.02283 16.9121C9.02283 16.8112 9.05408 16.7344 9.1322 16.6562L13.8138 11.9746L9.10681 7.26758C9.02915 7.18988 9.0072 7.12357 9.01013 7.04297C9.01358 6.9487 9.04615 6.86731 9.1322 6.78125C9.21013 6.70344 9.28649 6.67293 9.38708 6.67285Z" fill="black" stroke="black"/></svg></a></div>
-          </div>
+          {contactItems.map((item:any, idx:number)=> (
+            <div class="contact-item">
+              {idx===0 && (<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M4.73877 5.62646H27.2612C27.7386 5.62646 28.1473 5.79554 28.5093 6.15771C28.8715 6.51972 29.0405 6.92841 29.0405 7.40576V24.5952C29.0405 25.0698 28.8713 25.4758 28.5093 25.8364C28.1474 26.1972 27.7391 26.3667 27.2612 26.3667H4.73877C4.32308 26.3667 3.95997 26.2372 3.63428 25.9634L3.49658 25.8374C3.13594 25.4769 2.96729 25.0703 2.96729 24.5952V7.40576C2.96729 6.92799 3.13602 6.51949 3.49658 6.15771H3.49756C3.85816 5.79569 4.26423 5.62646 4.73877 5.62646ZM4.23877 7.56592V25.0952H27.7612V8.49463L26.9868 9.00439L16.3657 15.9966C16.2804 16.0414 16.2047 16.0775 16.1372 16.104C16.116 16.1124 16.0731 16.1235 15.9995 16.1235C15.9262 16.1235 15.884 16.1123 15.8628 16.104C15.7951 16.0774 15.719 16.0416 15.6333 15.9966L5.23877 9.15283V8.22119L15.7261 15.0903L15.9995 15.27L16.2729 15.0903L27.4019 7.82373L28.8081 6.90576H3.229L4.23877 7.56592Z" fill="black" stroke="black"/></svg>)}
+              {idx===1 && (<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M5.49207 4.29297H10.1591C10.4429 4.29305 10.6543 4.37934 10.827 4.54199C11.0199 4.72357 11.1656 4.97248 11.2509 5.3125L12.1405 9.34082C12.1874 9.6688 12.1776 9.93944 12.1249 10.1611C12.0758 10.3672 11.9768 10.5392 11.8212 10.6875L11.8153 10.6943L8.45789 14.0049L8.17859 14.2803L8.37878 14.6172C8.94459 15.568 9.5456 16.458 10.1815 17.2871C10.8202 18.1199 11.5294 18.912 12.3085 19.6631C13.1221 20.5033 13.9723 21.2654 14.8593 21.9482C15.7522 22.6357 16.6848 23.2372 17.6571 23.752L17.9882 23.9277L18.2499 23.6592L21.4559 20.3691L21.4657 20.3584C21.6698 20.1369 21.8904 19.9983 22.1298 19.9268L22.1307 19.9277C22.3248 19.8702 22.5181 19.8482 22.7128 19.8623L22.9081 19.8887L26.6815 20.7236C27.0066 20.8142 27.2513 20.9736 27.4364 21.1973C27.6173 21.4158 27.7068 21.6631 27.7069 21.96V26.5078C27.7069 26.8656 27.5921 27.1386 27.3671 27.3613C27.1393 27.5866 26.866 27.6992 26.5155 27.6992C23.9879 27.6991 21.4041 27.0919 18.7596 25.8633C16.116 24.6351 13.6586 22.8892 11.3885 20.6191C9.26054 18.4911 7.59227 16.1973 6.37781 13.7383L6.1405 13.2451L5.91687 12.749C4.83533 10.2746 4.30066 7.85669 4.30066 5.49219C4.30068 5.17911 4.38847 4.92968 4.5614 4.7207L4.6405 4.63379C4.86545 4.40761 5.13801 4.29297 5.49207 4.29297Z" fill="black" stroke="black"/></svg>)}
+              {idx>=2 && (<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16.0001 2.95947C18.7425 2.95952 21.1536 3.91573 23.2531 5.84717C25.3236 7.75196 26.374 10.3096 26.3741 13.5757C26.3741 14.9148 26.0791 16.2521 25.4806 17.5894C24.8709 18.9518 24.1054 20.2557 23.1847 21.5024C22.2579 22.7574 21.2512 23.9286 20.1642 25.0161C19.065 26.116 18.0394 27.0898 17.088 27.937L17.0831 27.9419L17.0773 27.9468C16.9383 28.0782 16.7783 28.1734 16.5919 28.2339C16.3813 28.3022 16.1809 28.3345 15.9894 28.3345C15.798 28.3345 15.6024 28.302 15.4005 28.2349C15.2223 28.1756 15.0695 28.0824 14.9366 27.9526L14.9279 27.9438L14.9181 27.936L14.1876 27.2769C13.4437 26.5944 12.6592 25.8408 11.8351 25.0161C10.7481 23.9287 9.74125 22.7573 8.81458 21.5024C7.89406 20.2559 7.13047 18.9514 6.52356 17.5894C5.92767 16.2521 5.63391 14.9151 5.63391 13.5757C5.63401 10.3095 6.68313 7.7519 8.7511 5.84717C10.8478 3.91586 13.2576 2.95947 16.0001 2.95947Z" fill="black" stroke="black"/></svg>)}
+              <div><h3>{item.heading}</h3><p>{item.text}</p><a href={item.link}>{item.link_text}</a></div>
+            </div>
+          ))}
         </div>
-        <img class="contact-img" src="/shots/figma-3.png" alt="Location map" loading="lazy"/>
+        <img class="contact-img" src={contactImage} alt="Location map" loading="lazy"/>
       </div>
     </div>
   </section>
@@ -451,8 +521,8 @@ img{display:block;max-width:100%}
   <section class="cta reveal" id="book">
     <div class="inner">
       <div class="cta-card">
-        <h2>See you at the counter</h2>
-        <p>Stop by for a coffee or stay for brunch. The kettle is on and the door is open.</p>
+        <h2>{ctaHeading}</h2>
+        <p>{ctaText}</p>
         <div class="cta-actions">
           <a class="btn-mustard" href="#book">Book a Table</a>
           <a class="btn-outline-dark" style="color:#fff;outline-color:#fff" href="#menu">See the menu</a>
@@ -472,10 +542,10 @@ img{display:block;max-width:100%}
           <div class="footer-col"><h4>Our menu</h4><a href="#">Find us</a><a href="#">Careers</a><a href="#">Press</a><a href="#">Gift cards</a><a href="#">Feedback</a></div>
         </div>
         <div class="news">
-          <h4>Get in touch</h4>
-          <p>Get the word on new roasts and weekend specials. No noise, just news.</p>
-          <div class="news-form"><label class="field"><input type="email" placeholder="Enter your email" aria-label="Footer email" style="flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:16px;font-family:DM Sans;width:100%" /></label><button class="btn-outline-dark" style="color:#fff;outline-color:#fff;padding:6px 12px">Subscribe</button></div>
-          <p style="font-size:12px;line-height:18px;margin-top:12px">By subscribing you agree to our Privacy Policy</p>
+          <h4>{footerNewsletterHeading}</h4>
+          <p>{footerNewsletterText}</p>
+          <div class="news-form"><label class="field"><input type="email" placeholder={footerPlaceholder} aria-label={footerPlaceholder} style="flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:16px;font-family:DM Sans;width:100%" /></label><button class="btn-outline-dark" style="color:#fff;outline-color:#fff;padding:6px 12px">{footerButton}</button></div>
+          <p style="font-size:12px;line-height:18px;margin-top:12px">{footerFineprint}</p>
         </div>
       </div>
       <div class="footer-bottom">
@@ -499,6 +569,35 @@ img{display:block;max-width:100%}
 </div>
 
 <script is:inline>
+// CMS live preview patch: when opened as /?cms_preview_data={...} inside Sveltia iframe,
+// patch the static HTML client-side so right pane shows exact frontend live per keystroke
+(function(){
+  try{
+    const q = new URLSearchParams(location.search).get('cms_preview_data');
+    if(!q) return;
+    const d = JSON.parse(decodeURIComponent(q));
+    const set = (sel, val)=>{ if(val==null) return; const el=document.querySelector(sel); if(el) el.textContent=val; };
+    set('.hero h1', d.hero_heading);
+    set('.hero .sub', d.hero_text);
+    set('.about h2', (d.about&&d.about.heading)||d.about_heading);
+    set('.about-grid > div > div > p:last-child', (d.about&&d.about.text)||d.about_text);
+    set('.menu-head h2', d.menu&&d.menu.heading);
+    set('.menu-head p', d.menu&&d.menu.text);
+    set('.testi-head h2', d.testimonials&&d.testimonials.heading);
+    set('.testi-head p', d.testimonials&&d.testimonials.text);
+    set('.faq-head h2', d.faq&&d.faq.heading);
+    set('.faq-head p', d.faq&&d.faq.text);
+    set('.contact-head h2', d.contact&&d.contact.heading);
+    set('.contact-head p', d.contact&&d.contact.text);
+    set('.cta-card h2', d.cta&&d.cta.heading);
+    set('.cta-card p', d.cta&&d.cta.text);
+    // menu first tab live
+    if(d.menu&&d.menu.tabs&&d.menu.tabs[0]){
+      const t0=d.menu.tabs[0];
+      set('#tab-'+(t0.id||'coffee')+' h3', t0.heading);
+    }
+  }catch(e){ console.log('preview patch skip', e); }
+})();
 document.addEventListener('DOMContentLoaded',()=>{
   const dd=document.getElementById('visit-dropdown');
   const trigger=dd?.querySelector('.nav-link');
