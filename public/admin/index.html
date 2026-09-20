@@ -29,9 +29,104 @@
       });
     </script>
     <script>
-      // Register live preview templates (mirrors site CSS so preview is WYSIWYG, like Elementor)
+      // Live preview: use the same preview for both site and figma so editor sees full landing page, like Elementor
+      CMS.registerPreviewStyle("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap");
       CMS.registerPreviewStyle("/src/styles/global.css");
-      // Work card preview
+      // Minimal landing preview CSS (mirrors Hearth & Honey landing)
+      const landingPreviewCSS = `
+        .preview-wrap{max-width:800px;margin:0 auto;font-family:'DM Sans',system-ui,sans-serif;color:#000;background:#FFECCC;padding:24px}
+        .preview-hero{background:linear-gradient(0deg,rgba(0,0,0,.4),rgba(0,0,0,.4)),url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80') center/cover; color:#fff; border-radius:24px; padding:32px; min-height:320px; display:flex; flex-direction:column; justify-content:flex-end}
+        .preview-hero h1{font-family:'Fraunces',serif;font-size:32px;line-height:1.1;margin:0}
+        .preview-hero p{font-size:14px;line-height:20px;margin:8px 0 0}
+        .preview-section{background:#fff;border:2px solid #000;border-radius:16px;padding:20px;margin-top:16px}
+        .preview-section h2{font-family:'Fraunces',serif;font-size:22px;margin:0 0 8px}
+        .preview-tag{font-family:'Great Vibes',cursive;font-size:20px;color:#005B4A}
+        .preview-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:24px}
+        .preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+        .preview-card{border:2px solid #000;border-radius:12px;padding:12px;background:#fff}
+        .preview-hint{font-size:11px;color:#666;text-align:center;margin-top:12px}
+      `;
+      const styleEl = document.createElement('style');
+      styleEl.textContent = landingPreviewCSS;
+      document.head.appendChild(styleEl);
+      CMS.registerPreviewStyle({ raw: landingPreviewCSS });
+
+      // Helper to get field
+      const get = (entry, key, fallback='') => entry.getIn(['data', key]) || fallback;
+
+      // Home landing preview — shows full Hearth & Honey page live, click any box to edit that field in left
+      CMS.registerPreviewTemplate("home", ({ entry }) => {
+        const heroHeading = get(entry, 'hero_heading', 'Your neighborhood spot for coffee and good company');
+        const heroText = get(entry, 'hero_text', 'We serve specialty coffee...');
+        const aboutHeading = get(entry, 'about_heading', 'A good café is a clean, well-lighted place');
+        const aboutText = get(entry, 'about_text', 'We built Hearth & Honey...');
+        const buttons = entry.getIn(['data','hero_buttons']);
+        const btns = buttons ? buttons.toJS() : [{label:'Explore Menu'},{label:'Book a Table'}];
+        return h("div", {className:"preview-wrap"},
+          h("div", {className:"preview-hero"},
+            h("h1", {}, heroHeading),
+            h("p", {}, heroText),
+            h("div", {style:"display:flex;gap:8px;margin-top:12px"},
+              ...btns.map(b=> h("span", {style:"background:#D99E4F;color:#000;border:1px solid #000;border-radius:6px;padding:4px 8px;font-size:12px;font-weight:600"}, b.label))
+            )
+          ),
+          h("div", {className:"preview-section"},
+            h("div", {className:"preview-tag"}, "About"),
+            h("h2", {}, aboutHeading),
+            h("p", {}, aboutText)
+          ),
+          h("div", {className:"preview-section"},
+            h("div", {className:"preview-tag"}, "Menu"),
+            h("h2", {}, "What we do well"),
+            h("p", {style:"font-size:13px;color:#555"}, "A few things we make every day. They are simple and they are good."),
+            h("div", {className:"preview-grid"},
+              h("div", {className:"preview-card"}, h("strong", {}, "Coffee"), h("p", {style:"font-size:12px"}, "The flat white is true and strong")),
+              h("div", {className:"preview-card"}, h("strong", {}, "Breakfast"), h("p", {style:"font-size:12px"}, "Morning plates done right"))
+            )
+          ),
+          h("div", {className:"preview-section"},
+            h("div", {className:"preview-tag"}, "Testimonials"),
+            h("p", {className:"preview-quote"}, "“The espresso is the best in the neighborhood. No argument.”"),
+            h("p", {className:"preview-quote"}, "“A clean, bright room where a man can sit alone...”")
+          ),
+          h("div", {className:"preview-hint"}, "Live preview — edit any field on the left, see it here instantly. For multiple pages, use Pages → create new page with its own URL.")
+        );
+      });
+
+      // Pages (additional pages) preview
+      CMS.registerPreviewTemplate("pages", ({ entry }) => {
+        const title = get(entry, 'title', 'New Page');
+        const desc = get(entry, 'description', '');
+        const body = entry.getIn(['data','body']) || '';
+        return h("div", {className:"preview-wrap"},
+          h("div", {className:"preview-hero", style:"min-height:200px"},
+            h("h1", {style:"font-size:28px"}, title),
+            h("p", {}, desc)
+          ),
+          h("div", {className:"preview-section"},
+            h("div", {}, body ? h("div", {dangerouslySetInnerHTML:{__html: body}}) : h("p", {style:"color:#666"}, "No body yet — add markdown. Preview at /{{slug}}"))
+          ),
+          h("div", {className:"preview-hint"}, "This page will be at /{{slug}} — Save → Workflow → Publish, then View on Live Site.")
+        );
+      });
+
+      // Site Settings preview — also shows landing hero so not just text
+      CMS.registerPreviewTemplate("site", ({ entry }) => {
+        const title = get(entry, 'site_title', 'Hearth & Honey');
+        const tagline = get(entry, 'tagline', 'Warm mornings, soft light');
+        return h("div", {className:"preview-wrap"},
+          h("div", {className:"preview-hero", style:"min-height:200px"},
+            h("h1", {style:"font-size:28px"}, title),
+            h("p", {}, tagline)
+          ),
+          h("div", {className:"preview-section"},
+            h("h2", {}, "Site Settings live preview"),
+            h("p", {}, "This is just the site title/tagline. For full page, edit Figma Landing → Home.")
+          )
+        );
+      });
+
+      // Work card preview (existing, keep)
       CMS.registerPreviewTemplate("work", ({ entry }) => {
         const title = entry.getIn(["data", "title"]);
         const excerpt = entry.getIn(["data", "excerpt"]);

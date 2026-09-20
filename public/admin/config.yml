@@ -10,6 +10,8 @@ display_url: "https://the-daily-grind-7y2.pages.dev"
 logo_url: "/favicon.svg"
 publish_mode: editorial_workflow
 show_preview_links: true
+local_backend: true
+search: true
 
 media_folder: "public/shots"
 public_folder: "/shots"
@@ -31,14 +33,15 @@ collections:
           - { label: "Tagline", name: "tagline", widget: "string", default: "Your neighborhood spot for coffee and good company" }
           - { label: "Description", name: "description", widget: "text", default: "We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space." }
           - { label: "Contact Email", name: "contact_email", widget: "string", default: "hello@hearthandhoney.example" }
-  - name: "figma"
-    label: "Figma Landing (Hearth & Honey)"
-    label_singular: "Landing"
-    description: "Hearth & Honey — warm & soft. Edit hero, header dropdown, menu. Like Elementor."
+  - name: "home"
+    label: "Home — Landing"
+    label_singular: "Home"
+    description: "Hearth & Honey landing — live visual preview. Edit hero, header, menu. Like Elementor."
     files:
       - label: "Home"
         name: "home"
-        file: "src/content/figma/home.yaml"
+        file: "src/content/pages/home.yaml"
+        preview_path: "/"
         fields:
           - { label: "SEO Title", name: "seo_title", widget: "string", default: "Hearth & Honey — Your neighborhood spot for coffee and good company" }
           - { label: "Hero Heading", name: "hero_heading", widget: "string", default: "Your neighborhood spot for coffee and good company" }
@@ -63,13 +66,16 @@ collections:
                   - { label: "Item", name: "item", widget: "string" }
           - { label: "About Heading", name: "about_heading", widget: "string", default: "A good café is a clean, well-lighted place" }
           - { label: "About Text", name: "about_text", widget: "text", default: "We built Hearth & Honey to be simple and true. Good coffee, honest food, and a room that feels right." }
-  - name: "work"
-    label: "Work"
-    folder: "src/content/work"
+  - name: "pages"
+    label: "Pages"
+    description: "Additional pages (About, Contact, etc). Each page gets its own URL."
+    folder: "src/content/pages"
     create: true
     slug: "{{slug}}"
+    preview_path: "{{slug}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Image", name: "image", widget: "image" }
-      - { label: "Excerpt", name: "excerpt", widget: "string" }
+      - { label: "Description", name: "description", widget: "text", required: false }
       - { label: "Body", name: "body", widget: "markdown", required: false }
+  # Work collection removed for single landing page - not needed for Hearth & Honey café
+  # To re-enable, uncomment and use src/content/work for portfolio items

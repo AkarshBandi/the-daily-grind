@@ -1,8 +1,8 @@
 ---
-import figmaRaw from '../content/figma/home.yaml?raw';
+import homeRaw from '../content/pages/home.yaml?raw';
 import * as yaml from 'js-yaml';
 let f:any={};
-try{ f = yaml.load(figmaRaw) as any; }catch{}
+try{ f = yaml.load(homeRaw) as any; }catch{}
 const t = (k:string, fallback:string)=> (f && f[k]) ? f[k] : fallback;
 // preserve figma exact strings
 const seoTitle = t('seo_title','Hearth & Honey — Your neighborhood spot for coffee and good company');
