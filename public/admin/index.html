@@ -50,11 +50,12 @@
         const d = D(entry);
         const src = 'https://the-daily-grind-7y2.pages.dev/preview?edit=1&data=' + encodeURIComponent(JSON.stringify(d));
         const live = 'https://the-daily-grind-7y2.pages.dev/';
-        return h('div', { style: { maxWidth: '100%', padding: 0, fontFamily: 'sans-serif' } },
+        var k = 'hh-' + String(JSON.stringify(d).length) + '-' + String((d.menu && d.menu.tag) || '').length;
+        return h('div', { style: { maxWidth: '100%', padding: 0, fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 16px)', background: '#FFECCC' } },
           h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'space-between', background: '#FFECCC', border: '2px solid #1A472C', borderRadius: '12px', padding: '8px 12px', marginBottom: '8px' } },
             h('span', { style: { fontSize: '13px', fontWeight: '600', color: '#1A472C' } }, 'Live preview — click any text or image to jump to its field'),
             h('a', { href: live, target: '_blank', style: { fontSize: '12px', color: '#1A472C' } }, 'Open live site')),
-          h('iframe', { id: 'hh-live-iframe', src: src, title: 'Hearth & Honey live preview', style: { width: '100%', height: '78vh', border: '2px solid #1A472C', borderRadius: '12px', background: '#fff', display: 'block' } }));
+          h('iframe', { key: k, id: 'hh-live-iframe', src: src, title: 'Hearth & Honey live preview', style: { width: '100%', flex: '1', minHeight: '60vh', border: '2px solid #1A472C', borderRadius: '12px', background: '#fff', display: 'block' } }));
       } catch(e) {
         return h("div", { style: { padding: "24px", color: "red", fontFamily: "monospace" } }, "Preview error: " + e.message);
       }
@@ -104,7 +105,8 @@
       var norm = function (s) { return ' ' + String(s || '').toLowerCase().replace(/[_-]+/g, ' ') + ' '; };
       var fields = Array.prototype.slice.call(document.querySelectorAll('input, textarea, select'));
       var best = null, i, f, hay;
-      for (i = 0; i < fields.length; i++) {
+      for (i = 0; i < fields.length; i++) { f = fields[i]; if (f.getAttribute('name') === String(msg.field)) { best = f; break; } }
+      if (!best) for (i = 0; i < fields.length; i++) {
         f = fields[i];
         hay = norm(f.getAttribute('aria-label')) + norm(f.getAttribute('name')) + norm(f.getAttribute('placeholder')) + norm(f.id);
         if (hay.indexOf(' ' + leaf + ' ') !== -1) { best = f; break; }
@@ -125,6 +127,43 @@
       best.style.outline = '3px solid #D99E4F';
       setTimeout(function () { best.style.outline = prev; }, 1600);
     });
+    (function () {
+      function fieldFromInput(el) {
+        if (!el) return null;
+        var n = el.getAttribute('name');
+        if (n && n.indexOf('.') !== -1) return n;
+        var p = el.closest ? el.closest('[class*="field"]') : null;
+        var lab = p ? p.querySelector('label') : null;
+        if (!lab) lab = el.previousElementSibling && el.previousElementSibling.tagName === 'LABEL' ? el.previousElementSibling : null;
+        if (lab) {
+          var t = lab.textContent.trim().toLowerCase();
+          var map = { 'site title':'site_title', 'tagline':'tagline', 'seo title':'seo_title', 'hero heading':'hero_heading', 'hero text':'hero_text' };
+          if (map[t]) return map[t];
+        }
+        return el.getAttribute('aria-label') || el.getAttribute('placeholder') || null;
+      }
+      function scrollPreviewTo(field) {
+        if (!field) return;
+        var ifr = document.getElementById('hh-live-iframe');
+        if (!ifr || !ifr.contentWindow) return;
+        try { ifr.contentWindow.postMessage({ type: 'hh-scroll-to', field: field }, '*'); } catch (e) {}
+      }
+      document.addEventListener('focusin', function (ev) {
+        var t = ev.target;
+        if (!t || !t.matches || !t.matches('input, textarea, select')) return;
+        var f = fieldFromInput(t);
+        if (f) scrollPreviewTo(f);
+      });
+      document.addEventListener('click', function (ev) {
+        var t = ev.target && ev.target.closest ? ev.target.closest('label') : null;
+        if (!t) return;
+        var inp = t.querySelector('input, textarea, select') || t.nextElementSibling;
+        if (inp && inp.matches && inp.matches('input, textarea, select')) {
+          var f2 = fieldFromInput(inp);
+          if (f2) scrollPreviewTo(f2);
+        }
+      }, true);
+    })();
     </script>
   </body>
 </html>
