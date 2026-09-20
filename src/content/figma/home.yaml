@@ -1,1 +1,21 @@
-seo_title: "Hearth & Honey — Your neighborhood spot for coffee and good company"\nhero_heading: "Your neighborhood spot for coffee and good company"\nhero_text: "We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile."\nhero_buttons:\n  - label: "Explore Menu"\n    href: "#menu"\n  - label: "Book a Table"\n    href: "#book"\nnavbar_links:\n  - label: "Our story"\n    href: "#story"\n  - label: "Menu"\n    href: "#menu"\n  - label: "Visit"\n    href: "#visit"\n    dropdown:\n      - "Hours"\n      - "Location"\n      - "Contact"\nabout_heading: "A good café is a clean, well-lighted place"\nabout_text: "We built Hearth & Honey to be simple and true. Good coffee, honest food, and a room that feels right."\n
+seo_title: "Hearth & Honey — Your neighborhood spot for coffee and good company"
+hero_heading: "Your neighborhood spot for coffee and good company"
+hero_text: "We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile."
+hero_buttons:
+  - label: "Explore Menu"
+    href: "#menu"
+  - label: "Book a Table"
+    href: "#book"
+navbar_links:
+  - label: "Our story"
+    href: "#story"
+  - label: "Menu"
+    href: "#menu"
+  - label: "Visit"
+    href: "#visit"
+    dropdown:
+      - "Hours"
+      - "Location"
+      - "Contact"
+about_heading: "A good café is a clean, well-lighted place"
+about_text: "We built Hearth & Honey to be simple and true. Good coffee, honest food, and a room that feels right."
