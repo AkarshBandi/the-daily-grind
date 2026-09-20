@@ -65,13 +65,28 @@ import Landing from "../components/Landing.astro";
     if (!ev.data) return;
     if (ev.data.type === 'hh-cms-data') { applyCmsData(ev.data.data); return; }
     if (ev.data.type === 'hh-scroll-to' && ev.data.field) {
-      var sel = '[data-cms="' + ev.data.field + '"], [data-cms-src="' + ev.data.field + '"]';
-      var el = document.querySelector(sel);
-      if (!el && ev.data.field.indexOf('.') !== -1) {
-        var leaf = ev.data.field.split('.').pop();
-        el = document.querySelector('[data-cms$=".' + leaf + '"], [data-cms-src$=".' + leaf + '"]') || document.querySelector('[data-cms="' + leaf + '"]');
+      var field = ev.data.field;
+      // 1) try exact full path match
+      var el = document.querySelector('[data-cms="' + field + '"]') || document.querySelector('[data-cms-src="' + field + '"]') || document.querySelector('[data-cms-href="' + field + '"]');
+      // 2) try leaf match
+      if (!el && field.indexOf('.') !== -1) {
+        var leaf = field.split('.').pop();
+        el = document.querySelector('[data-cms$=".' + leaf + '"]') || document.querySelector('[data-cms-src$=".' + leaf + '"]') || document.querySelector('[data-cms="' + leaf + '"]');
       }
-      if (el) { try { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} el.style.outline = '3px solid #D99E4F'; el.style.outlineOffset = '2px'; setTimeout(function(){ el.style.outline=''; }, 1400); }
+      // 3) find the closest section ancestor for a better scroll target
+      var scrollTarget = el;
+      if (el) {
+        var section = el.closest('section, .banner, .hero, .about, .menu, .testimonials, .faq, .contact, .cta, footer, [class*="section"]');
+        if (section) scrollTarget = section;
+      }
+      if (scrollTarget) {
+        try { scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+        if (el) {
+          el.style.outline = '3px solid #D99E4F';
+          el.style.outlineOffset = '2px';
+          setTimeout(function(){ el.style.outline = ''; el.style.outlineOffset = ''; }, 1400);
+        }
+      }
     }
   });
   if (editMode) {
