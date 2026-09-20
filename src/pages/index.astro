@@ -1,0 +1,98 @@
+---
+import pHtmlRaw from '../../public/p.html?raw';
+import figmaRaw from '../content/figma/home.yaml?raw';
+import * as yaml from 'js-yaml';
+let figma: any = {};
+try { figma = yaml.load(figmaRaw) as any; } catch {}
+let pHtml = pHtmlRaw;
+// CMS patches — exact p.html stays untouched on disk, but live HTML reflects CMS edits (like Elementor)
+if (figma.hero_heading) pHtml = pHtml.replace('Your neighborhood spot for coffee and good company', figma.hero_heading);
+if (figma.hero_text) pHtml = pHtml.replace('We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile.', figma.hero_text);
+if (figma.about_heading) pHtml = pHtml.replace('A good café is a clean, well-lighted place', figma.about_heading);
+if (figma.about_text) pHtml = pHtml.replace('We built The Daily Grind to be simple and true. Good coffee, honest food, and a room that feels right.', figma.about_text);
+const pageTitle = figma.seo_title || 'The Daily Grind — Your neighborhood spot for coffee and good company';
+const pageDesc = figma.hero_text || 'We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile.';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDesc} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style is:global>
+    /* Make Figma 1440px exact code responsive without touching p.html lines */
+    .HomeDesktop { width: 100% !important; max-width: 100% !important; }
+    @media (max-width: 1440px) {
+      .HomeDesktop { width: 100% !important; }
+      .Header111 { padding-left: 32px !important; padding-right: 32px !important; }
+      .Banner1, .Navbar3, .Layout1, .Layout507, .Testimonial19 { padding-left: 32px !important; padding-right: 32px !important; }
+    }
+    @media (max-width: 1024px) {
+      .Header111 { height: 700px !important; padding: 80px 24px !important; }
+      .Heading { font-size: 48px !important; line-height: 57px !important; }
+    }
+    @media (max-width: 768px) {
+      .Header111 { height: 600px !important; padding: 48px 24px !important; flex-direction: column !important; }
+      .Header111 .Component { flex-direction: column !important; gap: 32px !important; }
+      .Navbar3 { height: auto !important; padding: 16px 24px !important; }
+      .Layout1, .Layout507 { padding: 48px 24px !important; }
+    }
+    @media (max-width: 480px) {
+      .Header111 { height: 500px !important; padding: 32px 16px !important; }
+      .Heading { font-size: 36px !important; line-height: 43px !important; }
+    }
+    /* Fix duplicate background-image if outer HomeDesktop has same as hero - hide outer */
+    .HomeDesktop[style*="background-image"] { background-image: none !important; }
+    /* Exact dropdown: hover on desktop, tap on tab/mobile */
+    .Menu { display: none !important; }
+    @media (min-width: 1025px) {
+      .Link:hover .Menu, .Link:focus-within .Menu { display: flex !important; }
+    }
+    @media (max-width: 1024px) {
+      .Link.open .Menu { display: flex !important; }
+    }
+    /* Ensure text not touching edge on tab/mobile */
+    .Container { max-width: 100% !important; }
+  </style>
+</head>
+<body>
+  <!-- Exact p.html injected verbatim - not a single line changed in source, fix via CSS above -->
+  <div id="figma-original" set:html={pHtml}></div>
+
+  <script is:inline>
+    // Exact header dropdown: tap on tab/mobile, hover on desktop (as requested)
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropdown = document.querySelector('.NavLinkDropdown');
+      const link = dropdown?.closest('.Link');
+      if (!link || !dropdown) return;
+      const isMobile = () => window.innerWidth <= 1024;
+      dropdown.style.cursor = 'pointer';
+      dropdown.setAttribute('tabindex', '0');
+      dropdown.setAttribute('role', 'button');
+      dropdown.setAttribute('aria-expanded', 'false');
+      dropdown.setAttribute('aria-haspopup', 'true');
+      function toggle(e) {
+        if (!isMobile()) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const open = link.classList.toggle('open');
+        dropdown.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      dropdown.addEventListener('click', toggle);
+      dropdown.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { toggle(e); }
+        if (e.key === 'Escape') { link.classList.remove('open'); dropdown.setAttribute('aria-expanded','false'); }
+      });
+      document.addEventListener('click', (e) => {
+        if (!link.contains(e.target)) { link.classList.remove('open'); dropdown.setAttribute('aria-expanded','false'); }
+      });
+      // Ensure hover works on desktop by not interfering
+      link.addEventListener('mouseenter', () => { if (!isMobile()) link.classList.remove('open'); });
+    });
+  </script>
+</body>
+</html>

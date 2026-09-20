@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+public/_headers
+public/_redirects
+.env
+.DS_Store

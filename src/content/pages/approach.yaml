@@ -1,0 +1,86 @@
+seo_title: "Approach: proof not promises"
+hero_1: "Before WordPress."
+hero_2: "After static."
+lede: "Three checks. WordPress next to static. Tagged illustrative is a mock. Your screenshots replace it."
+method_band:
+  - title: "Tool"
+    note: "PageSpeed Insights, lab run"
+  - title: "Device"
+    note: "Mid-range phone class"
+  - title: "Network"
+    note: "Throttled 4G"
+  - title: "Runs"
+    note: "Median of three"
+chapters:
+  - kicker: "Chapter 1: Found"
+    title: "Before WordPress vs your site: can customers find you?"
+    intro: "Search only lists pages it can crawl. Plugin logins, duplicate URLs and missing titles quietly delete you from results."
+    before:
+      rows:
+        - label: "Crawl access"
+          value: "Blocked by login plugin"
+        - label: "Page titles"
+          value: "31 missing"
+        - label: "Sitemap"
+          value: "None found"
+        - label: "Verdict"
+          value: "Half invisible"
+    after:
+      image: "/shots/seo-after.webp"
+      rows:
+        - label: "Crawl access"
+          value: "All pages pass"
+        - label: "Page titles"
+          value: "Set on every page"
+        - label: "Sitemap"
+          value: "Submitted"
+        - label: "Verdict"
+          value: "Fully listed"
+  - kicker: "Chapter 2: Fast"
+    title: "Before WordPress vs your site: do they wait?"
+    intro: "Every second of loading loses visitors. The before card is what a lab test reports on a typical builder page; the after card is the same test on static."
+    before:
+      rows:
+        - label: "Performance score"
+          value: "41 · Poor"
+        - label: "Main content shows in"
+          value: "5.2 seconds"
+        - label: "Blocking scripts"
+          value: "1.1 MB"
+        - label: "Verdict"
+          value: "Most visitors leave"
+    after:
+      image: "/shots/speed-after.webp"
+      rows:
+        - label: "Performance score"
+          value: "96 · Good"
+        - label: "Main content shows in"
+          value: "0.4 seconds"
+        - label: "Blocking scripts"
+          value: "None"
+        - label: "Verdict"
+          value: "Opens instantly"
+  - kicker: "Chapter 3: Phone"
+    title: "Before WordPress vs your site: can they buy on a phone?"
+    intro: "Most of your customers arrive on a phone. If the call button is tiny, hidden, or overlapping, the sale goes to whoever is easier to tap."
+    before:
+      rows: []
+    before_caption: "Text too small · buttons overlap · taps miss"
+    after_caption: "Readable · one thumb-sized button · nothing overlaps"
+    after:
+      image: "/shots/mobile-after.webp"
+      rows: []
+steps:
+  - kicker: "Audit"
+    text: "I measure your current page and list exactly what loads. You keep the report."
+  - kicker: "Rebuild"
+    text: "Same content, rewritten as lean static files. You review on a preview link, not on promises."
+  - kicker: "Verify"
+    text: "Before/after test links you can rerun yourself, any time, on your own connection."
+dark_closer:
+  kicker: "Test it yourself"
+  text: "Test any site in thirty seconds. Slow pages fail the same way."
+  steps: |
+    **1.** Open PageSpeed Insights and paste any address.
+    **2.** Read the mobile score first. That is your customer.
+    **3.** Healthy reads: largest paint under two and a half seconds, page under half a megabyte.

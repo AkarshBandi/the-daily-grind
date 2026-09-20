@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+    <title>Content Manager — Sveltia CMS</title>
+    <style>
+      :root { color-scheme: light; }
+    </style>
+  </head>
+  <body>
+    <!-- Sveltia CMS — free, open source, Git-based, drop-in Decap replacement -->
+    <!-- Method A active: GitHub OAuth via sveltia/sveltia-cms-auth Worker (one-time login) -->
+    <!-- For Method B (password-only), see docs/cms-auth.md and switch backend to proxy -->
+    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+    <script>
+      // Register live preview templates (mirrors site CSS so preview is WYSIWYG, like Elementor)
+      CMS.registerPreviewStyle("/src/styles/global.css");
+      // Work card preview
+      CMS.registerPreviewTemplate("work", ({ entry }) => {
+        const title = entry.getIn(["data", "title"]);
+        const excerpt = entry.getIn(["data", "excerpt"]);
+        const image = entry.getIn(["data", "image"]);
+        return h("div", { className: "wrap", style: "padding:24px; font-family: -apple-system, Helvetica, Arial, sans-serif;" },
+          h("div", { className: "browser", style: "border:2px solid #0A0A0A; max-width:600px" },
+            h("div", { style: "border-bottom:2px solid #0A0A0A; padding:8px 12px; font-size:12px; font-weight:700" }, title || "Preview"),
+            image ? h("img", { src: image, style: "width:100%; display:block;" }) : null,
+            h("div", { style: "padding:16px" },
+              h("h3", {}, title),
+              h("p", { style: "color:#555; font-size:14px" }, excerpt),
+              h("div", { style: "margin-top:12px; font-weight:800" }, "Enquire →")
+            )
+          )
+        );
+      });
+    </script>
+  </body>
+</html>

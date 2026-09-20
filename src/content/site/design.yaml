@@ -1,0 +1,7 @@
+paper: "#FFFFFF"
+cream: "#F5F1EA"
+ink: "#0A0A0A"
+muted: "#555555"
+accent: "#0A0A0A"
+max_width: "1200px"
+pad: "clamp(4rem, 2.18rem + 8.1vw, 8.25rem)"

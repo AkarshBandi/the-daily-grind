@@ -1,0 +1,170 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Approach: proof not promises" current="approach">
+<section>
+  <div class="wrap">
+    <p class="kicker" data-exit>Approach</p>
+    <h1 class="hero-title" data-exit>
+      <span class="mask"><span>Before WordPress.</span></span>
+      <span class="mask"><span>After static.</span></span>
+    </h1>
+    <p class="lede" data-reveal style="margin-top:24px">Three checks. WordPress next to static. Tagged illustrative is a mock. Your screenshots replace it.</p>
+  </div>
+</section>
+
+<div class="band">
+  <div class="wrap band-row four" data-reveal>
+    <div>Tool<small>PageSpeed Insights, lab run</small></div>
+    <div>Device<small>Mid-range phone class</small></div>
+    <div>Network<small>Throttled 4G</small></div>
+    <div>Runs<small>Median of three</small></div>
+  </div>
+</div>
+
+<div class="proof">
+  <div class="proof-stage">
+    <div class="wrap">
+      <div class="proof-head">
+        <p class="kicker">Chapter 1: Found</p>
+        <h2 class="section-title">Before WordPress vs your site: can customers find you?</h2>
+        <p style="margin-top:16px;max-width:56ch">Search only lists pages it can crawl. Plugin logins, duplicate URLs and missing titles quietly delete you from results.</p>
+      </div>
+      <div class="proof-cards">
+        <div class="pcard before">
+          <div class="pcard-top"><strong>Before · WordPress</strong><span class="wtag">illustrative</span></div>
+          <div class="pcard-body">
+            <div class="prow"><span>Crawl access</span><span>Blocked by login plugin</span></div>
+            <div class="prow"><span>Page titles</span><span>31 missing</span></div>
+            <div class="prow"><span>Sitemap</span><span>None found</span></div>
+            <div class="prow"><span>Verdict</span><span>Half invisible</span></div>
+          </div>
+        </div>
+        <div class="pcard after">
+          <div class="pcard-top"><strong>After · Static</strong><span class="wtag">your capture</span></div>
+          <div class="pcard-body">
+            <div class="browser-body shot-frame">
+              <img src="/shots/seo-after.webp" alt="Rebuilt site showing clean search listing data" loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()" />
+              <div class="skel block"></div>
+            </div>
+            <div class="prow"><span>Crawl access</span><span>All pages pass</span></div>
+            <div class="prow"><span>Page titles</span><span>Set on every page</span></div>
+            <div class="prow"><span>Sitemap</span><span>Submitted</span></div>
+            <div class="prow"><span>Verdict</span><span>Fully listed</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proof alt">
+  <div class="proof-stage">
+    <div class="wrap">
+      <div class="proof-head">
+        <p class="kicker">Chapter 2: Fast</p>
+        <h2 class="section-title">Before WordPress vs your site: do they wait?</h2>
+        <p style="margin-top:16px;max-width:56ch">Every second of loading loses visitors. The before card is what a lab test reports on a typical builder page; the after card is the same test on static.</p>
+      </div>
+      <div class="proof-cards">
+        <div class="pcard before">
+          <div class="pcard-top"><strong>Before · WordPress</strong><span class="wtag">illustrative</span></div>
+          <div class="pcard-body">
+            <div class="prow"><span>Performance score</span><span>41 · Poor</span></div>
+            <div class="prow"><span>Main content shows in</span><span>5.2 seconds</span></div>
+            <div class="prow"><span>Blocking scripts</span><span>1.1 MB</span></div>
+            <div class="prow"><span>Verdict</span><span>Most visitors leave</span></div>
+          </div>
+        </div>
+        <div class="pcard after">
+          <div class="pcard-top"><strong>After · Static</strong><span class="wtag">your capture</span></div>
+          <div class="pcard-body">
+            <div class="browser-body shot-frame">
+              <img src="/shots/speed-after.webp" alt="Rebuilt site showing a green PageSpeed result" loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()" />
+              <div class="skel block"></div>
+            </div>
+            <div class="prow"><span>Performance score</span><span>96 · Good</span></div>
+            <div class="prow"><span>Main content shows in</span><span>0.4 seconds</span></div>
+            <div class="prow"><span>Blocking scripts</span><span>None</span></div>
+            <div class="prow"><span>Verdict</span><span>Opens instantly</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proof">
+  <div class="proof-stage">
+    <div class="wrap">
+      <div class="proof-head">
+        <p class="kicker">Chapter 3: Phone</p>
+        <h2 class="section-title">Before WordPress vs your site: can they buy on a phone?</h2>
+        <p style="margin-top:16px;max-width:56ch">Most of your customers arrive on a phone. If the call button is tiny, hidden, or overlapping, the sale goes to whoever is easier to tap.</p>
+      </div>
+      <div class="proof-cards">
+        <div class="pcard before">
+          <div class="pcard-top"><strong>Before · WordPress</strong><span class="wtag">illustrative</span></div>
+          <div class="pcard-body">
+            <div class="phone">
+              <div class="phone-bar">typical-builder-site.example</div>
+              <div class="phone-body">
+                <p class="ph big">Welcome to our website!!</p>
+                <p class="pt tiny">Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore.</p>
+                <p class="phone-cta">Call now</p>
+                <p class="phone-cta overlap">Chat with us!</p>
+              </div>
+            </div>
+            <p class="frame-cap">Text too small · buttons overlap · taps miss</p>
+          </div>
+        </div>
+        <div class="pcard after">
+          <div class="pcard-top"><strong>After · Static</strong><span class="wtag">your capture</span></div>
+          <div class="pcard-body">
+            <div class="browser-body shot-frame">
+              <img src="/shots/mobile-after.webp" alt="Rebuilt site on a phone viewport" loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()" />
+              <div class="skel block"></div>
+            </div>
+            <div class="phone">
+              <div class="phone-bar">yourbusiness.com</div>
+              <div class="phone-body">
+                <p class="ph big">Fixed today. Call now.</p>
+                <p class="pt">One page. Prices, proof, and a button big enough to tap.</p>
+                <p class="phone-cta">Call now</p>
+              </div>
+            </div>
+            <p class="frame-cap">Readable · one thumb-sized button · nothing overlaps</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <p class="kicker" data-reveal>How we get there</p>
+    <h2 class="section-title" data-reveal>Three steps, each with proof.</h2>
+    <div class="steps three" style="margin-top:40px">
+      <div data-reveal><p class="kicker">Audit</p><p>I measure your current page and list exactly what loads. You keep the report.</p></div>
+      <div data-reveal><p class="kicker">Rebuild</p><p>Same content, rewritten as lean static files. You review on a preview link, not on promises.</p></div>
+      <div data-reveal><p class="kicker">Verify</p><p>Before/after test links you can rerun yourself, any time, on your own connection.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="band-dark">
+  <section>
+    <div class="wrap">
+      <p class="kicker" data-reveal style="color:#fff">Test it yourself</p>
+      <p class="big-state words" data-words>Test any site in thirty seconds. Slow pages fail the same way.</p>
+      <div data-reveal style="margin-top:28px;display:grid;gap:12px;max-width:60ch">
+        <p><strong>1.</strong> Open PageSpeed Insights and paste any address.</p>
+        <p><strong>2.</strong> Read the mobile score first. That is your customer.</p>
+        <p><strong>3.</strong> Healthy reads: largest paint under two and a half seconds, page under half a megabyte.</p>
+      </div>
+      <p data-reveal style="margin-top:32px"><a class="btn" href="/contact" data-link>Audit my page <span class="arr" aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+</div>
+</Layout>

@@ -1,0 +1,10 @@
+links:
+  - label: "Home"
+    href: "/"
+  - label: "Work"
+    href: "/work"
+  - label: "Approach"
+    href: "/approach"
+  - label: "Contact"
+    href: "/contact"
+footer_note: "Static sites. Cloudflare hosting."

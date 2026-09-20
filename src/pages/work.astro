@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+const workEntries = (await getCollection('work')).sort((a,b) => a.data.order - b.data.order);
+const featured = workEntries.find(e => e.data.featured) ?? workEntries[0];
+const rest = workEntries.filter(e => e !== featured);
+---
+<Layout title="Work: three case studies" current="work">
+<section style="padding-bottom:48px">
+  <div class="wrap">
+    <p class="kicker" data-exit>Work</p>
+    <h1 class="hero-title" data-exit>
+      <span class="mask"><span class="no-gsap" style="animation:rise 450ms var(--ease-dock) 480ms backwards">Three sites.</span></span>
+      <span class="mask"><span class="no-gsap" style="animation:rise 450ms var(--ease-dock) 560ms backwards">Three results.</span></span>
+    </h1>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="work-grid" style="margin-top:0">
+      {featured && (
+        <a class="card lead-card shot-tall" href={featured.data.cta_link} data-link data-reveal aria-label={`${featured.data.title} enquire`}>
+          <div class="shot"><div class="browser"><div class="browser-bar"><span class="dots"><i></i><i></i><i></i></span><span class="browser-url">{featured.data.url_stub}</span></div>
+          <div class="browser-body shot-frame">
+          <img src={featured.data.image} alt={featured.data.image_alt} loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()" /><div class="skel" style="width:55%"></div><div class="skel thin" style="width:80%"></div><div class="skel block"></div><div class="skel thin" style="width:65%"></div></div></div></div>
+          <div class="card-meta"><p class="kicker">Featured</p><h3>{featured.data.title}</h3><p>{featured.data.excerpt}</p><span class="go">{featured.data.cta_label}</span></div>
+        </a>
+      )}
+      {rest.map(entry => (
+        <a class="card shot-tall" href={entry.data.cta_link} data-link data-reveal aria-label={`${entry.data.title} enquire`}>
+          <div class="shot"><div class="browser"><div class="browser-bar"><span class="dots"><i></i><i></i><i></i></span><span class="browser-url">{entry.data.url_stub}</span></div>
+          <div class="browser-body shot-frame">
+          <img src={entry.data.image} alt={entry.data.image_alt} loading="lazy" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()" /><div class="skel" style="width:60%"></div><div class="skel thin" style="width:85%"></div><div class="skel block"></div></div></div></div>
+          <div class="card-meta"><h3>{entry.data.title}</h3><p>{entry.data.excerpt}</p><span class="go">{entry.data.cta_label}</span></div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<div class="band-dark">
+  <section>
+    <div class="wrap">
+      <p class="big-state">Yours next?</p>
+      <p style="margin-top:28px"><a class="btn" href="/contact" data-link>Start with an email <span class="arr" aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+</div>
+</Layout>

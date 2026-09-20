@@ -1,0 +1,38 @@
+seo_title: "Fast static websites that bring customers. A Studio"
+blocks:
+  - type: hero
+    kicker: "Static sites for business owners"
+    title_1: "Your website"
+    title_2: "should load before"
+    title_3: "customers leave."
+    lede: "No logins, no updates, no monthly fees. One fast page that explains what you do and gets the email."
+    buttons:
+      - label: "Get a fast site"
+        href: "/contact"
+        style: solid
+      - label: "See proof"
+        href: "/work"
+        style: outline
+  - type: peel_intro
+    title: "Watch the weight fall off."
+    text: "Keep scrolling. A typical builder page loads all this before your words appear. Then it is gone. Static stays. Mock view only."
+  - type: compare
+    static_hint: "Static rebuild. Two files. Nothing blinking"
+    static_url: "yourbusiness.com"
+    static_badge: "0.3s"
+    builder_hint: "Typical builder load · keep scrolling"
+    builder_url: "typical-builder-site.example"
+    builder_badge: "4.8s …"
+  - type: work_gallery
+    kicker: "Selected work"
+    title: "Three sites. Three results."
+    show: 3
+  - type: statement
+    kicker: "Why static wins"
+    text: "Builders make you wait through popups banners and plugins. Static just opens."
+    btn_label: "See the breakdown"
+    btn_link: "/approach"
+  - type: cta_band
+    kicker: "Last step"
+    text: "Have a slow site?"
+    href: "/contact"

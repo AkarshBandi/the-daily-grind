@@ -1,0 +1,79 @@
+backend:
+  name: github
+  repo: "YOUR-USER/the-daily-grind"
+  branch: main
+  base_url: "https://auth.the-daily-grind.pages.dev"
+  auth_endpoint: "auth"
+
+site_url: "https://the-daily-grind.pages.dev"
+display_url: "https://the-daily-grind.pages.dev"
+logo_url: "/favicon.svg"
+publish_mode: editorial_workflow
+show_preview_links: true
+
+media_folder: "public/shots"
+public_folder: "/shots"
+media_library:
+  max_file_size: 512000
+  config:
+    multiple: true
+
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+  - name: "site"
+    label: "Site Settings"
+    files:
+      - label: "General"
+        name: "general"
+        file: "src/content/site/general.yaml"
+        fields:
+          - { label: "Site Title", name: "site_title", widget: "string", default: "The Daily Grind" }
+          - { label: "Tagline", name: "tagline", widget: "string", default: "Your neighborhood spot for coffee and good company" }
+          - { label: "Description", name: "description", widget: "text", default: "We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space." }
+          - { label: "Contact Email", name: "contact_email", widget: "string", default: "hello@thedailygrind.example" }
+  - name: "figma"
+    label: "Figma Landing (The Daily Grind)"
+    label_singular: "Landing"
+    description: "Exact Figma p.html — edit hero, header dropdown, menu. Like Elementor."
+    files:
+      - label: "Home"
+        name: "home"
+        file: "src/content/figma/home.yaml"
+        fields:
+          - { label: "SEO Title", name: "seo_title", widget: "string", default: "The Daily Grind — Your neighborhood spot for coffee and good company" }
+          - { label: "Hero Heading", name: "hero_heading", widget: "string", default: "Your neighborhood spot for coffee and good company" }
+          - { label: "Hero Text", name: "hero_text", widget: "text", default: "We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile." }
+          - label: "Hero Buttons"
+            name: "hero_buttons"
+            widget: "list"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "Href", name: "href", widget: "string" }
+          - label: "Navbar Links"
+            name: "navbar_links"
+            widget: "list"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "Href", name: "href", widget: "string" }
+              - label: "Dropdown"
+                name: "dropdown"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Item", name: "item", widget: "string" }
+          - { label: "About Heading", name: "about_heading", widget: "string", default: "A good café is a clean, well-lighted place" }
+          - { label: "About Text", name: "about_text", widget: "text", default: "We built The Daily Grind to be simple and true. Good coffee, honest food, and a room that feels right." }
+  - name: "work"
+    label: "Work"
+    folder: "src/content/work"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Excerpt", name: "excerpt", widget: "string" }
+      - { label: "Body", name: "body", widget: "markdown", required: false }

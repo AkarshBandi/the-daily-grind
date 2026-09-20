@@ -1,0 +1,21 @@
+seo_title: "The Daily Grind — Your neighborhood spot for coffee and good company"
+hero_heading: "Your neighborhood spot for coffee and good company"
+hero_text: "We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile."
+hero_buttons:
+  - label: "Button"
+    href: "#menu"
+  - label: "Book"
+    href: "#book"
+navbar_links:
+  - label: "Our story"
+    href: "#story"
+  - label: "Menu"
+    href: "#menu"
+  - label: "Visit"
+    href: "#visit"
+    dropdown:
+      - "Hours"
+      - "Location"
+      - "Contact"
+about_heading: "A good café is a clean, well-lighted place"
+about_text: "We built The Daily Grind to be simple and true. Good coffee, honest food, and a room that feels right."
