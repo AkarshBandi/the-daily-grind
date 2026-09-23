@@ -366,7 +366,7 @@ var config_default = defineConfig({
   },
   media: {
     tina: {
-      mediaRoot: "shots",
+      mediaRoot: "",
       publicFolder: "public"
     }
   },
