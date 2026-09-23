@@ -9,7 +9,7 @@ const branch =
   process.env.WORKERS_CI_BRANCH ||
   process.env.CF_PAGES_BRANCH ||
   process.env.HEAD ||
-  'main';
+  'master';
 
 export default defineConfig({
   branch,
