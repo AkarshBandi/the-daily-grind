@@ -33,6 +33,7 @@ var HomeCollection = {
         { name: "cta_href", label: "CTA href", type: "string" }
       ]
     },
+    { name: "hero_background", label: "Hero background image", type: "image" },
     { name: "hero_heading", label: "Hero heading", type: "string", ui: { component: "textarea" } },
     { name: "hero_text", label: "Hero text", type: "string", ui: { component: "textarea" } },
     {

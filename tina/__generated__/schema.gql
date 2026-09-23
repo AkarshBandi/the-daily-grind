@@ -190,6 +190,7 @@ type Home implements Node & Document {
   seo_title: String
   banner: HomeBanner
   navbar: HomeNavbar
+  hero_background: String
   hero_heading: String
   hero_text: String
   hero_buttons: [HomeHero_buttons]
@@ -230,6 +231,13 @@ input HomeNavbarFilter {
   cta_href: StringFilter
 }
 
+input ImageFilter {
+  startsWith: String
+  eq: String
+  exists: Boolean
+  in: [String]
+}
+
 input HomeHero_buttonsFilter {
   label: StringFilter
   href: StringFilter
@@ -239,13 +247,6 @@ input HomeNavbar_linksFilter {
   label: StringFilter
   href: StringFilter
   dropdown: StringFilter
-}
-
-input ImageFilter {
-  startsWith: String
-  eq: String
-  exists: Boolean
-  in: [String]
 }
 
 input HomeAboutButtonsFilter {
@@ -327,6 +328,7 @@ input HomeFilter {
   seo_title: StringFilter
   banner: HomeBannerFilter
   navbar: HomeNavbarFilter
+  hero_background: ImageFilter
   hero_heading: StringFilter
   hero_text: StringFilter
   hero_buttons: HomeHero_buttonsFilter
@@ -560,6 +562,7 @@ input HomeMutation {
   seo_title: String
   banner: HomeBannerMutation
   navbar: HomeNavbarMutation
+  hero_background: String
   hero_heading: String
   hero_text: String
   hero_buttons: [HomeHero_buttonsMutation]

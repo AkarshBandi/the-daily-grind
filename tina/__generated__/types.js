@@ -23,6 +23,7 @@ export const HomePartsFragmentDoc = gql`
     cta_label
     cta_href
   }
+  hero_background
   hero_heading
   hero_text
   hero_buttons {

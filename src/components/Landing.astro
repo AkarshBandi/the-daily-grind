@@ -6,6 +6,7 @@ const t = (k:string, fallback:string)=> (f && f[k] != null && f[k] !== '') ? f[k
 const pick = (obj:any, key:string, fallback:string)=> (obj && obj[key] != null && obj[key] !== '') ? obj[key] : fallback;
 // preserve figma exact strings
 const seoTitle = t('seo_title','Hearth & Honey — Your neighborhood spot for coffee and good company');
+const heroBg = f?.hero_background || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1920&q=80';
 const heroHeading = t('hero_heading','Your neighborhood spot for coffee and good company');
 const heroText = t('hero_text','We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile.');
 const heroBtns = f?.hero_buttons || [{label:'Explore Menu',href:'#menu'},{label:'Book a Table',href:'#book'}];
@@ -377,11 +378,11 @@ img{display:block;max-width:100%}
   </nav>
 
   <!-- Hero -->
-  <section class="hero" data-tina-field={tinaField(d, 'hero_heading')}  id="home">
+  <section class="hero" id="home" style={`background: linear-gradient(0deg,rgba(0,0,0,.40),rgba(0,0,0,.40)),url('${heroBg}') center/cover no-repeat`} data-tina-field={tinaField(d, 'hero_background')}>
     <div class="inner hero-grid">
-      <div><h1 class="reveal" data-cms="hero_heading">{heroHeading}</h1></div>
+      <div><h1 class="reveal" data-cms="hero_heading" data-tina-field={tinaField(d, 'hero_heading')}>{heroHeading}</h1></div>
       <div class="hero-right reveal">
-        <p class="sub" data-cms="hero_text">{heroText}</p>
+        <p class="sub" data-cms="hero_text" data-tina-field={tinaField(d, 'hero_text')}>{heroText}</p>
         <div class="hero-actions">
           {heroBtns.map((b:any, bi:number)=> <a data-cms={`hero_buttons.${bi}.label`} class={b.label.includes('Book') ? 'btn-outline-dark' : 'btn-mustard'} href={b.href} style={b.label.includes('Book') ? 'color:#fff;outline-color:#fff' : ''}>{b.label}</a>)}
         </div>
