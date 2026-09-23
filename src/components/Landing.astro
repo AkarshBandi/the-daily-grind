@@ -1,4 +1,5 @@
 ---
+import { tinaField } from '@tinacms/astro/tina-field';
 const { d = {} } = Astro.props as any;
 const f:any = d;
 const t = (k:string, fallback:string)=> (f && f[k] != null && f[k] !== '') ? f[k] : fallback;
@@ -333,7 +334,7 @@ img{display:block;max-width:100%}
 <body>
 <div class="wrap">
   <!-- Banner -->
-  <div class="banner">
+  <div class="banner" data-tina-field={tinaField(d, 'banner')}>
     <div class="banner-card inner">
       <div class="banner-left">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.3334 23.2537C23.3558 23.2537 25.0704 22.545 26.477 21.1277C27.8837 19.7101 28.587 17.9959 28.587 15.985C28.587 13.9739 27.8837 12.2647 26.477 10.8573C25.0704 9.45001 23.3558 8.74635 21.3334 8.74635C20.6969 8.74635 20.0783 8.82668 19.4774 8.98735C18.8763 9.14801 18.3164 9.37757 17.7977 9.67601C18.5375 10.5258 19.1227 11.4859 19.5534 12.5563C19.984 13.6268 20.1994 14.7752 20.1994 16.0017C20.1994 17.2281 19.984 18.376 19.5534 19.4453C19.1227 20.5147 18.5375 21.4742 17.7977 22.324C18.3164 22.6225 18.8763 22.852 19.4774 23.0127C20.0783 23.1733 20.6969 23.2537 21.3334 23.2537ZM16 20.8977C16.5947 20.2659 17.0635 19.5253 17.4064 18.676C17.749 17.8269 17.9204 16.9321 17.9204 15.9917C17.9204 15.0512 17.749 14.1592 17.4064 13.3157C17.0635 12.4719 16.5947 11.7341 16 11.1023C15.4054 11.7341 14.9366 12.4747 14.5937 13.324C14.251 14.1731 14.0797 15.0679 14.0797 16.0083C14.0797 16.9488 14.251 17.8408 14.5937 18.6843C14.9366 19.5281 15.4054 20.2659 16 20.8977ZM10.6667 23.2537C11.3031 23.2537 11.9218 23.1735 12.5227 23.013C13.1238 22.8523 13.6863 22.6227 14.21 22.324C13.4651 21.4742 12.8774 20.5141 12.4467 19.4437C12.016 18.3732 11.8007 17.2248 11.8007 15.9983C11.8007 14.7719 12.016 13.624 12.4467 12.5547C12.8774 11.4853 13.4651 10.5258 14.21 9.67601C13.6863 9.37735 13.1238 9.14768 12.5227 8.98701C11.9218 8.82657 11.3031 8.74635 10.6667 8.74635C8.65981 8.74635 6.94914 9.44957 5.5347 10.856C4.12026 12.2625 3.41303 13.9711 3.41303 15.982C3.41303 17.9931 4.12026 19.7078 5.5347 21.126C6.94914 22.5445 8.65981 23.2537 10.6667 23.2537ZM10.6667 25.5327C8.0147 25.5327 5.76292 24.6068 3.91137 22.755C2.05981 20.9032 1.13403 18.6511 1.13403 15.9987C1.13403 13.3465 2.05981 11.0949 3.91137 9.24401C5.76292 7.3929 8.0147 6.46735 10.6667 6.46735C11.6667 6.46735 12.6158 6.60923 13.514 6.89301C14.412 7.17657 15.2407 7.57968 16 8.10235C16.7594 7.57968 17.588 7.17657 18.486 6.89301C19.3843 6.60923 20.3334 6.46735 21.3334 6.46735C23.9854 6.46735 26.2371 7.39323 28.0887 9.24501C29.94 11.0968 30.8658 13.3485 30.8658 15.9987C30.8658 18.6492 29.94 20.9032 28.0887 22.755C26.2371 24.6068 23.9854 25.5327 21.3334 25.5327H10.6667Z" fill="white"/></svg>
@@ -376,7 +377,7 @@ img{display:block;max-width:100%}
   </nav>
 
   <!-- Hero -->
-  <section class="hero" id="home">
+  <section class="hero" data-tina-field={tinaField(d, 'hero_heading')}  id="home">
     <div class="inner hero-grid">
       <div><h1 class="reveal" data-cms="hero_heading">{heroHeading}</h1></div>
       <div class="hero-right reveal">
@@ -389,7 +390,7 @@ img{display:block;max-width:100%}
   </section>
 
   <!-- About -->
-  <section class="about reveal" id="story">
+  <section class="about reveal" id="story" data-tina-field={tinaField(d, 'about')}>
     <div class="inner about-grid">
       <div style="display:flex;flex-direction:column;gap:32px">
         <div style="display:flex;flex-direction:column;gap:16px">
@@ -402,12 +403,12 @@ img{display:block;max-width:100%}
           <a style="display:flex;align-items:center;gap:8px;font-weight:500" href="#book">Reserve Table <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9.38708 6.67285C9.48791 6.67285 9.56488 6.70326 9.64294 6.78125L14.5873 11.7256C14.6412 11.7795 14.6663 11.8215 14.6781 11.8496V11.8506C14.6929 11.8861 14.7015 11.9259 14.7015 11.9746C14.7015 12.0233 14.6929 12.0631 14.6781 12.0986V12.0996C14.6663 12.1277 14.6412 12.1697 14.5873 12.2236L9.61853 17.1924C9.54076 17.2702 9.47362 17.292 9.39294 17.2891C9.29892 17.2856 9.21805 17.2537 9.1322 17.168C9.05408 17.0898 9.02283 17.013 9.02283 16.9121C9.02283 16.8112 9.05408 16.7344 9.1322 16.6562L13.8138 11.9746L9.10681 7.26758C9.02915 7.18988 9.0072 7.12357 9.01013 7.04297C9.01358 6.9487 9.04615 6.86731 9.1322 6.78125C9.21013 6.70344 9.28649 6.67293 9.38708 6.67285Z" fill="black" stroke="black"/></svg></a>
         </div>
       </div>
-      <img class="about-img" src={aboutImage} data-cms-src="about.image" alt="Hearth & Honey interior" loading="lazy"/>
+      <img class="about-img" src={aboutImage} data-tina-field={tinaField(d, 'about')} data-cms-src="about.image" alt="Hearth & Honey interior" loading="lazy"/>
     </div>
   </section>
 
   <!-- Menu -->
-  <section class="menu-sec reveal" id="menu">
+  <section class="menu-sec reveal" id="menu" data-tina-field={tinaField(d, 'menu')}>
     <div class="inner">
       <div class="menu-card">
         <div class="menu-head">
@@ -443,7 +444,7 @@ img{display:block;max-width:100%}
     </section>
 
   <!-- Testimonials -->
-  <section class="testi reveal" id="reviews">
+  <section class="testi reveal" id="reviews" data-tina-field={tinaField(d, 'testimonials')}>
     <div class="inner">
       <div class="testi-head">
         <h2 class="reveal" data-cms="testimonials.heading">{testiHeading}</h2>
@@ -463,7 +464,7 @@ img{display:block;max-width:100%}
   </section>
 
   <!-- FAQ -->
-  <section class="faq reveal" id="faq">
+  <section class="faq reveal" id="faq" data-tina-field={tinaField(d, 'faq')}>
     <div class="inner">
       <div class="faq-head">
         <h2 class="reveal" data-cms="faq.heading">{faqHeading}</h2>
@@ -483,7 +484,7 @@ img{display:block;max-width:100%}
   </section>
 
   <!-- Contact -->
-  <section class="contact reveal" id="contact">
+  <section class="contact reveal" id="contact" data-tina-field={tinaField(d, 'contact')}>
     <div class="inner">
       <div class="contact-head">
         <div class="tagline" data-cms="contact.tagline">{contactTagline}</div>

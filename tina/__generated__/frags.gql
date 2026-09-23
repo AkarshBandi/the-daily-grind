@@ -1,99 +1,93 @@
-fragment PageParts on Page {
+fragment HomeParts on Home {
   __typename
-  seoTitle
-  blocks {
+  seo_title
+  banner {
     __typename
-    ... on PageBlocksHero {
-      eyebrow
-      headline
-      tagline
-      primaryAction {
-        __typename
-        label
-        link
-      }
-      secondaryAction {
-        __typename
-        label
-        link
-      }
-      image {
-        __typename
-        src
-        alt
-      }
+    enabled
+    heading
+    text
+    placeholder
+    button
+  }
+  navbar {
+    __typename
+    logo
+    cta_label
+    cta_href
+  }
+  hero_heading
+  hero_text
+  hero_buttons {
+    __typename
+    label
+    href
+  }
+  navbar_links {
+    __typename
+    label
+    href
+    dropdown
+  }
+  about {
+    __typename
+    tagline
+    heading
+    text
+    image
+    buttons {
+      __typename
+      label
+      href
     }
-    ... on PageBlocksRichText {
-      eyebrow
-      headline
-      body
-    }
-    ... on PageBlocksMedia {
-      image {
-        __typename
-        src
-        alt
-        caption
-      }
-      aspect
-    }
-    ... on PageBlocksCta {
-      headline
+  }
+  menu {
+    __typename
+    tag
+    heading
+    text
+    tabs {
+      __typename
+      id
+      label
+      tag
+      heading
       text
-      primaryLabel
-      primaryLink
-      secondaryLabel
-      secondaryLink
+      image
     }
-    ... on PageBlocksGallery {
-      headline
-      images {
-        __typename
-        src
-        alt
-        caption
-      }
-    }
-    ... on PageBlocksAccordion {
-      headline
-      items {
-        __typename
-        title
-        content
-      }
-    }
-    ... on PageBlocksStats {
-      headline
-      items {
-        __typename
-        value
-        label
-      }
-    }
-    ... on PageBlocksTestimonial {
+  }
+  testimonials {
+    __typename
+    heading
+    text
+    items {
+      __typename
       quote
-      author
+      stars
+      avatar
+      name
       role
-      avatar {
-        __typename
-        src
-        alt
-      }
     }
-    ... on PageBlocksMenuTabs {
-      eyebrow
-      headline
-      description
-      tabs {
-        __typename
-        id
-        label
-        tag
-        heading
-        text
-        image
-      }
+  }
+  faq {
+    __typename
+    heading
+    text
+    items {
+      __typename
+      q
+      a
     }
+    still_heading
+    still_text
+    still_button
+  }
+  contact {
+    __typename
+    tagline
+    heading
+    text
+    email
+    phone
   }
 }
 

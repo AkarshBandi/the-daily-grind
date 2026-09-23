@@ -1,299 +1,161 @@
 // tina/config.ts
 import { defineConfig } from "tinacms";
 
-// src/components/blocks/hero.template.ts
-var heroBlockSchema = {
-  name: "hero",
-  label: "Hero",
+// tina/collections/home.ts
+var HomeCollection = {
+  name: "home",
+  label: "Home (Hearth)",
+  path: "src/content/pages",
+  format: "yaml",
+  match: { include: "home" },
+  ui: { router: () => "/" },
   fields: [
-    { type: "string", label: "Eyebrow", name: "eyebrow" },
-    { type: "string", label: "Headline", name: "headline" },
-    { type: "string", label: "Tagline", name: "tagline", ui: { component: "textarea" } },
+    { name: "seo_title", label: "SEO title", type: "string" },
     {
+      name: "banner",
+      label: "Banner",
       type: "object",
-      label: "Primary action",
-      name: "primaryAction",
       fields: [
-        { type: "string", label: "Label", name: "label" },
-        { type: "string", label: "Link", name: "link" }
+        { name: "enabled", label: "Enabled", type: "boolean" },
+        { name: "heading", label: "Heading", type: "string" },
+        { name: "text", label: "Text", type: "string", ui: { component: "textarea" } },
+        { name: "placeholder", label: "Placeholder", type: "string" },
+        { name: "button", label: "Button", type: "string" }
       ]
     },
     {
+      name: "navbar",
+      label: "Navbar",
       type: "object",
-      label: "Secondary action",
-      name: "secondaryAction",
       fields: [
-        { type: "string", label: "Label", name: "label" },
-        { type: "string", label: "Link", name: "link" }
+        { name: "logo", label: "Logo", type: "string" },
+        { name: "cta_label", label: "CTA label", type: "string" },
+        { name: "cta_href", label: "CTA href", type: "string" }
+      ]
+    },
+    { name: "hero_heading", label: "Hero heading", type: "string", ui: { component: "textarea" } },
+    { name: "hero_text", label: "Hero text", type: "string", ui: { component: "textarea" } },
+    {
+      name: "hero_buttons",
+      label: "Hero buttons",
+      type: "object",
+      list: true,
+      fields: [
+        { name: "label", label: "Label", type: "string" },
+        { name: "href", label: "Href", type: "string" }
       ]
     },
     {
+      name: "navbar_links",
+      label: "Navbar links",
       type: "object",
-      label: "Image",
-      name: "image",
+      list: true,
       fields: [
-        { name: "src", label: "Image source", type: "image" },
-        { name: "alt", label: "Alt text", type: "string" }
-      ]
-    }
-  ],
-  ui: {
-    defaultItem: {
-      eyebrow: "Welcome",
-      headline: "Headline goes here",
-      tagline: "Tagline that explains the value prop in one sentence.",
-      primaryAction: { label: "Get started", link: "/" }
-    }
-  }
-};
-
-// src/components/blocks/richText.template.ts
-var richTextBlockSchema = {
-  name: "richText",
-  label: "Rich text",
-  fields: [
-    { type: "string", label: "Eyebrow", name: "eyebrow" },
-    { type: "string", label: "Headline", name: "headline" },
-    { type: "rich-text", label: "Body", name: "body" }
-  ],
-  ui: {
-    defaultItem: {
-      eyebrow: "Section label",
-      headline: "Rich text headline",
-      body: "Body content with **markdown** support."
-    }
-  }
-};
-
-// src/components/blocks/media.template.ts
-var mediaBlockSchema = {
-  name: "media",
-  label: "Media",
-  fields: [
-    {
-      type: "object",
-      label: "Image",
-      name: "image",
-      fields: [
-        { name: "src", label: "Image source", type: "image" },
-        { name: "alt", label: "Alt text", type: "string" },
-        { name: "caption", label: "Caption", type: "string" }
+        { name: "label", label: "Label", type: "string" },
+        { name: "href", label: "Href", type: "string" },
+        { name: "dropdown", label: "Dropdown", type: "string", list: true }
       ]
     },
     {
-      type: "string",
-      label: "Aspect",
-      name: "aspect",
-      options: [
-        { label: "16:9", value: "16/9" },
-        { label: "4:3", value: "4/3" },
-        { label: "1:1", value: "1/1" }
-      ]
-    }
-  ]
-};
-
-// src/components/blocks/cta.template.ts
-var ctaBlockSchema = {
-  name: "cta",
-  label: "Call to action",
-  fields: [
-    { type: "string", label: "Headline", name: "headline" },
-    { type: "string", label: "Text", name: "text", ui: { component: "textarea" } },
-    { type: "string", label: "Primary label", name: "primaryLabel" },
-    { type: "string", label: "Primary link", name: "primaryLink" },
-    { type: "string", label: "Secondary label", name: "secondaryLabel" },
-    { type: "string", label: "Secondary link", name: "secondaryLink" }
-  ],
-  ui: {
-    defaultItem: {
-      headline: "Ready to get started?",
-      text: "A short, persuasive line that drives action.",
-      primaryLabel: "Primary action",
-      primaryLink: "/"
-    }
-  }
-};
-
-// src/components/blocks/gallery.template.ts
-var galleryBlockSchema = {
-  name: "gallery",
-  label: "Gallery",
-  fields: [
-    { type: "string", label: "Headline", name: "headline" },
-    {
+      name: "about",
+      label: "About",
       type: "object",
-      label: "Images",
-      name: "images",
-      list: true,
-      ui: {
-        itemProps: (item) => ({ label: item?.alt ?? "Image" })
-      },
       fields: [
-        { name: "src", label: "Image source", type: "image" },
-        { name: "alt", label: "Alt text", type: "string" },
-        { name: "caption", label: "Caption", type: "string" }
+        { name: "tagline", label: "Tagline", type: "string" },
+        { name: "heading", label: "Heading", type: "string", ui: { component: "textarea" } },
+        { name: "text", label: "Text", type: "string", ui: { component: "textarea" } },
+        { name: "image", label: "Image", type: "image" },
+        {
+          name: "buttons",
+          label: "Buttons",
+          type: "object",
+          list: true,
+          fields: [
+            { name: "label", label: "Label", type: "string" },
+            { name: "href", label: "Href", type: "string" }
+          ]
+        }
       ]
-    }
-  ]
-};
-
-// src/components/blocks/accordion.template.ts
-var accordionBlockSchema = {
-  name: "accordion",
-  label: "Accordion",
-  fields: [
-    { type: "string", label: "Headline", name: "headline" },
-    {
-      type: "object",
-      label: "Items",
-      name: "items",
-      list: true,
-      ui: {
-        itemProps: (item) => ({ label: item?.title ?? "Item" })
-      },
-      fields: [
-        { type: "string", label: "Title", name: "title" },
-        { type: "rich-text", label: "Content", name: "content" }
-      ]
-    }
-  ]
-};
-
-// src/components/blocks/stats.template.ts
-var statsBlockSchema = {
-  name: "stats",
-  label: "Stats",
-  fields: [
-    { type: "string", label: "Headline", name: "headline" },
-    {
-      type: "object",
-      label: "Stats",
-      name: "items",
-      list: true,
-      ui: {
-        itemProps: (item) => ({
-          label: item?.value ? `${item.value} \u2014 ${item.label ?? ""}` : "Stat"
-        })
-      },
-      fields: [
-        { type: "string", label: "Value", name: "value" },
-        { type: "string", label: "Label", name: "label" }
-      ]
-    }
-  ],
-  ui: {
-    defaultItem: {
-      headline: "By the numbers",
-      items: [
-        { value: "99%", label: "Uptime" },
-        { value: "24/7", label: "Support" }
-      ]
-    }
-  }
-};
-
-// src/components/blocks/testimonial.template.ts
-var testimonialBlockSchema = {
-  name: "testimonial",
-  label: "Testimonial",
-  fields: [
-    { type: "string", label: "Quote", name: "quote", ui: { component: "textarea" } },
-    { type: "string", label: "Author", name: "author" },
-    { type: "string", label: "Role", name: "role" },
-    {
-      type: "object",
-      label: "Avatar",
-      name: "avatar",
-      fields: [
-        { name: "src", label: "Image source", type: "image" },
-        { name: "alt", label: "Alt text", type: "string" }
-      ]
-    }
-  ],
-  ui: {
-    defaultItem: {
-      quote: "This product changed how we work.",
-      author: "Jane Doe",
-      role: "CEO, Example Co."
-    }
-  }
-};
-
-// src/components/blocks/menuTabs.template.ts
-var menuTabsBlockSchema = {
-  name: "menuTabs",
-  label: "Menu tabs",
-  fields: [
-    { type: "string", label: "Eyebrow", name: "eyebrow" },
-    { type: "string", label: "Headline", name: "headline" },
-    { type: "string", label: "Description", name: "description", ui: { component: "textarea" } },
-    {
-      type: "object",
-      label: "Tabs",
-      name: "tabs",
-      list: true,
-      ui: {
-        itemProps: (item) => ({ label: item?.label ?? "Tab" })
-      },
-      fields: [
-        { type: "string", label: "ID", name: "id" },
-        { type: "string", label: "Label", name: "label" },
-        { type: "string", label: "Tag", name: "tag" },
-        { type: "string", label: "Heading", name: "heading" },
-        { type: "string", label: "Text", name: "text", ui: { component: "textarea" } },
-        { name: "image", label: "Image", type: "image" }
-      ]
-    }
-  ],
-  ui: {
-    defaultItem: {
-      eyebrow: "Menu",
-      headline: "What we do well",
-      description: "A few things we make every day. They are simple and they are good.",
-      tabs: [
-        { id: "coffee", label: "Coffee", tag: "Coffee", heading: "The flat white is true and strong", text: "We pull shots from beans roasted two miles away.", image: "/shots/figma-2.png" }
-      ]
-    }
-  }
-};
-
-// tina/collections/page.ts
-var PageCollection = {
-  name: "page",
-  label: "Pages",
-  path: "src/content/page",
-  format: "mdx",
-  ui: {
-    router: ({ document }) => {
-      if (document._sys.filename === "home") return "/";
-      return `/${document._sys.filename}`;
-    }
-  },
-  fields: [
-    {
-      name: "seoTitle",
-      label: "Meta title (SEO)",
-      type: "string",
-      isTitle: true,
-      required: true
     },
     {
+      name: "menu",
+      label: "Menu",
       type: "object",
-      list: true,
-      name: "blocks",
-      label: "Page sections",
-      ui: { visualSelector: true },
-      templates: [
-        heroBlockSchema,
-        richTextBlockSchema,
-        mediaBlockSchema,
-        ctaBlockSchema,
-        galleryBlockSchema,
-        accordionBlockSchema,
-        statsBlockSchema,
-        testimonialBlockSchema,
-        menuTabsBlockSchema
+      fields: [
+        { name: "tag", label: "Tag", type: "string" },
+        { name: "heading", label: "Heading", type: "string" },
+        { name: "text", label: "Text", type: "string", ui: { component: "textarea" } },
+        {
+          name: "tabs",
+          label: "Tabs",
+          type: "object",
+          list: true,
+          ui: { itemProps: (item) => ({ label: item?.label ?? "Tab" }) },
+          fields: [
+            { name: "id", label: "ID", type: "string" },
+            { name: "label", label: "Label", type: "string" },
+            { name: "tag", label: "Tag", type: "string" },
+            { name: "heading", label: "Heading", type: "string" },
+            { name: "text", label: "Text", type: "string", ui: { component: "textarea" } },
+            { name: "image", label: "Image", type: "image" }
+          ]
+        }
+      ]
+    },
+    {
+      name: "testimonials",
+      label: "Testimonials",
+      type: "object",
+      fields: [
+        { name: "heading", label: "Heading", type: "string" },
+        { name: "text", label: "Text", type: "string" },
+        {
+          name: "items",
+          label: "Items",
+          type: "object",
+          list: true,
+          fields: [
+            { name: "quote", label: "Quote", type: "string", ui: { component: "textarea" } },
+            { name: "stars", label: "Stars", type: "number" },
+            { name: "avatar", label: "Avatar", type: "image" },
+            { name: "name", label: "Name", type: "string" },
+            { name: "role", label: "Role", type: "string" }
+          ]
+        }
+      ]
+    },
+    {
+      name: "faq",
+      label: "FAQ",
+      type: "object",
+      fields: [
+        { name: "heading", label: "Heading", type: "string" },
+        { name: "text", label: "Text", type: "string" },
+        {
+          name: "items",
+          label: "Items",
+          type: "object",
+          list: true,
+          fields: [
+            { name: "q", label: "Question", type: "string" },
+            { name: "a", label: "Answer", type: "string", ui: { component: "textarea" } }
+          ]
+        },
+        { name: "still_heading", label: "Still heading", type: "string" },
+        { name: "still_text", label: "Still text", type: "string" },
+        { name: "still_button", label: "Still button", type: "string" }
+      ]
+    },
+    {
+      name: "contact",
+      label: "Contact",
+      type: "object",
+      fields: [
+        { name: "tagline", label: "Tagline", type: "string" },
+        { name: "heading", label: "Heading", type: "string" },
+        { name: "text", label: "Text", type: "string", ui: { component: "textarea" } },
+        { name: "email", label: "Email", type: "string" },
+        { name: "phone", label: "Phone", type: "string" }
       ]
     }
   ]
@@ -371,7 +233,7 @@ var config_default = defineConfig({
     }
   },
   schema: {
-    collections: [PageCollection, BlogCollection, GlobalCollection]
+    collections: [HomeCollection, BlogCollection, GlobalCollection]
   }
 });
 export {

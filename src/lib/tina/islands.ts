@@ -1,25 +1,23 @@
 import type { IslandRegistry } from '@tinacms/astro/experimental';
 import type { QueryResult } from '@tinacms/astro/data';
-import type { PageQuery, BlogQuery, ConfigQuery } from '../../../tina/__generated__/types';
-import type { CmsPage, CmsBlog, CmsConfig } from './data';
-import PageBody from '../../components/islands/PageBody.astro';
+import type { HomeQuery, BlogQuery, ConfigQuery } from '../../../tina/__generated__/types';
+import type { CmsHome, CmsBlog, CmsConfig } from './data';
+import Landing from '../../components/Landing.astro';
 import BlogBody from '../../components/islands/BlogBody.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import { getPage, getBlog, getConfig } from './data';
+import { getHome, getBlog, getConfig } from './data';
 
 export const islands: IslandRegistry = {
-  page: {
-    fetch: (_request, params) => getPage(params.get('slug') ?? 'home'),
-    component: PageBody,
-    wrapper: { tag: 'main' },
+  home: {
+    fetch: () => getHome(),
+    component: Landing as any,
+    wrapper: { tag: 'div' },
     propsFromData: (data) => ({
-      data: (data as QueryResult<PageQuery>).data?.page as CmsPage | undefined,
+      d: (data as QueryResult<HomeQuery>).data?.home as any,
     }),
   },
   blog: {
-    fetch: (_request, params) => getBlog(params.get('slug') ?? ''),
-    component: BlogBody,
+    fetch: (_req, params) => getBlog(params.get('slug') ?? ''),
+    component: BlogBody as any,
     wrapper: { tag: 'article' },
     propsFromData: (data) => ({
       data: (data as QueryResult<BlogQuery>).data?.blog as CmsBlog | undefined,
@@ -27,18 +25,10 @@ export const islands: IslandRegistry = {
   },
   global: {
     fetch: () => getConfig(),
-    component: Header,
+    component: Landing as any,
     wrapper: { tag: 'div' },
     propsFromData: (data) => ({
-      config: (data as QueryResult<ConfigQuery>).data?.config as CmsConfig | undefined,
-    }),
-  },
-  'global-footer': {
-    fetch: () => getConfig(),
-    component: Footer,
-    wrapper: { tag: 'div' },
-    propsFromData: (data) => ({
-      config: (data as QueryResult<ConfigQuery>).data?.config as CmsConfig | undefined,
+      d: (data as QueryResult<ConfigQuery>).data?.config as any,
     }),
   },
 };

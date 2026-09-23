@@ -84,8 +84,8 @@ export type Query = {
   collections: Array<Collection>;
   node: Node;
   document: DocumentNode;
-  page: Page;
-  pageConnection: PageConnection;
+  home: Home;
+  homeConnection: HomeConnection;
   blog: Blog;
   blogConnection: BlogConnection;
   config: Config;
@@ -114,18 +114,18 @@ export type QueryDocumentArgs = {
 };
 
 
-export type QueryPageArgs = {
+export type QueryHomeArgs = {
   relativePath?: InputMaybe<Scalars['String']['input']>;
 };
 
 
-export type QueryPageConnectionArgs = {
+export type QueryHomeConnectionArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Float']['input']>;
   last?: InputMaybe<Scalars['Float']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
-  filter?: InputMaybe<PageFilter>;
+  filter?: InputMaybe<HomeFilter>;
 };
 
 
@@ -159,7 +159,7 @@ export type QueryConfigConnectionArgs = {
 };
 
 export type DocumentFilter = {
-  page?: InputMaybe<PageFilter>;
+  home?: InputMaybe<HomeFilter>;
   blog?: InputMaybe<BlogFilter>;
   config?: InputMaybe<ConfigFilter>;
 };
@@ -201,119 +201,54 @@ export type CollectionDocumentsArgs = {
   folder?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type DocumentNode = Page | Blog | Config | Folder;
+export type DocumentNode = Home | Blog | Config | Folder;
 
-export type PageBlocksHeroPrimaryAction = {
-  __typename?: 'PageBlocksHeroPrimaryAction';
-  label?: Maybe<Scalars['String']['output']>;
-  link?: Maybe<Scalars['String']['output']>;
-};
-
-export type PageBlocksHeroSecondaryAction = {
-  __typename?: 'PageBlocksHeroSecondaryAction';
-  label?: Maybe<Scalars['String']['output']>;
-  link?: Maybe<Scalars['String']['output']>;
-};
-
-export type PageBlocksHeroImage = {
-  __typename?: 'PageBlocksHeroImage';
-  src?: Maybe<Scalars['String']['output']>;
-  alt?: Maybe<Scalars['String']['output']>;
-};
-
-export type PageBlocksHero = {
-  __typename?: 'PageBlocksHero';
-  eyebrow?: Maybe<Scalars['String']['output']>;
-  headline?: Maybe<Scalars['String']['output']>;
-  tagline?: Maybe<Scalars['String']['output']>;
-  primaryAction?: Maybe<PageBlocksHeroPrimaryAction>;
-  secondaryAction?: Maybe<PageBlocksHeroSecondaryAction>;
-  image?: Maybe<PageBlocksHeroImage>;
-};
-
-export type PageBlocksRichText = {
-  __typename?: 'PageBlocksRichText';
-  eyebrow?: Maybe<Scalars['String']['output']>;
-  headline?: Maybe<Scalars['String']['output']>;
-  body?: Maybe<Scalars['RichText']['output']>;
-};
-
-export type PageBlocksMediaImage = {
-  __typename?: 'PageBlocksMediaImage';
-  src?: Maybe<Scalars['String']['output']>;
-  alt?: Maybe<Scalars['String']['output']>;
-  caption?: Maybe<Scalars['String']['output']>;
-};
-
-export type PageBlocksMedia = {
-  __typename?: 'PageBlocksMedia';
-  image?: Maybe<PageBlocksMediaImage>;
-  aspect?: Maybe<Scalars['String']['output']>;
-};
-
-export type PageBlocksCta = {
-  __typename?: 'PageBlocksCta';
-  headline?: Maybe<Scalars['String']['output']>;
+export type HomeBanner = {
+  __typename?: 'HomeBanner';
+  enabled?: Maybe<Scalars['Boolean']['output']>;
+  heading?: Maybe<Scalars['String']['output']>;
   text?: Maybe<Scalars['String']['output']>;
-  primaryLabel?: Maybe<Scalars['String']['output']>;
-  primaryLink?: Maybe<Scalars['String']['output']>;
-  secondaryLabel?: Maybe<Scalars['String']['output']>;
-  secondaryLink?: Maybe<Scalars['String']['output']>;
+  placeholder?: Maybe<Scalars['String']['output']>;
+  button?: Maybe<Scalars['String']['output']>;
 };
 
-export type PageBlocksGalleryImages = {
-  __typename?: 'PageBlocksGalleryImages';
-  src?: Maybe<Scalars['String']['output']>;
-  alt?: Maybe<Scalars['String']['output']>;
-  caption?: Maybe<Scalars['String']['output']>;
+export type HomeNavbar = {
+  __typename?: 'HomeNavbar';
+  logo?: Maybe<Scalars['String']['output']>;
+  cta_label?: Maybe<Scalars['String']['output']>;
+  cta_href?: Maybe<Scalars['String']['output']>;
 };
 
-export type PageBlocksGallery = {
-  __typename?: 'PageBlocksGallery';
-  headline?: Maybe<Scalars['String']['output']>;
-  images?: Maybe<Array<Maybe<PageBlocksGalleryImages>>>;
-};
-
-export type PageBlocksAccordionItems = {
-  __typename?: 'PageBlocksAccordionItems';
-  title?: Maybe<Scalars['String']['output']>;
-  content?: Maybe<Scalars['RichText']['output']>;
-};
-
-export type PageBlocksAccordion = {
-  __typename?: 'PageBlocksAccordion';
-  headline?: Maybe<Scalars['String']['output']>;
-  items?: Maybe<Array<Maybe<PageBlocksAccordionItems>>>;
-};
-
-export type PageBlocksStatsItems = {
-  __typename?: 'PageBlocksStatsItems';
-  value?: Maybe<Scalars['String']['output']>;
+export type HomeHero_Buttons = {
+  __typename?: 'HomeHero_buttons';
   label?: Maybe<Scalars['String']['output']>;
+  href?: Maybe<Scalars['String']['output']>;
 };
 
-export type PageBlocksStats = {
-  __typename?: 'PageBlocksStats';
-  headline?: Maybe<Scalars['String']['output']>;
-  items?: Maybe<Array<Maybe<PageBlocksStatsItems>>>;
+export type HomeNavbar_Links = {
+  __typename?: 'HomeNavbar_links';
+  label?: Maybe<Scalars['String']['output']>;
+  href?: Maybe<Scalars['String']['output']>;
+  dropdown?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
 
-export type PageBlocksTestimonialAvatar = {
-  __typename?: 'PageBlocksTestimonialAvatar';
-  src?: Maybe<Scalars['String']['output']>;
-  alt?: Maybe<Scalars['String']['output']>;
+export type HomeAboutButtons = {
+  __typename?: 'HomeAboutButtons';
+  label?: Maybe<Scalars['String']['output']>;
+  href?: Maybe<Scalars['String']['output']>;
 };
 
-export type PageBlocksTestimonial = {
-  __typename?: 'PageBlocksTestimonial';
-  quote?: Maybe<Scalars['String']['output']>;
-  author?: Maybe<Scalars['String']['output']>;
-  role?: Maybe<Scalars['String']['output']>;
-  avatar?: Maybe<PageBlocksTestimonialAvatar>;
+export type HomeAbout = {
+  __typename?: 'HomeAbout';
+  tagline?: Maybe<Scalars['String']['output']>;
+  heading?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+  image?: Maybe<Scalars['String']['output']>;
+  buttons?: Maybe<Array<Maybe<HomeAboutButtons>>>;
 };
 
-export type PageBlocksMenuTabsTabs = {
-  __typename?: 'PageBlocksMenuTabsTabs';
+export type HomeMenuTabs = {
+  __typename?: 'HomeMenuTabs';
   id?: Maybe<Scalars['String']['output']>;
   label?: Maybe<Scalars['String']['output']>;
   tag?: Maybe<Scalars['String']['output']>;
@@ -322,20 +257,69 @@ export type PageBlocksMenuTabsTabs = {
   image?: Maybe<Scalars['String']['output']>;
 };
 
-export type PageBlocksMenuTabs = {
-  __typename?: 'PageBlocksMenuTabs';
-  eyebrow?: Maybe<Scalars['String']['output']>;
-  headline?: Maybe<Scalars['String']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  tabs?: Maybe<Array<Maybe<PageBlocksMenuTabsTabs>>>;
+export type HomeMenu = {
+  __typename?: 'HomeMenu';
+  tag?: Maybe<Scalars['String']['output']>;
+  heading?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+  tabs?: Maybe<Array<Maybe<HomeMenuTabs>>>;
 };
 
-export type PageBlocks = PageBlocksHero | PageBlocksRichText | PageBlocksMedia | PageBlocksCta | PageBlocksGallery | PageBlocksAccordion | PageBlocksStats | PageBlocksTestimonial | PageBlocksMenuTabs;
+export type HomeTestimonialsItems = {
+  __typename?: 'HomeTestimonialsItems';
+  quote?: Maybe<Scalars['String']['output']>;
+  stars?: Maybe<Scalars['Float']['output']>;
+  avatar?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  role?: Maybe<Scalars['String']['output']>;
+};
 
-export type Page = Node & Document & {
-  __typename?: 'Page';
-  seoTitle: Scalars['String']['output'];
-  blocks?: Maybe<Array<Maybe<PageBlocks>>>;
+export type HomeTestimonials = {
+  __typename?: 'HomeTestimonials';
+  heading?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+  items?: Maybe<Array<Maybe<HomeTestimonialsItems>>>;
+};
+
+export type HomeFaqItems = {
+  __typename?: 'HomeFaqItems';
+  q?: Maybe<Scalars['String']['output']>;
+  a?: Maybe<Scalars['String']['output']>;
+};
+
+export type HomeFaq = {
+  __typename?: 'HomeFaq';
+  heading?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+  items?: Maybe<Array<Maybe<HomeFaqItems>>>;
+  still_heading?: Maybe<Scalars['String']['output']>;
+  still_text?: Maybe<Scalars['String']['output']>;
+  still_button?: Maybe<Scalars['String']['output']>;
+};
+
+export type HomeContact = {
+  __typename?: 'HomeContact';
+  tagline?: Maybe<Scalars['String']['output']>;
+  heading?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+};
+
+export type Home = Node & Document & {
+  __typename?: 'Home';
+  seo_title?: Maybe<Scalars['String']['output']>;
+  banner?: Maybe<HomeBanner>;
+  navbar?: Maybe<HomeNavbar>;
+  hero_heading?: Maybe<Scalars['String']['output']>;
+  hero_text?: Maybe<Scalars['String']['output']>;
+  hero_buttons?: Maybe<Array<Maybe<HomeHero_Buttons>>>;
+  navbar_links?: Maybe<Array<Maybe<HomeNavbar_Links>>>;
+  about?: Maybe<HomeAbout>;
+  menu?: Maybe<HomeMenu>;
+  testimonials?: Maybe<HomeTestimonials>;
+  faq?: Maybe<HomeFaq>;
+  contact?: Maybe<HomeContact>;
   id: Scalars['ID']['output'];
   _sys: SystemInfo;
   _values: Scalars['JSON']['output'];
@@ -348,14 +332,34 @@ export type StringFilter = {
   in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
-export type PageBlocksHeroPrimaryActionFilter = {
-  label?: InputMaybe<StringFilter>;
-  link?: InputMaybe<StringFilter>;
+export type BooleanFilter = {
+  eq?: InputMaybe<Scalars['Boolean']['input']>;
+  exists?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-export type PageBlocksHeroSecondaryActionFilter = {
+export type HomeBannerFilter = {
+  enabled?: InputMaybe<BooleanFilter>;
+  heading?: InputMaybe<StringFilter>;
+  text?: InputMaybe<StringFilter>;
+  placeholder?: InputMaybe<StringFilter>;
+  button?: InputMaybe<StringFilter>;
+};
+
+export type HomeNavbarFilter = {
+  logo?: InputMaybe<StringFilter>;
+  cta_label?: InputMaybe<StringFilter>;
+  cta_href?: InputMaybe<StringFilter>;
+};
+
+export type HomeHero_ButtonsFilter = {
   label?: InputMaybe<StringFilter>;
-  link?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+};
+
+export type HomeNavbar_LinksFilter = {
+  label?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+  dropdown?: InputMaybe<StringFilter>;
 };
 
 export type ImageFilter = {
@@ -365,96 +369,20 @@ export type ImageFilter = {
   in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
-export type PageBlocksHeroImageFilter = {
-  src?: InputMaybe<ImageFilter>;
-  alt?: InputMaybe<StringFilter>;
-};
-
-export type PageBlocksHeroFilter = {
-  eyebrow?: InputMaybe<StringFilter>;
-  headline?: InputMaybe<StringFilter>;
-  tagline?: InputMaybe<StringFilter>;
-  primaryAction?: InputMaybe<PageBlocksHeroPrimaryActionFilter>;
-  secondaryAction?: InputMaybe<PageBlocksHeroSecondaryActionFilter>;
-  image?: InputMaybe<PageBlocksHeroImageFilter>;
-};
-
-export type RichTextFilter = {
-  startsWith?: InputMaybe<Scalars['String']['input']>;
-  eq?: InputMaybe<Scalars['String']['input']>;
-  exists?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type PageBlocksRichTextFilter = {
-  eyebrow?: InputMaybe<StringFilter>;
-  headline?: InputMaybe<StringFilter>;
-  body?: InputMaybe<RichTextFilter>;
-};
-
-export type PageBlocksMediaImageFilter = {
-  src?: InputMaybe<ImageFilter>;
-  alt?: InputMaybe<StringFilter>;
-  caption?: InputMaybe<StringFilter>;
-};
-
-export type PageBlocksMediaFilter = {
-  image?: InputMaybe<PageBlocksMediaImageFilter>;
-  aspect?: InputMaybe<StringFilter>;
-};
-
-export type PageBlocksCtaFilter = {
-  headline?: InputMaybe<StringFilter>;
-  text?: InputMaybe<StringFilter>;
-  primaryLabel?: InputMaybe<StringFilter>;
-  primaryLink?: InputMaybe<StringFilter>;
-  secondaryLabel?: InputMaybe<StringFilter>;
-  secondaryLink?: InputMaybe<StringFilter>;
-};
-
-export type PageBlocksGalleryImagesFilter = {
-  src?: InputMaybe<ImageFilter>;
-  alt?: InputMaybe<StringFilter>;
-  caption?: InputMaybe<StringFilter>;
-};
-
-export type PageBlocksGalleryFilter = {
-  headline?: InputMaybe<StringFilter>;
-  images?: InputMaybe<PageBlocksGalleryImagesFilter>;
-};
-
-export type PageBlocksAccordionItemsFilter = {
-  title?: InputMaybe<StringFilter>;
-  content?: InputMaybe<RichTextFilter>;
-};
-
-export type PageBlocksAccordionFilter = {
-  headline?: InputMaybe<StringFilter>;
-  items?: InputMaybe<PageBlocksAccordionItemsFilter>;
-};
-
-export type PageBlocksStatsItemsFilter = {
-  value?: InputMaybe<StringFilter>;
+export type HomeAboutButtonsFilter = {
   label?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
 };
 
-export type PageBlocksStatsFilter = {
-  headline?: InputMaybe<StringFilter>;
-  items?: InputMaybe<PageBlocksStatsItemsFilter>;
+export type HomeAboutFilter = {
+  tagline?: InputMaybe<StringFilter>;
+  heading?: InputMaybe<StringFilter>;
+  text?: InputMaybe<StringFilter>;
+  image?: InputMaybe<ImageFilter>;
+  buttons?: InputMaybe<HomeAboutButtonsFilter>;
 };
 
-export type PageBlocksTestimonialAvatarFilter = {
-  src?: InputMaybe<ImageFilter>;
-  alt?: InputMaybe<StringFilter>;
-};
-
-export type PageBlocksTestimonialFilter = {
-  quote?: InputMaybe<StringFilter>;
-  author?: InputMaybe<StringFilter>;
-  role?: InputMaybe<StringFilter>;
-  avatar?: InputMaybe<PageBlocksTestimonialAvatarFilter>;
-};
-
-export type PageBlocksMenuTabsTabsFilter = {
+export type HomeMenuTabsFilter = {
   id?: InputMaybe<StringFilter>;
   label?: InputMaybe<StringFilter>;
   tag?: InputMaybe<StringFilter>;
@@ -463,41 +391,85 @@ export type PageBlocksMenuTabsTabsFilter = {
   image?: InputMaybe<ImageFilter>;
 };
 
-export type PageBlocksMenuTabsFilter = {
-  eyebrow?: InputMaybe<StringFilter>;
-  headline?: InputMaybe<StringFilter>;
-  description?: InputMaybe<StringFilter>;
-  tabs?: InputMaybe<PageBlocksMenuTabsTabsFilter>;
+export type HomeMenuFilter = {
+  tag?: InputMaybe<StringFilter>;
+  heading?: InputMaybe<StringFilter>;
+  text?: InputMaybe<StringFilter>;
+  tabs?: InputMaybe<HomeMenuTabsFilter>;
 };
 
-export type PageBlocksFilter = {
-  hero?: InputMaybe<PageBlocksHeroFilter>;
-  richText?: InputMaybe<PageBlocksRichTextFilter>;
-  media?: InputMaybe<PageBlocksMediaFilter>;
-  cta?: InputMaybe<PageBlocksCtaFilter>;
-  gallery?: InputMaybe<PageBlocksGalleryFilter>;
-  accordion?: InputMaybe<PageBlocksAccordionFilter>;
-  stats?: InputMaybe<PageBlocksStatsFilter>;
-  testimonial?: InputMaybe<PageBlocksTestimonialFilter>;
-  menuTabs?: InputMaybe<PageBlocksMenuTabsFilter>;
+export type NumberFilter = {
+  lt?: InputMaybe<Scalars['Float']['input']>;
+  lte?: InputMaybe<Scalars['Float']['input']>;
+  gte?: InputMaybe<Scalars['Float']['input']>;
+  gt?: InputMaybe<Scalars['Float']['input']>;
+  eq?: InputMaybe<Scalars['Float']['input']>;
+  exists?: InputMaybe<Scalars['Boolean']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
 };
 
-export type PageFilter = {
-  seoTitle?: InputMaybe<StringFilter>;
-  blocks?: InputMaybe<PageBlocksFilter>;
+export type HomeTestimonialsItemsFilter = {
+  quote?: InputMaybe<StringFilter>;
+  stars?: InputMaybe<NumberFilter>;
+  avatar?: InputMaybe<ImageFilter>;
+  name?: InputMaybe<StringFilter>;
+  role?: InputMaybe<StringFilter>;
 };
 
-export type PageConnectionEdges = {
-  __typename?: 'PageConnectionEdges';
+export type HomeTestimonialsFilter = {
+  heading?: InputMaybe<StringFilter>;
+  text?: InputMaybe<StringFilter>;
+  items?: InputMaybe<HomeTestimonialsItemsFilter>;
+};
+
+export type HomeFaqItemsFilter = {
+  q?: InputMaybe<StringFilter>;
+  a?: InputMaybe<StringFilter>;
+};
+
+export type HomeFaqFilter = {
+  heading?: InputMaybe<StringFilter>;
+  text?: InputMaybe<StringFilter>;
+  items?: InputMaybe<HomeFaqItemsFilter>;
+  still_heading?: InputMaybe<StringFilter>;
+  still_text?: InputMaybe<StringFilter>;
+  still_button?: InputMaybe<StringFilter>;
+};
+
+export type HomeContactFilter = {
+  tagline?: InputMaybe<StringFilter>;
+  heading?: InputMaybe<StringFilter>;
+  text?: InputMaybe<StringFilter>;
+  email?: InputMaybe<StringFilter>;
+  phone?: InputMaybe<StringFilter>;
+};
+
+export type HomeFilter = {
+  seo_title?: InputMaybe<StringFilter>;
+  banner?: InputMaybe<HomeBannerFilter>;
+  navbar?: InputMaybe<HomeNavbarFilter>;
+  hero_heading?: InputMaybe<StringFilter>;
+  hero_text?: InputMaybe<StringFilter>;
+  hero_buttons?: InputMaybe<HomeHero_ButtonsFilter>;
+  navbar_links?: InputMaybe<HomeNavbar_LinksFilter>;
+  about?: InputMaybe<HomeAboutFilter>;
+  menu?: InputMaybe<HomeMenuFilter>;
+  testimonials?: InputMaybe<HomeTestimonialsFilter>;
+  faq?: InputMaybe<HomeFaqFilter>;
+  contact?: InputMaybe<HomeContactFilter>;
+};
+
+export type HomeConnectionEdges = {
+  __typename?: 'HomeConnectionEdges';
   cursor: Scalars['String']['output'];
-  node?: Maybe<Page>;
+  node?: Maybe<Home>;
 };
 
-export type PageConnection = Connection & {
-  __typename?: 'PageConnection';
+export type HomeConnection = Connection & {
+  __typename?: 'HomeConnection';
   pageInfo: PageInfo;
   totalCount: Scalars['Float']['output'];
-  edges?: Maybe<Array<Maybe<PageConnectionEdges>>>;
+  edges?: Maybe<Array<Maybe<HomeConnectionEdges>>>;
 };
 
 export type Blog = Node & Document & {
@@ -518,6 +490,12 @@ export type DatetimeFilter = {
   eq?: InputMaybe<Scalars['String']['input']>;
   exists?: InputMaybe<Scalars['Boolean']['input']>;
   in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type RichTextFilter = {
+  startsWith?: InputMaybe<Scalars['String']['input']>;
+  eq?: InputMaybe<Scalars['String']['input']>;
+  exists?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type BlogFilter = {
@@ -599,8 +577,8 @@ export type Mutation = {
   deleteDocument: DocumentNode;
   createDocument: DocumentNode;
   createFolder: DocumentNode;
-  updatePage: Page;
-  createPage: Page;
+  updateHome: Home;
+  createHome: Home;
   updateBlog: Blog;
   createBlog: Blog;
   updateConfig: Config;
@@ -641,15 +619,15 @@ export type MutationCreateFolderArgs = {
 };
 
 
-export type MutationUpdatePageArgs = {
+export type MutationUpdateHomeArgs = {
   relativePath: Scalars['String']['input'];
-  params: PageMutation;
+  params: HomeMutation;
 };
 
 
-export type MutationCreatePageArgs = {
+export type MutationCreateHomeArgs = {
   relativePath: Scalars['String']['input'];
-  params: PageMutation;
+  params: HomeMutation;
 };
 
 
@@ -677,112 +655,57 @@ export type MutationCreateConfigArgs = {
 };
 
 export type DocumentUpdateMutation = {
-  page?: InputMaybe<PageMutation>;
+  home?: InputMaybe<HomeMutation>;
   blog?: InputMaybe<BlogMutation>;
   config?: InputMaybe<ConfigMutation>;
   relativePath?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type DocumentMutation = {
-  page?: InputMaybe<PageMutation>;
+  home?: InputMaybe<HomeMutation>;
   blog?: InputMaybe<BlogMutation>;
   config?: InputMaybe<ConfigMutation>;
 };
 
-export type PageBlocksHeroPrimaryActionMutation = {
-  label?: InputMaybe<Scalars['String']['input']>;
-  link?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type PageBlocksHeroSecondaryActionMutation = {
-  label?: InputMaybe<Scalars['String']['input']>;
-  link?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type PageBlocksHeroImageMutation = {
-  src?: InputMaybe<Scalars['String']['input']>;
-  alt?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type PageBlocksHeroMutation = {
-  eyebrow?: InputMaybe<Scalars['String']['input']>;
-  headline?: InputMaybe<Scalars['String']['input']>;
-  tagline?: InputMaybe<Scalars['String']['input']>;
-  primaryAction?: InputMaybe<PageBlocksHeroPrimaryActionMutation>;
-  secondaryAction?: InputMaybe<PageBlocksHeroSecondaryActionMutation>;
-  image?: InputMaybe<PageBlocksHeroImageMutation>;
-};
-
-export type PageBlocksRichTextMutation = {
-  eyebrow?: InputMaybe<Scalars['String']['input']>;
-  headline?: InputMaybe<Scalars['String']['input']>;
-  body?: InputMaybe<Scalars['RichText']['input']>;
-};
-
-export type PageBlocksMediaImageMutation = {
-  src?: InputMaybe<Scalars['String']['input']>;
-  alt?: InputMaybe<Scalars['String']['input']>;
-  caption?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type PageBlocksMediaMutation = {
-  image?: InputMaybe<PageBlocksMediaImageMutation>;
-  aspect?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type PageBlocksCtaMutation = {
-  headline?: InputMaybe<Scalars['String']['input']>;
+export type HomeBannerMutation = {
+  enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  heading?: InputMaybe<Scalars['String']['input']>;
   text?: InputMaybe<Scalars['String']['input']>;
-  primaryLabel?: InputMaybe<Scalars['String']['input']>;
-  primaryLink?: InputMaybe<Scalars['String']['input']>;
-  secondaryLabel?: InputMaybe<Scalars['String']['input']>;
-  secondaryLink?: InputMaybe<Scalars['String']['input']>;
+  placeholder?: InputMaybe<Scalars['String']['input']>;
+  button?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PageBlocksGalleryImagesMutation = {
-  src?: InputMaybe<Scalars['String']['input']>;
-  alt?: InputMaybe<Scalars['String']['input']>;
-  caption?: InputMaybe<Scalars['String']['input']>;
+export type HomeNavbarMutation = {
+  logo?: InputMaybe<Scalars['String']['input']>;
+  cta_label?: InputMaybe<Scalars['String']['input']>;
+  cta_href?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PageBlocksGalleryMutation = {
-  headline?: InputMaybe<Scalars['String']['input']>;
-  images?: InputMaybe<Array<InputMaybe<PageBlocksGalleryImagesMutation>>>;
-};
-
-export type PageBlocksAccordionItemsMutation = {
-  title?: InputMaybe<Scalars['String']['input']>;
-  content?: InputMaybe<Scalars['RichText']['input']>;
-};
-
-export type PageBlocksAccordionMutation = {
-  headline?: InputMaybe<Scalars['String']['input']>;
-  items?: InputMaybe<Array<InputMaybe<PageBlocksAccordionItemsMutation>>>;
-};
-
-export type PageBlocksStatsItemsMutation = {
-  value?: InputMaybe<Scalars['String']['input']>;
+export type HomeHero_ButtonsMutation = {
   label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PageBlocksStatsMutation = {
-  headline?: InputMaybe<Scalars['String']['input']>;
-  items?: InputMaybe<Array<InputMaybe<PageBlocksStatsItemsMutation>>>;
+export type HomeNavbar_LinksMutation = {
+  label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
+  dropdown?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
-export type PageBlocksTestimonialAvatarMutation = {
-  src?: InputMaybe<Scalars['String']['input']>;
-  alt?: InputMaybe<Scalars['String']['input']>;
+export type HomeAboutButtonsMutation = {
+  label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PageBlocksTestimonialMutation = {
-  quote?: InputMaybe<Scalars['String']['input']>;
-  author?: InputMaybe<Scalars['String']['input']>;
-  role?: InputMaybe<Scalars['String']['input']>;
-  avatar?: InputMaybe<PageBlocksTestimonialAvatarMutation>;
+export type HomeAboutMutation = {
+  tagline?: InputMaybe<Scalars['String']['input']>;
+  heading?: InputMaybe<Scalars['String']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  buttons?: InputMaybe<Array<InputMaybe<HomeAboutButtonsMutation>>>;
 };
 
-export type PageBlocksMenuTabsTabsMutation = {
+export type HomeMenuTabsMutation = {
   id?: InputMaybe<Scalars['String']['input']>;
   label?: InputMaybe<Scalars['String']['input']>;
   tag?: InputMaybe<Scalars['String']['input']>;
@@ -791,28 +714,62 @@ export type PageBlocksMenuTabsTabsMutation = {
   image?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PageBlocksMenuTabsMutation = {
-  eyebrow?: InputMaybe<Scalars['String']['input']>;
-  headline?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  tabs?: InputMaybe<Array<InputMaybe<PageBlocksMenuTabsTabsMutation>>>;
+export type HomeMenuMutation = {
+  tag?: InputMaybe<Scalars['String']['input']>;
+  heading?: InputMaybe<Scalars['String']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+  tabs?: InputMaybe<Array<InputMaybe<HomeMenuTabsMutation>>>;
 };
 
-export type PageBlocksMutation = {
-  hero?: InputMaybe<PageBlocksHeroMutation>;
-  richText?: InputMaybe<PageBlocksRichTextMutation>;
-  media?: InputMaybe<PageBlocksMediaMutation>;
-  cta?: InputMaybe<PageBlocksCtaMutation>;
-  gallery?: InputMaybe<PageBlocksGalleryMutation>;
-  accordion?: InputMaybe<PageBlocksAccordionMutation>;
-  stats?: InputMaybe<PageBlocksStatsMutation>;
-  testimonial?: InputMaybe<PageBlocksTestimonialMutation>;
-  menuTabs?: InputMaybe<PageBlocksMenuTabsMutation>;
+export type HomeTestimonialsItemsMutation = {
+  quote?: InputMaybe<Scalars['String']['input']>;
+  stars?: InputMaybe<Scalars['Float']['input']>;
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PageMutation = {
-  seoTitle?: InputMaybe<Scalars['String']['input']>;
-  blocks?: InputMaybe<Array<InputMaybe<PageBlocksMutation>>>;
+export type HomeTestimonialsMutation = {
+  heading?: InputMaybe<Scalars['String']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+  items?: InputMaybe<Array<InputMaybe<HomeTestimonialsItemsMutation>>>;
+};
+
+export type HomeFaqItemsMutation = {
+  q?: InputMaybe<Scalars['String']['input']>;
+  a?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type HomeFaqMutation = {
+  heading?: InputMaybe<Scalars['String']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+  items?: InputMaybe<Array<InputMaybe<HomeFaqItemsMutation>>>;
+  still_heading?: InputMaybe<Scalars['String']['input']>;
+  still_text?: InputMaybe<Scalars['String']['input']>;
+  still_button?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type HomeContactMutation = {
+  tagline?: InputMaybe<Scalars['String']['input']>;
+  heading?: InputMaybe<Scalars['String']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type HomeMutation = {
+  seo_title?: InputMaybe<Scalars['String']['input']>;
+  banner?: InputMaybe<HomeBannerMutation>;
+  navbar?: InputMaybe<HomeNavbarMutation>;
+  hero_heading?: InputMaybe<Scalars['String']['input']>;
+  hero_text?: InputMaybe<Scalars['String']['input']>;
+  hero_buttons?: InputMaybe<Array<InputMaybe<HomeHero_ButtonsMutation>>>;
+  navbar_links?: InputMaybe<Array<InputMaybe<HomeNavbar_LinksMutation>>>;
+  about?: InputMaybe<HomeAboutMutation>;
+  menu?: InputMaybe<HomeMenuMutation>;
+  testimonials?: InputMaybe<HomeTestimonialsMutation>;
+  faq?: InputMaybe<HomeFaqMutation>;
+  contact?: InputMaybe<HomeContactMutation>;
 };
 
 export type BlogMutation = {
@@ -846,14 +803,34 @@ export type StringFilter = {
   in?: Array<string | null | undefined> | null | undefined;
 };
 
-export type PageBlocksHeroPrimaryActionFilter = {
-  label?: StringFilter | null | undefined;
-  link?: StringFilter | null | undefined;
+export type BooleanFilter = {
+  eq?: boolean | null | undefined;
+  exists?: boolean | null | undefined;
 };
 
-export type PageBlocksHeroSecondaryActionFilter = {
+export type HomeBannerFilter = {
+  enabled?: BooleanFilter | null | undefined;
+  heading?: StringFilter | null | undefined;
+  text?: StringFilter | null | undefined;
+  placeholder?: StringFilter | null | undefined;
+  button?: StringFilter | null | undefined;
+};
+
+export type HomeNavbarFilter = {
+  logo?: StringFilter | null | undefined;
+  cta_label?: StringFilter | null | undefined;
+  cta_href?: StringFilter | null | undefined;
+};
+
+export type HomeHero_ButtonsFilter = {
   label?: StringFilter | null | undefined;
-  link?: StringFilter | null | undefined;
+  href?: StringFilter | null | undefined;
+};
+
+export type HomeNavbar_LinksFilter = {
+  label?: StringFilter | null | undefined;
+  href?: StringFilter | null | undefined;
+  dropdown?: StringFilter | null | undefined;
 };
 
 export type ImageFilter = {
@@ -863,96 +840,20 @@ export type ImageFilter = {
   in?: Array<string | null | undefined> | null | undefined;
 };
 
-export type PageBlocksHeroImageFilter = {
-  src?: ImageFilter | null | undefined;
-  alt?: StringFilter | null | undefined;
-};
-
-export type PageBlocksHeroFilter = {
-  eyebrow?: StringFilter | null | undefined;
-  headline?: StringFilter | null | undefined;
-  tagline?: StringFilter | null | undefined;
-  primaryAction?: PageBlocksHeroPrimaryActionFilter | null | undefined;
-  secondaryAction?: PageBlocksHeroSecondaryActionFilter | null | undefined;
-  image?: PageBlocksHeroImageFilter | null | undefined;
-};
-
-export type RichTextFilter = {
-  startsWith?: string | null | undefined;
-  eq?: string | null | undefined;
-  exists?: boolean | null | undefined;
-};
-
-export type PageBlocksRichTextFilter = {
-  eyebrow?: StringFilter | null | undefined;
-  headline?: StringFilter | null | undefined;
-  body?: RichTextFilter | null | undefined;
-};
-
-export type PageBlocksMediaImageFilter = {
-  src?: ImageFilter | null | undefined;
-  alt?: StringFilter | null | undefined;
-  caption?: StringFilter | null | undefined;
-};
-
-export type PageBlocksMediaFilter = {
-  image?: PageBlocksMediaImageFilter | null | undefined;
-  aspect?: StringFilter | null | undefined;
-};
-
-export type PageBlocksCtaFilter = {
-  headline?: StringFilter | null | undefined;
-  text?: StringFilter | null | undefined;
-  primaryLabel?: StringFilter | null | undefined;
-  primaryLink?: StringFilter | null | undefined;
-  secondaryLabel?: StringFilter | null | undefined;
-  secondaryLink?: StringFilter | null | undefined;
-};
-
-export type PageBlocksGalleryImagesFilter = {
-  src?: ImageFilter | null | undefined;
-  alt?: StringFilter | null | undefined;
-  caption?: StringFilter | null | undefined;
-};
-
-export type PageBlocksGalleryFilter = {
-  headline?: StringFilter | null | undefined;
-  images?: PageBlocksGalleryImagesFilter | null | undefined;
-};
-
-export type PageBlocksAccordionItemsFilter = {
-  title?: StringFilter | null | undefined;
-  content?: RichTextFilter | null | undefined;
-};
-
-export type PageBlocksAccordionFilter = {
-  headline?: StringFilter | null | undefined;
-  items?: PageBlocksAccordionItemsFilter | null | undefined;
-};
-
-export type PageBlocksStatsItemsFilter = {
-  value?: StringFilter | null | undefined;
+export type HomeAboutButtonsFilter = {
   label?: StringFilter | null | undefined;
+  href?: StringFilter | null | undefined;
 };
 
-export type PageBlocksStatsFilter = {
-  headline?: StringFilter | null | undefined;
-  items?: PageBlocksStatsItemsFilter | null | undefined;
+export type HomeAboutFilter = {
+  tagline?: StringFilter | null | undefined;
+  heading?: StringFilter | null | undefined;
+  text?: StringFilter | null | undefined;
+  image?: ImageFilter | null | undefined;
+  buttons?: HomeAboutButtonsFilter | null | undefined;
 };
 
-export type PageBlocksTestimonialAvatarFilter = {
-  src?: ImageFilter | null | undefined;
-  alt?: StringFilter | null | undefined;
-};
-
-export type PageBlocksTestimonialFilter = {
-  quote?: StringFilter | null | undefined;
-  author?: StringFilter | null | undefined;
-  role?: StringFilter | null | undefined;
-  avatar?: PageBlocksTestimonialAvatarFilter | null | undefined;
-};
-
-export type PageBlocksMenuTabsTabsFilter = {
+export type HomeMenuTabsFilter = {
   id?: StringFilter | null | undefined;
   label?: StringFilter | null | undefined;
   tag?: StringFilter | null | undefined;
@@ -961,28 +862,72 @@ export type PageBlocksMenuTabsTabsFilter = {
   image?: ImageFilter | null | undefined;
 };
 
-export type PageBlocksMenuTabsFilter = {
-  eyebrow?: StringFilter | null | undefined;
-  headline?: StringFilter | null | undefined;
-  description?: StringFilter | null | undefined;
-  tabs?: PageBlocksMenuTabsTabsFilter | null | undefined;
+export type HomeMenuFilter = {
+  tag?: StringFilter | null | undefined;
+  heading?: StringFilter | null | undefined;
+  text?: StringFilter | null | undefined;
+  tabs?: HomeMenuTabsFilter | null | undefined;
 };
 
-export type PageBlocksFilter = {
-  hero?: PageBlocksHeroFilter | null | undefined;
-  richText?: PageBlocksRichTextFilter | null | undefined;
-  media?: PageBlocksMediaFilter | null | undefined;
-  cta?: PageBlocksCtaFilter | null | undefined;
-  gallery?: PageBlocksGalleryFilter | null | undefined;
-  accordion?: PageBlocksAccordionFilter | null | undefined;
-  stats?: PageBlocksStatsFilter | null | undefined;
-  testimonial?: PageBlocksTestimonialFilter | null | undefined;
-  menuTabs?: PageBlocksMenuTabsFilter | null | undefined;
+export type NumberFilter = {
+  lt?: number | null | undefined;
+  lte?: number | null | undefined;
+  gte?: number | null | undefined;
+  gt?: number | null | undefined;
+  eq?: number | null | undefined;
+  exists?: boolean | null | undefined;
+  in?: Array<number | null | undefined> | null | undefined;
 };
 
-export type PageFilter = {
-  seoTitle?: StringFilter | null | undefined;
-  blocks?: PageBlocksFilter | null | undefined;
+export type HomeTestimonialsItemsFilter = {
+  quote?: StringFilter | null | undefined;
+  stars?: NumberFilter | null | undefined;
+  avatar?: ImageFilter | null | undefined;
+  name?: StringFilter | null | undefined;
+  role?: StringFilter | null | undefined;
+};
+
+export type HomeTestimonialsFilter = {
+  heading?: StringFilter | null | undefined;
+  text?: StringFilter | null | undefined;
+  items?: HomeTestimonialsItemsFilter | null | undefined;
+};
+
+export type HomeFaqItemsFilter = {
+  q?: StringFilter | null | undefined;
+  a?: StringFilter | null | undefined;
+};
+
+export type HomeFaqFilter = {
+  heading?: StringFilter | null | undefined;
+  text?: StringFilter | null | undefined;
+  items?: HomeFaqItemsFilter | null | undefined;
+  still_heading?: StringFilter | null | undefined;
+  still_text?: StringFilter | null | undefined;
+  still_button?: StringFilter | null | undefined;
+};
+
+export type HomeContactFilter = {
+  tagline?: StringFilter | null | undefined;
+  heading?: StringFilter | null | undefined;
+  text?: StringFilter | null | undefined;
+  email?: StringFilter | null | undefined;
+  phone?: StringFilter | null | undefined;
+};
+
+export type HomeFilter = {
+  seo_title?: StringFilter | null | undefined;
+  banner?: HomeBannerFilter | null | undefined;
+  navbar?: HomeNavbarFilter | null | undefined;
+  hero_heading?: StringFilter | null | undefined;
+  hero_text?: StringFilter | null | undefined;
+  hero_buttons?: HomeHero_ButtonsFilter | null | undefined;
+  navbar_links?: HomeNavbar_LinksFilter | null | undefined;
+  about?: HomeAboutFilter | null | undefined;
+  menu?: HomeMenuFilter | null | undefined;
+  testimonials?: HomeTestimonialsFilter | null | undefined;
+  faq?: HomeFaqFilter | null | undefined;
+  contact?: HomeContactFilter | null | undefined;
 };
 
 export type DatetimeFilter = {
@@ -991,6 +936,12 @@ export type DatetimeFilter = {
   eq?: string | null | undefined;
   exists?: boolean | null | undefined;
   in?: Array<string | null | undefined> | null | undefined;
+};
+
+export type RichTextFilter = {
+  startsWith?: string | null | undefined;
+  eq?: string | null | undefined;
+  exists?: boolean | null | undefined;
 };
 
 export type BlogFilter = {
@@ -1017,60 +968,30 @@ export type ConfigFilter = {
   footerNote?: StringFilter | null | undefined;
 };
 
-export type PagePartsFragment = { __typename: 'Page', seoTitle: string, blocks: Array<
-    | { __typename: 'PageBlocksHero', eyebrow: string | null, headline: string | null, tagline: string | null, primaryAction: { __typename: 'PageBlocksHeroPrimaryAction', label: string | null, link: string | null } | null, secondaryAction: { __typename: 'PageBlocksHeroSecondaryAction', label: string | null, link: string | null } | null, image: { __typename: 'PageBlocksHeroImage', src: string | null, alt: string | null } | null }
-    | { __typename: 'PageBlocksRichText', eyebrow: string | null, headline: string | null, body: TinaMarkdownContent | null }
-    | { __typename: 'PageBlocksMedia', aspect: string | null, image: { __typename: 'PageBlocksMediaImage', src: string | null, alt: string | null, caption: string | null } | null }
-    | { __typename: 'PageBlocksCta', headline: string | null, text: string | null, primaryLabel: string | null, primaryLink: string | null, secondaryLabel: string | null, secondaryLink: string | null }
-    | { __typename: 'PageBlocksGallery', headline: string | null, images: Array<{ __typename: 'PageBlocksGalleryImages', src: string | null, alt: string | null, caption: string | null } | null> | null }
-    | { __typename: 'PageBlocksAccordion', headline: string | null, items: Array<{ __typename: 'PageBlocksAccordionItems', title: string | null, content: TinaMarkdownContent | null } | null> | null }
-    | { __typename: 'PageBlocksStats', headline: string | null, items: Array<{ __typename: 'PageBlocksStatsItems', value: string | null, label: string | null } | null> | null }
-    | { __typename: 'PageBlocksTestimonial', quote: string | null, author: string | null, role: string | null, avatar: { __typename: 'PageBlocksTestimonialAvatar', src: string | null, alt: string | null } | null }
-    | { __typename: 'PageBlocksMenuTabs', eyebrow: string | null, headline: string | null, description: string | null, tabs: Array<{ __typename: 'PageBlocksMenuTabsTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null }
-   | null> | null };
+export type HomePartsFragment = { __typename: 'Home', seo_title: string | null, hero_heading: string | null, hero_text: string | null, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null };
 
 export type BlogPartsFragment = { __typename: 'Blog', title: string, description: string | null, pubDate: string | null, heroImage: string | null, body: TinaMarkdownContent | null };
 
 export type ConfigPartsFragment = { __typename: 'Config', footerNote: string | null, seo: { __typename: 'ConfigSeo', title: string, description: string } | null, nav: Array<{ __typename: 'ConfigNav', title: string, link: string } | null> | null };
 
-export type PageQueryVariables = Exact<{
+export type HomeQueryVariables = Exact<{
   relativePath: string;
 }>;
 
 
-export type PageQuery = { page: { __typename: 'Page', id: string, seoTitle: string, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, blocks: Array<
-      | { __typename: 'PageBlocksHero', eyebrow: string | null, headline: string | null, tagline: string | null, primaryAction: { __typename: 'PageBlocksHeroPrimaryAction', label: string | null, link: string | null } | null, secondaryAction: { __typename: 'PageBlocksHeroSecondaryAction', label: string | null, link: string | null } | null, image: { __typename: 'PageBlocksHeroImage', src: string | null, alt: string | null } | null }
-      | { __typename: 'PageBlocksRichText', eyebrow: string | null, headline: string | null, body: TinaMarkdownContent | null }
-      | { __typename: 'PageBlocksMedia', aspect: string | null, image: { __typename: 'PageBlocksMediaImage', src: string | null, alt: string | null, caption: string | null } | null }
-      | { __typename: 'PageBlocksCta', headline: string | null, text: string | null, primaryLabel: string | null, primaryLink: string | null, secondaryLabel: string | null, secondaryLink: string | null }
-      | { __typename: 'PageBlocksGallery', headline: string | null, images: Array<{ __typename: 'PageBlocksGalleryImages', src: string | null, alt: string | null, caption: string | null } | null> | null }
-      | { __typename: 'PageBlocksAccordion', headline: string | null, items: Array<{ __typename: 'PageBlocksAccordionItems', title: string | null, content: TinaMarkdownContent | null } | null> | null }
-      | { __typename: 'PageBlocksStats', headline: string | null, items: Array<{ __typename: 'PageBlocksStatsItems', value: string | null, label: string | null } | null> | null }
-      | { __typename: 'PageBlocksTestimonial', quote: string | null, author: string | null, role: string | null, avatar: { __typename: 'PageBlocksTestimonialAvatar', src: string | null, alt: string | null } | null }
-      | { __typename: 'PageBlocksMenuTabs', eyebrow: string | null, headline: string | null, description: string | null, tabs: Array<{ __typename: 'PageBlocksMenuTabsTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null }
-     | null> | null } };
+export type HomeQuery = { home: { __typename: 'Home', id: string, seo_title: string | null, hero_heading: string | null, hero_text: string | null, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null } };
 
-export type PageConnectionQueryVariables = Exact<{
+export type HomeConnectionQueryVariables = Exact<{
   before?: string | null | undefined;
   after?: string | null | undefined;
   first?: number | null | undefined;
   last?: number | null | undefined;
   sort?: string | null | undefined;
-  filter?: PageFilter | null | undefined;
+  filter?: HomeFilter | null | undefined;
 }>;
 
 
-export type PageConnectionQuery = { pageConnection: { totalCount: number, pageInfo: { hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges: Array<{ cursor: string, node: { __typename: 'Page', id: string, seoTitle: string, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, blocks: Array<
-          | { __typename: 'PageBlocksHero', eyebrow: string | null, headline: string | null, tagline: string | null, primaryAction: { __typename: 'PageBlocksHeroPrimaryAction', label: string | null, link: string | null } | null, secondaryAction: { __typename: 'PageBlocksHeroSecondaryAction', label: string | null, link: string | null } | null, image: { __typename: 'PageBlocksHeroImage', src: string | null, alt: string | null } | null }
-          | { __typename: 'PageBlocksRichText', eyebrow: string | null, headline: string | null, body: TinaMarkdownContent | null }
-          | { __typename: 'PageBlocksMedia', aspect: string | null, image: { __typename: 'PageBlocksMediaImage', src: string | null, alt: string | null, caption: string | null } | null }
-          | { __typename: 'PageBlocksCta', headline: string | null, text: string | null, primaryLabel: string | null, primaryLink: string | null, secondaryLabel: string | null, secondaryLink: string | null }
-          | { __typename: 'PageBlocksGallery', headline: string | null, images: Array<{ __typename: 'PageBlocksGalleryImages', src: string | null, alt: string | null, caption: string | null } | null> | null }
-          | { __typename: 'PageBlocksAccordion', headline: string | null, items: Array<{ __typename: 'PageBlocksAccordionItems', title: string | null, content: TinaMarkdownContent | null } | null> | null }
-          | { __typename: 'PageBlocksStats', headline: string | null, items: Array<{ __typename: 'PageBlocksStatsItems', value: string | null, label: string | null } | null> | null }
-          | { __typename: 'PageBlocksTestimonial', quote: string | null, author: string | null, role: string | null, avatar: { __typename: 'PageBlocksTestimonialAvatar', src: string | null, alt: string | null } | null }
-          | { __typename: 'PageBlocksMenuTabs', eyebrow: string | null, headline: string | null, description: string | null, tabs: Array<{ __typename: 'PageBlocksMenuTabsTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null }
-         | null> | null } | null } | null> | null } };
+export type HomeConnectionQuery = { homeConnection: { totalCount: number, pageInfo: { hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges: Array<{ cursor: string, node: { __typename: 'Home', id: string, seo_title: string | null, hero_heading: string | null, hero_text: string | null, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null } | null } | null> | null } };
 
 export type BlogQueryVariables = Exact<{
   relativePath: string;
@@ -1110,103 +1031,97 @@ export type ConfigConnectionQueryVariables = Exact<{
 
 export type ConfigConnectionQuery = { configConnection: { totalCount: number, pageInfo: { hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges: Array<{ cursor: string, node: { __typename: 'Config', id: string, footerNote: string | null, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, seo: { __typename: 'ConfigSeo', title: string, description: string } | null, nav: Array<{ __typename: 'ConfigNav', title: string, link: string } | null> | null } | null } | null> | null } };
 
-export const PagePartsFragmentDoc = gql`
-    fragment PageParts on Page {
+export const HomePartsFragmentDoc = gql`
+    fragment HomeParts on Home {
   __typename
-  seoTitle
-  blocks {
+  seo_title
+  banner {
     __typename
-    ... on PageBlocksHero {
-      eyebrow
-      headline
-      tagline
-      primaryAction {
-        __typename
-        label
-        link
-      }
-      secondaryAction {
-        __typename
-        label
-        link
-      }
-      image {
-        __typename
-        src
-        alt
-      }
+    enabled
+    heading
+    text
+    placeholder
+    button
+  }
+  navbar {
+    __typename
+    logo
+    cta_label
+    cta_href
+  }
+  hero_heading
+  hero_text
+  hero_buttons {
+    __typename
+    label
+    href
+  }
+  navbar_links {
+    __typename
+    label
+    href
+    dropdown
+  }
+  about {
+    __typename
+    tagline
+    heading
+    text
+    image
+    buttons {
+      __typename
+      label
+      href
     }
-    ... on PageBlocksRichText {
-      eyebrow
-      headline
-      body
-    }
-    ... on PageBlocksMedia {
-      image {
-        __typename
-        src
-        alt
-        caption
-      }
-      aspect
-    }
-    ... on PageBlocksCta {
-      headline
+  }
+  menu {
+    __typename
+    tag
+    heading
+    text
+    tabs {
+      __typename
+      id
+      label
+      tag
+      heading
       text
-      primaryLabel
-      primaryLink
-      secondaryLabel
-      secondaryLink
+      image
     }
-    ... on PageBlocksGallery {
-      headline
-      images {
-        __typename
-        src
-        alt
-        caption
-      }
-    }
-    ... on PageBlocksAccordion {
-      headline
-      items {
-        __typename
-        title
-        content
-      }
-    }
-    ... on PageBlocksStats {
-      headline
-      items {
-        __typename
-        value
-        label
-      }
-    }
-    ... on PageBlocksTestimonial {
+  }
+  testimonials {
+    __typename
+    heading
+    text
+    items {
+      __typename
       quote
-      author
+      stars
+      avatar
+      name
       role
-      avatar {
-        __typename
-        src
-        alt
-      }
     }
-    ... on PageBlocksMenuTabs {
-      eyebrow
-      headline
-      description
-      tabs {
-        __typename
-        id
-        label
-        tag
-        heading
-        text
-        image
-      }
+  }
+  faq {
+    __typename
+    heading
+    text
+    items {
+      __typename
+      q
+      a
     }
+    still_heading
+    still_text
+    still_button
+  }
+  contact {
+    __typename
+    tagline
+    heading
+    text
+    email
+    phone
   }
 }
     `;
@@ -1236,9 +1151,9 @@ export const ConfigPartsFragmentDoc = gql`
   footerNote
 }
     `;
-export const PageDocument = gql`
-    query page($relativePath: String!) {
-  page(relativePath: $relativePath) {
+export const HomeDocument = gql`
+    query home($relativePath: String!) {
+  home(relativePath: $relativePath) {
     ... on Document {
       _sys {
         filename
@@ -1251,13 +1166,13 @@ export const PageDocument = gql`
       }
       id
     }
-    ...PageParts
+    ...HomeParts
   }
 }
-    ${PagePartsFragmentDoc}`;
-export const PageConnectionDocument = gql`
-    query pageConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: PageFilter) {
-  pageConnection(
+    ${HomePartsFragmentDoc}`;
+export const HomeConnectionDocument = gql`
+    query homeConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: HomeFilter) {
+  homeConnection(
     before: $before
     after: $after
     first: $first
@@ -1287,12 +1202,12 @@ export const PageConnectionDocument = gql`
           }
           id
         }
-        ...PageParts
+        ...HomeParts
       }
     }
   }
 }
-    ${PagePartsFragmentDoc}`;
+    ${HomePartsFragmentDoc}`;
 export const BlogDocument = gql`
     query blog($relativePath: String!) {
   blog(relativePath: $relativePath) {
@@ -1410,11 +1325,11 @@ export const ConfigConnectionDocument = gql`
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
   export function getSdk<C>(requester: Requester<C>) {
     return {
-      page(variables: PageQueryVariables, options?: C): Promise<{data: PageQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: PageQueryVariables, query: string}> {
-        return requester<{data: PageQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: PageQueryVariables, query: string}, PageQueryVariables>(PageDocument, variables, options);
+      home(variables: HomeQueryVariables, options?: C): Promise<{data: HomeQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: HomeQueryVariables, query: string}> {
+        return requester<{data: HomeQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: HomeQueryVariables, query: string}, HomeQueryVariables>(HomeDocument, variables, options);
       },
-    pageConnection(variables?: PageConnectionQueryVariables, options?: C): Promise<{data: PageConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: PageConnectionQueryVariables, query: string}> {
-        return requester<{data: PageConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: PageConnectionQueryVariables, query: string}, PageConnectionQueryVariables>(PageConnectionDocument, variables, options);
+    homeConnection(variables?: HomeConnectionQueryVariables, options?: C): Promise<{data: HomeConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: HomeConnectionQueryVariables, query: string}> {
+        return requester<{data: HomeConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: HomeConnectionQueryVariables, query: string}, HomeConnectionQueryVariables>(HomeConnectionDocument, variables, options);
       },
     blog(variables: BlogQueryVariables, options?: C): Promise<{data: BlogQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: BlogQueryVariables, query: string}> {
         return requester<{data: BlogQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: BlogQueryVariables, query: string}, BlogQueryVariables>(BlogDocument, variables, options);

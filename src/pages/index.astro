@@ -1,17 +1,30 @@
 ---
-import Base from '../layouts/Base.astro';
 import TinaIsland from '@tinacms/astro/TinaIsland.astro';
-import PageBody from '../components/islands/PageBody.astro';
-import { getConfig, getPage } from '../lib/tina/data';
+import Landing from '../components/Landing.astro';
+import { getHome } from '../lib/tina/data';
 import { islands } from '../lib/tina/islands';
-const slug = 'home';
-const page = await getPage(slug);
-const data = page.data?.page;
-if (!data) return new Response('Not Found', { status: 404 });
-const config = (await getConfig()).data?.config ?? null;
+
+const homeResult = await getHome();
+const home = homeResult.data?.home as any;
+const seoTitle = home?.seo_title ?? 'Hearth & Honey — Your neighborhood spot for coffee and good company';
 ---
-<Base title={data.seoTitle || (config as any)?.seo?.title || 'Home'} description={(config as any)?.seo?.description}>
-  <TinaIsland name="page" wrapper={islands.page.wrapper} params={{ slug }} primary>
-    <PageBody data={data} />
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{seoTitle}</title>
+  <meta name="description" content={home?.hero_text ?? ''} />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body>
+  <TinaIsland name="home" wrapper={islands.home.wrapper} params={{}} primary>
+    <Landing d={home} />
   </TinaIsland>
-</Base>
+  <script src="/js/tina-guard.js" is:inline></script>
+</body>
+</html>

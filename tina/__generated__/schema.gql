@@ -57,8 +57,8 @@ type Query {
   collections: [Collection!]!
   node(id: String): Node!
   document(collection: String, relativePath: String): DocumentNode!
-  page(relativePath: String): Page!
-  pageConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: PageFilter): PageConnection!
+  home(relativePath: String): Home!
+  homeConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: HomeFilter): HomeConnection!
   blog(relativePath: String): Blog!
   blogConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: BlogFilter): BlogConnection!
   config(relativePath: String): Config!
@@ -66,7 +66,7 @@ type Query {
 }
 
 input DocumentFilter {
-  page: PageFilter
+  home: HomeFilter
   blog: BlogFilter
   config: ConfigFilter
 }
@@ -94,102 +94,47 @@ type Collection {
   documents(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter, folder: String): DocumentConnection!
 }
 
-union DocumentNode = Page | Blog | Config | Folder
+union DocumentNode = Home | Blog | Config | Folder
 
-type PageBlocksHeroPrimaryAction {
-  label: String
-  link: String
-}
-
-type PageBlocksHeroSecondaryAction {
-  label: String
-  link: String
-}
-
-type PageBlocksHeroImage {
-  src: String
-  alt: String
-}
-
-type PageBlocksHero {
-  eyebrow: String
-  headline: String
-  tagline: String
-  primaryAction: PageBlocksHeroPrimaryAction
-  secondaryAction: PageBlocksHeroSecondaryAction
-  image: PageBlocksHeroImage
-}
-
-type PageBlocksRichText {
-  eyebrow: String
-  headline: String
-  body: RichText
-}
-
-type PageBlocksMediaImage {
-  src: String
-  alt: String
-  caption: String
-}
-
-type PageBlocksMedia {
-  image: PageBlocksMediaImage
-  aspect: String
-}
-
-type PageBlocksCta {
-  headline: String
+type HomeBanner {
+  enabled: Boolean
+  heading: String
   text: String
-  primaryLabel: String
-  primaryLink: String
-  secondaryLabel: String
-  secondaryLink: String
+  placeholder: String
+  button: String
 }
 
-type PageBlocksGalleryImages {
-  src: String
-  alt: String
-  caption: String
+type HomeNavbar {
+  logo: String
+  cta_label: String
+  cta_href: String
 }
 
-type PageBlocksGallery {
-  headline: String
-  images: [PageBlocksGalleryImages]
-}
-
-type PageBlocksAccordionItems {
-  title: String
-  content: RichText
-}
-
-type PageBlocksAccordion {
-  headline: String
-  items: [PageBlocksAccordionItems]
-}
-
-type PageBlocksStatsItems {
-  value: String
+type HomeHero_buttons {
   label: String
+  href: String
 }
 
-type PageBlocksStats {
-  headline: String
-  items: [PageBlocksStatsItems]
+type HomeNavbar_links {
+  label: String
+  href: String
+  dropdown: [String]
 }
 
-type PageBlocksTestimonialAvatar {
-  src: String
-  alt: String
+type HomeAboutButtons {
+  label: String
+  href: String
 }
 
-type PageBlocksTestimonial {
-  quote: String
-  author: String
-  role: String
-  avatar: PageBlocksTestimonialAvatar
+type HomeAbout {
+  tagline: String
+  heading: String
+  text: String
+  image: String
+  buttons: [HomeAboutButtons]
 }
 
-type PageBlocksMenuTabsTabs {
+type HomeMenuTabs {
   id: String
   label: String
   tag: String
@@ -198,18 +143,62 @@ type PageBlocksMenuTabsTabs {
   image: String
 }
 
-type PageBlocksMenuTabs {
-  eyebrow: String
-  headline: String
-  description: String
-  tabs: [PageBlocksMenuTabsTabs]
+type HomeMenu {
+  tag: String
+  heading: String
+  text: String
+  tabs: [HomeMenuTabs]
 }
 
-union PageBlocks = PageBlocksHero | PageBlocksRichText | PageBlocksMedia | PageBlocksCta | PageBlocksGallery | PageBlocksAccordion | PageBlocksStats | PageBlocksTestimonial | PageBlocksMenuTabs
+type HomeTestimonialsItems {
+  quote: String
+  stars: Float
+  avatar: String
+  name: String
+  role: String
+}
 
-type Page implements Node & Document {
-  seoTitle: String!
-  blocks: [PageBlocks]
+type HomeTestimonials {
+  heading: String
+  text: String
+  items: [HomeTestimonialsItems]
+}
+
+type HomeFaqItems {
+  q: String
+  a: String
+}
+
+type HomeFaq {
+  heading: String
+  text: String
+  items: [HomeFaqItems]
+  still_heading: String
+  still_text: String
+  still_button: String
+}
+
+type HomeContact {
+  tagline: String
+  heading: String
+  text: String
+  email: String
+  phone: String
+}
+
+type Home implements Node & Document {
+  seo_title: String
+  banner: HomeBanner
+  navbar: HomeNavbar
+  hero_heading: String
+  hero_text: String
+  hero_buttons: [HomeHero_buttons]
+  navbar_links: [HomeNavbar_links]
+  about: HomeAbout
+  menu: HomeMenu
+  testimonials: HomeTestimonials
+  faq: HomeFaq
+  contact: HomeContact
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
@@ -222,14 +211,34 @@ input StringFilter {
   in: [String]
 }
 
-input PageBlocksHeroPrimaryActionFilter {
-  label: StringFilter
-  link: StringFilter
+input BooleanFilter {
+  eq: Boolean
+  exists: Boolean
 }
 
-input PageBlocksHeroSecondaryActionFilter {
+input HomeBannerFilter {
+  enabled: BooleanFilter
+  heading: StringFilter
+  text: StringFilter
+  placeholder: StringFilter
+  button: StringFilter
+}
+
+input HomeNavbarFilter {
+  logo: StringFilter
+  cta_label: StringFilter
+  cta_href: StringFilter
+}
+
+input HomeHero_buttonsFilter {
   label: StringFilter
-  link: StringFilter
+  href: StringFilter
+}
+
+input HomeNavbar_linksFilter {
+  label: StringFilter
+  href: StringFilter
+  dropdown: StringFilter
 }
 
 input ImageFilter {
@@ -239,96 +248,20 @@ input ImageFilter {
   in: [String]
 }
 
-input PageBlocksHeroImageFilter {
-  src: ImageFilter
-  alt: StringFilter
-}
-
-input PageBlocksHeroFilter {
-  eyebrow: StringFilter
-  headline: StringFilter
-  tagline: StringFilter
-  primaryAction: PageBlocksHeroPrimaryActionFilter
-  secondaryAction: PageBlocksHeroSecondaryActionFilter
-  image: PageBlocksHeroImageFilter
-}
-
-input RichTextFilter {
-  startsWith: String
-  eq: String
-  exists: Boolean
-}
-
-input PageBlocksRichTextFilter {
-  eyebrow: StringFilter
-  headline: StringFilter
-  body: RichTextFilter
-}
-
-input PageBlocksMediaImageFilter {
-  src: ImageFilter
-  alt: StringFilter
-  caption: StringFilter
-}
-
-input PageBlocksMediaFilter {
-  image: PageBlocksMediaImageFilter
-  aspect: StringFilter
-}
-
-input PageBlocksCtaFilter {
-  headline: StringFilter
-  text: StringFilter
-  primaryLabel: StringFilter
-  primaryLink: StringFilter
-  secondaryLabel: StringFilter
-  secondaryLink: StringFilter
-}
-
-input PageBlocksGalleryImagesFilter {
-  src: ImageFilter
-  alt: StringFilter
-  caption: StringFilter
-}
-
-input PageBlocksGalleryFilter {
-  headline: StringFilter
-  images: PageBlocksGalleryImagesFilter
-}
-
-input PageBlocksAccordionItemsFilter {
-  title: StringFilter
-  content: RichTextFilter
-}
-
-input PageBlocksAccordionFilter {
-  headline: StringFilter
-  items: PageBlocksAccordionItemsFilter
-}
-
-input PageBlocksStatsItemsFilter {
-  value: StringFilter
+input HomeAboutButtonsFilter {
   label: StringFilter
+  href: StringFilter
 }
 
-input PageBlocksStatsFilter {
-  headline: StringFilter
-  items: PageBlocksStatsItemsFilter
+input HomeAboutFilter {
+  tagline: StringFilter
+  heading: StringFilter
+  text: StringFilter
+  image: ImageFilter
+  buttons: HomeAboutButtonsFilter
 }
 
-input PageBlocksTestimonialAvatarFilter {
-  src: ImageFilter
-  alt: StringFilter
-}
-
-input PageBlocksTestimonialFilter {
-  quote: StringFilter
-  author: StringFilter
-  role: StringFilter
-  avatar: PageBlocksTestimonialAvatarFilter
-}
-
-input PageBlocksMenuTabsTabsFilter {
+input HomeMenuTabsFilter {
   id: StringFilter
   label: StringFilter
   tag: StringFilter
@@ -337,39 +270,83 @@ input PageBlocksMenuTabsTabsFilter {
   image: ImageFilter
 }
 
-input PageBlocksMenuTabsFilter {
-  eyebrow: StringFilter
-  headline: StringFilter
-  description: StringFilter
-  tabs: PageBlocksMenuTabsTabsFilter
+input HomeMenuFilter {
+  tag: StringFilter
+  heading: StringFilter
+  text: StringFilter
+  tabs: HomeMenuTabsFilter
 }
 
-input PageBlocksFilter {
-  hero: PageBlocksHeroFilter
-  richText: PageBlocksRichTextFilter
-  media: PageBlocksMediaFilter
-  cta: PageBlocksCtaFilter
-  gallery: PageBlocksGalleryFilter
-  accordion: PageBlocksAccordionFilter
-  stats: PageBlocksStatsFilter
-  testimonial: PageBlocksTestimonialFilter
-  menuTabs: PageBlocksMenuTabsFilter
+input NumberFilter {
+  lt: Float
+  lte: Float
+  gte: Float
+  gt: Float
+  eq: Float
+  exists: Boolean
+  in: [Float]
 }
 
-input PageFilter {
-  seoTitle: StringFilter
-  blocks: PageBlocksFilter
+input HomeTestimonialsItemsFilter {
+  quote: StringFilter
+  stars: NumberFilter
+  avatar: ImageFilter
+  name: StringFilter
+  role: StringFilter
 }
 
-type PageConnectionEdges {
+input HomeTestimonialsFilter {
+  heading: StringFilter
+  text: StringFilter
+  items: HomeTestimonialsItemsFilter
+}
+
+input HomeFaqItemsFilter {
+  q: StringFilter
+  a: StringFilter
+}
+
+input HomeFaqFilter {
+  heading: StringFilter
+  text: StringFilter
+  items: HomeFaqItemsFilter
+  still_heading: StringFilter
+  still_text: StringFilter
+  still_button: StringFilter
+}
+
+input HomeContactFilter {
+  tagline: StringFilter
+  heading: StringFilter
+  text: StringFilter
+  email: StringFilter
+  phone: StringFilter
+}
+
+input HomeFilter {
+  seo_title: StringFilter
+  banner: HomeBannerFilter
+  navbar: HomeNavbarFilter
+  hero_heading: StringFilter
+  hero_text: StringFilter
+  hero_buttons: HomeHero_buttonsFilter
+  navbar_links: HomeNavbar_linksFilter
+  about: HomeAboutFilter
+  menu: HomeMenuFilter
+  testimonials: HomeTestimonialsFilter
+  faq: HomeFaqFilter
+  contact: HomeContactFilter
+}
+
+type HomeConnectionEdges {
   cursor: String!
-  node: Page
+  node: Home
 }
 
-type PageConnection implements Connection {
+type HomeConnection implements Connection {
   pageInfo: PageInfo!
   totalCount: Float!
-  edges: [PageConnectionEdges]
+  edges: [HomeConnectionEdges]
 }
 
 type Blog implements Node & Document {
@@ -389,6 +366,12 @@ input DatetimeFilter {
   eq: String
   exists: Boolean
   in: [String]
+}
+
+input RichTextFilter {
+  startsWith: String
+  eq: String
+  exists: Boolean
 }
 
 input BlogFilter {
@@ -462,8 +445,8 @@ type Mutation {
   deleteDocument(collection: String, relativePath: String!): DocumentNode!
   createDocument(collection: String, relativePath: String!, params: DocumentMutation!): DocumentNode!
   createFolder(collection: String, relativePath: String!): DocumentNode!
-  updatePage(relativePath: String!, params: PageMutation!): Page!
-  createPage(relativePath: String!, params: PageMutation!): Page!
+  updateHome(relativePath: String!, params: HomeMutation!): Home!
+  createHome(relativePath: String!, params: HomeMutation!): Home!
   updateBlog(relativePath: String!, params: BlogMutation!): Blog!
   createBlog(relativePath: String!, params: BlogMutation!): Blog!
   updateConfig(relativePath: String!, params: ConfigMutation!): Config!
@@ -471,112 +454,57 @@ type Mutation {
 }
 
 input DocumentUpdateMutation {
-  page: PageMutation
+  home: HomeMutation
   blog: BlogMutation
   config: ConfigMutation
   relativePath: String
 }
 
 input DocumentMutation {
-  page: PageMutation
+  home: HomeMutation
   blog: BlogMutation
   config: ConfigMutation
 }
 
-input PageBlocksHeroPrimaryActionMutation {
-  label: String
-  link: String
-}
-
-input PageBlocksHeroSecondaryActionMutation {
-  label: String
-  link: String
-}
-
-input PageBlocksHeroImageMutation {
-  src: String
-  alt: String
-}
-
-input PageBlocksHeroMutation {
-  eyebrow: String
-  headline: String
-  tagline: String
-  primaryAction: PageBlocksHeroPrimaryActionMutation
-  secondaryAction: PageBlocksHeroSecondaryActionMutation
-  image: PageBlocksHeroImageMutation
-}
-
-input PageBlocksRichTextMutation {
-  eyebrow: String
-  headline: String
-  body: RichText
-}
-
-input PageBlocksMediaImageMutation {
-  src: String
-  alt: String
-  caption: String
-}
-
-input PageBlocksMediaMutation {
-  image: PageBlocksMediaImageMutation
-  aspect: String
-}
-
-input PageBlocksCtaMutation {
-  headline: String
+input HomeBannerMutation {
+  enabled: Boolean
+  heading: String
   text: String
-  primaryLabel: String
-  primaryLink: String
-  secondaryLabel: String
-  secondaryLink: String
+  placeholder: String
+  button: String
 }
 
-input PageBlocksGalleryImagesMutation {
-  src: String
-  alt: String
-  caption: String
+input HomeNavbarMutation {
+  logo: String
+  cta_label: String
+  cta_href: String
 }
 
-input PageBlocksGalleryMutation {
-  headline: String
-  images: [PageBlocksGalleryImagesMutation]
-}
-
-input PageBlocksAccordionItemsMutation {
-  title: String
-  content: RichText
-}
-
-input PageBlocksAccordionMutation {
-  headline: String
-  items: [PageBlocksAccordionItemsMutation]
-}
-
-input PageBlocksStatsItemsMutation {
-  value: String
+input HomeHero_buttonsMutation {
   label: String
+  href: String
 }
 
-input PageBlocksStatsMutation {
-  headline: String
-  items: [PageBlocksStatsItemsMutation]
+input HomeNavbar_linksMutation {
+  label: String
+  href: String
+  dropdown: [String]
 }
 
-input PageBlocksTestimonialAvatarMutation {
-  src: String
-  alt: String
+input HomeAboutButtonsMutation {
+  label: String
+  href: String
 }
 
-input PageBlocksTestimonialMutation {
-  quote: String
-  author: String
-  role: String
-  avatar: PageBlocksTestimonialAvatarMutation
+input HomeAboutMutation {
+  tagline: String
+  heading: String
+  text: String
+  image: String
+  buttons: [HomeAboutButtonsMutation]
 }
 
-input PageBlocksMenuTabsTabsMutation {
+input HomeMenuTabsMutation {
   id: String
   label: String
   tag: String
@@ -585,28 +513,62 @@ input PageBlocksMenuTabsTabsMutation {
   image: String
 }
 
-input PageBlocksMenuTabsMutation {
-  eyebrow: String
-  headline: String
-  description: String
-  tabs: [PageBlocksMenuTabsTabsMutation]
+input HomeMenuMutation {
+  tag: String
+  heading: String
+  text: String
+  tabs: [HomeMenuTabsMutation]
 }
 
-input PageBlocksMutation {
-  hero: PageBlocksHeroMutation
-  richText: PageBlocksRichTextMutation
-  media: PageBlocksMediaMutation
-  cta: PageBlocksCtaMutation
-  gallery: PageBlocksGalleryMutation
-  accordion: PageBlocksAccordionMutation
-  stats: PageBlocksStatsMutation
-  testimonial: PageBlocksTestimonialMutation
-  menuTabs: PageBlocksMenuTabsMutation
+input HomeTestimonialsItemsMutation {
+  quote: String
+  stars: Float
+  avatar: String
+  name: String
+  role: String
 }
 
-input PageMutation {
-  seoTitle: String
-  blocks: [PageBlocksMutation]
+input HomeTestimonialsMutation {
+  heading: String
+  text: String
+  items: [HomeTestimonialsItemsMutation]
+}
+
+input HomeFaqItemsMutation {
+  q: String
+  a: String
+}
+
+input HomeFaqMutation {
+  heading: String
+  text: String
+  items: [HomeFaqItemsMutation]
+  still_heading: String
+  still_text: String
+  still_button: String
+}
+
+input HomeContactMutation {
+  tagline: String
+  heading: String
+  text: String
+  email: String
+  phone: String
+}
+
+input HomeMutation {
+  seo_title: String
+  banner: HomeBannerMutation
+  navbar: HomeNavbarMutation
+  hero_heading: String
+  hero_text: String
+  hero_buttons: [HomeHero_buttonsMutation]
+  navbar_links: [HomeNavbar_linksMutation]
+  about: HomeAboutMutation
+  menu: HomeMenuMutation
+  testimonials: HomeTestimonialsMutation
+  faq: HomeFaqMutation
+  contact: HomeContactMutation
 }
 
 input BlogMutation {

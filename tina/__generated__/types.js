@@ -5,103 +5,97 @@ export function gql(strings, ...args) {
   });
   return str;
 }
-export const PagePartsFragmentDoc = gql`
-    fragment PageParts on Page {
+export const HomePartsFragmentDoc = gql`
+    fragment HomeParts on Home {
   __typename
-  seoTitle
-  blocks {
+  seo_title
+  banner {
     __typename
-    ... on PageBlocksHero {
-      eyebrow
-      headline
-      tagline
-      primaryAction {
-        __typename
-        label
-        link
-      }
-      secondaryAction {
-        __typename
-        label
-        link
-      }
-      image {
-        __typename
-        src
-        alt
-      }
+    enabled
+    heading
+    text
+    placeholder
+    button
+  }
+  navbar {
+    __typename
+    logo
+    cta_label
+    cta_href
+  }
+  hero_heading
+  hero_text
+  hero_buttons {
+    __typename
+    label
+    href
+  }
+  navbar_links {
+    __typename
+    label
+    href
+    dropdown
+  }
+  about {
+    __typename
+    tagline
+    heading
+    text
+    image
+    buttons {
+      __typename
+      label
+      href
     }
-    ... on PageBlocksRichText {
-      eyebrow
-      headline
-      body
-    }
-    ... on PageBlocksMedia {
-      image {
-        __typename
-        src
-        alt
-        caption
-      }
-      aspect
-    }
-    ... on PageBlocksCta {
-      headline
+  }
+  menu {
+    __typename
+    tag
+    heading
+    text
+    tabs {
+      __typename
+      id
+      label
+      tag
+      heading
       text
-      primaryLabel
-      primaryLink
-      secondaryLabel
-      secondaryLink
+      image
     }
-    ... on PageBlocksGallery {
-      headline
-      images {
-        __typename
-        src
-        alt
-        caption
-      }
-    }
-    ... on PageBlocksAccordion {
-      headline
-      items {
-        __typename
-        title
-        content
-      }
-    }
-    ... on PageBlocksStats {
-      headline
-      items {
-        __typename
-        value
-        label
-      }
-    }
-    ... on PageBlocksTestimonial {
+  }
+  testimonials {
+    __typename
+    heading
+    text
+    items {
+      __typename
       quote
-      author
+      stars
+      avatar
+      name
       role
-      avatar {
-        __typename
-        src
-        alt
-      }
     }
-    ... on PageBlocksMenuTabs {
-      eyebrow
-      headline
-      description
-      tabs {
-        __typename
-        id
-        label
-        tag
-        heading
-        text
-        image
-      }
+  }
+  faq {
+    __typename
+    heading
+    text
+    items {
+      __typename
+      q
+      a
     }
+    still_heading
+    still_text
+    still_button
+  }
+  contact {
+    __typename
+    tagline
+    heading
+    text
+    email
+    phone
   }
 }
     `;
@@ -131,9 +125,9 @@ export const ConfigPartsFragmentDoc = gql`
   footerNote
 }
     `;
-export const PageDocument = gql`
-    query page($relativePath: String!) {
-  page(relativePath: $relativePath) {
+export const HomeDocument = gql`
+    query home($relativePath: String!) {
+  home(relativePath: $relativePath) {
     ... on Document {
       _sys {
         filename
@@ -146,13 +140,13 @@ export const PageDocument = gql`
       }
       id
     }
-    ...PageParts
+    ...HomeParts
   }
 }
-    ${PagePartsFragmentDoc}`;
-export const PageConnectionDocument = gql`
-    query pageConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: PageFilter) {
-  pageConnection(
+    ${HomePartsFragmentDoc}`;
+export const HomeConnectionDocument = gql`
+    query homeConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: HomeFilter) {
+  homeConnection(
     before: $before
     after: $after
     first: $first
@@ -182,12 +176,12 @@ export const PageConnectionDocument = gql`
           }
           id
         }
-        ...PageParts
+        ...HomeParts
       }
     }
   }
 }
-    ${PagePartsFragmentDoc}`;
+    ${HomePartsFragmentDoc}`;
 export const BlogDocument = gql`
     query blog($relativePath: String!) {
   blog(relativePath: $relativePath) {
@@ -304,11 +298,11 @@ export const ConfigConnectionDocument = gql`
     ${ConfigPartsFragmentDoc}`;
 export function getSdk(requester) {
   return {
-    page(variables, options) {
-      return requester(PageDocument, variables, options);
+    home(variables, options) {
+      return requester(HomeDocument, variables, options);
     },
-    pageConnection(variables, options) {
-      return requester(PageConnectionDocument, variables, options);
+    homeConnection(variables, options) {
+      return requester(HomeConnectionDocument, variables, options);
     },
     blog(variables, options) {
       return requester(BlogDocument, variables, options);
