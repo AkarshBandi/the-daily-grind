@@ -80,6 +80,20 @@ fragment PageParts on Page {
         alt
       }
     }
+    ... on PageBlocksMenuTabs {
+      eyebrow
+      headline
+      description
+      tabs {
+        __typename
+        id
+        label
+        tag
+        heading
+        text
+        image
+      }
+    }
   }
 }
 

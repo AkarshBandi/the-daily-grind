@@ -189,7 +189,23 @@ type PageBlocksTestimonial {
   avatar: PageBlocksTestimonialAvatar
 }
 
-union PageBlocks = PageBlocksHero | PageBlocksRichText | PageBlocksMedia | PageBlocksCta | PageBlocksGallery | PageBlocksAccordion | PageBlocksStats | PageBlocksTestimonial
+type PageBlocksMenuTabsTabs {
+  id: String
+  label: String
+  tag: String
+  heading: String
+  text: String
+  image: String
+}
+
+type PageBlocksMenuTabs {
+  eyebrow: String
+  headline: String
+  description: String
+  tabs: [PageBlocksMenuTabsTabs]
+}
+
+union PageBlocks = PageBlocksHero | PageBlocksRichText | PageBlocksMedia | PageBlocksCta | PageBlocksGallery | PageBlocksAccordion | PageBlocksStats | PageBlocksTestimonial | PageBlocksMenuTabs
 
 type Page implements Node & Document {
   seoTitle: String!
@@ -312,6 +328,22 @@ input PageBlocksTestimonialFilter {
   avatar: PageBlocksTestimonialAvatarFilter
 }
 
+input PageBlocksMenuTabsTabsFilter {
+  id: StringFilter
+  label: StringFilter
+  tag: StringFilter
+  heading: StringFilter
+  text: StringFilter
+  image: ImageFilter
+}
+
+input PageBlocksMenuTabsFilter {
+  eyebrow: StringFilter
+  headline: StringFilter
+  description: StringFilter
+  tabs: PageBlocksMenuTabsTabsFilter
+}
+
 input PageBlocksFilter {
   hero: PageBlocksHeroFilter
   richText: PageBlocksRichTextFilter
@@ -321,6 +353,7 @@ input PageBlocksFilter {
   accordion: PageBlocksAccordionFilter
   stats: PageBlocksStatsFilter
   testimonial: PageBlocksTestimonialFilter
+  menuTabs: PageBlocksMenuTabsFilter
 }
 
 input PageFilter {
@@ -543,6 +576,22 @@ input PageBlocksTestimonialMutation {
   avatar: PageBlocksTestimonialAvatarMutation
 }
 
+input PageBlocksMenuTabsTabsMutation {
+  id: String
+  label: String
+  tag: String
+  heading: String
+  text: String
+  image: String
+}
+
+input PageBlocksMenuTabsMutation {
+  eyebrow: String
+  headline: String
+  description: String
+  tabs: [PageBlocksMenuTabsTabsMutation]
+}
+
 input PageBlocksMutation {
   hero: PageBlocksHeroMutation
   richText: PageBlocksRichTextMutation
@@ -552,6 +601,7 @@ input PageBlocksMutation {
   accordion: PageBlocksAccordionMutation
   stats: PageBlocksStatsMutation
   testimonial: PageBlocksTestimonialMutation
+  menuTabs: PageBlocksMenuTabsMutation
 }
 
 input PageMutation {

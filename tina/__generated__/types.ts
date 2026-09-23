@@ -312,7 +312,25 @@ export type PageBlocksTestimonial = {
   avatar?: Maybe<PageBlocksTestimonialAvatar>;
 };
 
-export type PageBlocks = PageBlocksHero | PageBlocksRichText | PageBlocksMedia | PageBlocksCta | PageBlocksGallery | PageBlocksAccordion | PageBlocksStats | PageBlocksTestimonial;
+export type PageBlocksMenuTabsTabs = {
+  __typename?: 'PageBlocksMenuTabsTabs';
+  id?: Maybe<Scalars['String']['output']>;
+  label?: Maybe<Scalars['String']['output']>;
+  tag?: Maybe<Scalars['String']['output']>;
+  heading?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+  image?: Maybe<Scalars['String']['output']>;
+};
+
+export type PageBlocksMenuTabs = {
+  __typename?: 'PageBlocksMenuTabs';
+  eyebrow?: Maybe<Scalars['String']['output']>;
+  headline?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  tabs?: Maybe<Array<Maybe<PageBlocksMenuTabsTabs>>>;
+};
+
+export type PageBlocks = PageBlocksHero | PageBlocksRichText | PageBlocksMedia | PageBlocksCta | PageBlocksGallery | PageBlocksAccordion | PageBlocksStats | PageBlocksTestimonial | PageBlocksMenuTabs;
 
 export type Page = Node & Document & {
   __typename?: 'Page';
@@ -436,6 +454,22 @@ export type PageBlocksTestimonialFilter = {
   avatar?: InputMaybe<PageBlocksTestimonialAvatarFilter>;
 };
 
+export type PageBlocksMenuTabsTabsFilter = {
+  id?: InputMaybe<StringFilter>;
+  label?: InputMaybe<StringFilter>;
+  tag?: InputMaybe<StringFilter>;
+  heading?: InputMaybe<StringFilter>;
+  text?: InputMaybe<StringFilter>;
+  image?: InputMaybe<ImageFilter>;
+};
+
+export type PageBlocksMenuTabsFilter = {
+  eyebrow?: InputMaybe<StringFilter>;
+  headline?: InputMaybe<StringFilter>;
+  description?: InputMaybe<StringFilter>;
+  tabs?: InputMaybe<PageBlocksMenuTabsTabsFilter>;
+};
+
 export type PageBlocksFilter = {
   hero?: InputMaybe<PageBlocksHeroFilter>;
   richText?: InputMaybe<PageBlocksRichTextFilter>;
@@ -445,6 +479,7 @@ export type PageBlocksFilter = {
   accordion?: InputMaybe<PageBlocksAccordionFilter>;
   stats?: InputMaybe<PageBlocksStatsFilter>;
   testimonial?: InputMaybe<PageBlocksTestimonialFilter>;
+  menuTabs?: InputMaybe<PageBlocksMenuTabsFilter>;
 };
 
 export type PageFilter = {
@@ -747,6 +782,22 @@ export type PageBlocksTestimonialMutation = {
   avatar?: InputMaybe<PageBlocksTestimonialAvatarMutation>;
 };
 
+export type PageBlocksMenuTabsTabsMutation = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
+  tag?: InputMaybe<Scalars['String']['input']>;
+  heading?: InputMaybe<Scalars['String']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PageBlocksMenuTabsMutation = {
+  eyebrow?: InputMaybe<Scalars['String']['input']>;
+  headline?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  tabs?: InputMaybe<Array<InputMaybe<PageBlocksMenuTabsTabsMutation>>>;
+};
+
 export type PageBlocksMutation = {
   hero?: InputMaybe<PageBlocksHeroMutation>;
   richText?: InputMaybe<PageBlocksRichTextMutation>;
@@ -756,6 +807,7 @@ export type PageBlocksMutation = {
   accordion?: InputMaybe<PageBlocksAccordionMutation>;
   stats?: InputMaybe<PageBlocksStatsMutation>;
   testimonial?: InputMaybe<PageBlocksTestimonialMutation>;
+  menuTabs?: InputMaybe<PageBlocksMenuTabsMutation>;
 };
 
 export type PageMutation = {
@@ -900,6 +952,22 @@ export type PageBlocksTestimonialFilter = {
   avatar?: PageBlocksTestimonialAvatarFilter | null | undefined;
 };
 
+export type PageBlocksMenuTabsTabsFilter = {
+  id?: StringFilter | null | undefined;
+  label?: StringFilter | null | undefined;
+  tag?: StringFilter | null | undefined;
+  heading?: StringFilter | null | undefined;
+  text?: StringFilter | null | undefined;
+  image?: ImageFilter | null | undefined;
+};
+
+export type PageBlocksMenuTabsFilter = {
+  eyebrow?: StringFilter | null | undefined;
+  headline?: StringFilter | null | undefined;
+  description?: StringFilter | null | undefined;
+  tabs?: PageBlocksMenuTabsTabsFilter | null | undefined;
+};
+
 export type PageBlocksFilter = {
   hero?: PageBlocksHeroFilter | null | undefined;
   richText?: PageBlocksRichTextFilter | null | undefined;
@@ -909,6 +977,7 @@ export type PageBlocksFilter = {
   accordion?: PageBlocksAccordionFilter | null | undefined;
   stats?: PageBlocksStatsFilter | null | undefined;
   testimonial?: PageBlocksTestimonialFilter | null | undefined;
+  menuTabs?: PageBlocksMenuTabsFilter | null | undefined;
 };
 
 export type PageFilter = {
@@ -957,6 +1026,7 @@ export type PagePartsFragment = { __typename: 'Page', seoTitle: string, blocks: 
     | { __typename: 'PageBlocksAccordion', headline: string | null, items: Array<{ __typename: 'PageBlocksAccordionItems', title: string | null, content: TinaMarkdownContent | null } | null> | null }
     | { __typename: 'PageBlocksStats', headline: string | null, items: Array<{ __typename: 'PageBlocksStatsItems', value: string | null, label: string | null } | null> | null }
     | { __typename: 'PageBlocksTestimonial', quote: string | null, author: string | null, role: string | null, avatar: { __typename: 'PageBlocksTestimonialAvatar', src: string | null, alt: string | null } | null }
+    | { __typename: 'PageBlocksMenuTabs', eyebrow: string | null, headline: string | null, description: string | null, tabs: Array<{ __typename: 'PageBlocksMenuTabsTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null }
    | null> | null };
 
 export type BlogPartsFragment = { __typename: 'Blog', title: string, description: string | null, pubDate: string | null, heroImage: string | null, body: TinaMarkdownContent | null };
@@ -977,6 +1047,7 @@ export type PageQuery = { page: { __typename: 'Page', id: string, seoTitle: stri
       | { __typename: 'PageBlocksAccordion', headline: string | null, items: Array<{ __typename: 'PageBlocksAccordionItems', title: string | null, content: TinaMarkdownContent | null } | null> | null }
       | { __typename: 'PageBlocksStats', headline: string | null, items: Array<{ __typename: 'PageBlocksStatsItems', value: string | null, label: string | null } | null> | null }
       | { __typename: 'PageBlocksTestimonial', quote: string | null, author: string | null, role: string | null, avatar: { __typename: 'PageBlocksTestimonialAvatar', src: string | null, alt: string | null } | null }
+      | { __typename: 'PageBlocksMenuTabs', eyebrow: string | null, headline: string | null, description: string | null, tabs: Array<{ __typename: 'PageBlocksMenuTabsTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null }
      | null> | null } };
 
 export type PageConnectionQueryVariables = Exact<{
@@ -998,6 +1069,7 @@ export type PageConnectionQuery = { pageConnection: { totalCount: number, pageIn
           | { __typename: 'PageBlocksAccordion', headline: string | null, items: Array<{ __typename: 'PageBlocksAccordionItems', title: string | null, content: TinaMarkdownContent | null } | null> | null }
           | { __typename: 'PageBlocksStats', headline: string | null, items: Array<{ __typename: 'PageBlocksStatsItems', value: string | null, label: string | null } | null> | null }
           | { __typename: 'PageBlocksTestimonial', quote: string | null, author: string | null, role: string | null, avatar: { __typename: 'PageBlocksTestimonialAvatar', src: string | null, alt: string | null } | null }
+          | { __typename: 'PageBlocksMenuTabs', eyebrow: string | null, headline: string | null, description: string | null, tabs: Array<{ __typename: 'PageBlocksMenuTabsTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null }
          | null> | null } | null } | null> | null } };
 
 export type BlogQueryVariables = Exact<{
@@ -1119,6 +1191,20 @@ export const PagePartsFragmentDoc = gql`
         __typename
         src
         alt
+      }
+    }
+    ... on PageBlocksMenuTabs {
+      eyebrow
+      headline
+      description
+      tabs {
+        __typename
+        id
+        label
+        tag
+        heading
+        text
+        image
       }
     }
   }
@@ -1389,7 +1475,7 @@ export const ExperimentalGetTinaClient = () =>
   getSdk(
     generateRequester(
       createClient({
-        url: "https://content.tinajs.io/3.0/content/028e674c-8b03-47a6-9e0c-a5e6c31c2ef6/github/master",
+        url: "http://localhost:4001/graphql",
         queries,
       })
     )

@@ -8,6 +8,7 @@ import Gallery from './Gallery.astro';
 import Accordion from './Accordion.astro';
 import Stats from './Stats.astro';
 import Testimonial from './Testimonial.astro';
+import MenuTabs from './MenuTabs.astro';
 
 const { data } = Astro.props as { data: any };
 const blocks = (data?.blocks ?? []).filter(Boolean);
@@ -31,6 +32,8 @@ const blocks = (data?.blocks ?? []).filter(Boolean);
         return <Stats data={block} />;
       case 'PageBlocksTestimonial':
         return <Testimonial data={block} />;
+      case 'PageBlocksMenuTabs':
+        return <MenuTabs data={block} />;
       default:
         return null;
     }

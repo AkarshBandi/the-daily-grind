@@ -7,6 +7,7 @@ import { galleryBlockSchema } from '../../src/components/blocks/gallery.template
 import { accordionBlockSchema } from '../../src/components/blocks/accordion.template';
 import { statsBlockSchema } from '../../src/components/blocks/stats.template';
 import { testimonialBlockSchema } from '../../src/components/blocks/testimonial.template';
+import { menuTabsBlockSchema } from '../../src/components/blocks/menuTabs.template';
 
 export const PageCollection: Collection = {
   name: 'page',
@@ -42,6 +43,7 @@ export const PageCollection: Collection = {
         accordionBlockSchema,
         statsBlockSchema,
         testimonialBlockSchema,
+        menuTabsBlockSchema,
       ],
     },
   ],

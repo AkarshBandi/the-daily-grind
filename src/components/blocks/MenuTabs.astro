@@ -1,0 +1,63 @@
+---
+import { tinaField } from '@tinacms/astro/tina-field';
+const { data } = Astro.props as { data: any };
+const tabs = (data?.tabs ?? []).filter(Boolean);
+---
+<section class="block-menutabs" style="max-width:1120px;margin:0 auto;padding:48px 24px">
+  {data?.eyebrow && <p style="letter-spacing:0.18em;text-transform:uppercase;font-size:11px;opacity:0.6" data-tina-field={tinaField(data, 'eyebrow')}>{data.eyebrow}</p>}
+  {data?.headline && <h2 style="font-size:clamp(1.6rem,4vw,2.2rem);margin:8px 0 8px" data-tina-field={tinaField(data, 'headline')}>{data.headline}</h2>}
+  {data?.description && <p style="opacity:0.7;max-width:36rem" data-tina-field={tinaField(data, 'description')}>{data.description}</p>}
+
+  <!-- Tab buttons -->
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 24px" data-tina-field={tinaField(data, 'tabs')}>
+    {tabs.map((tab: any) => (
+      <button style="padding:8px 14px;border:1px solid #ddd;background:#fff;font-size:13px;letter-spacing:0.06em;text-transform:uppercase" data-tab-btn={tab.id}>{tab.label}</button>
+    ))}
+  </div>
+
+  <!-- Panels — in Tina editor show all stacked so every tab is clickable -->
+  <div class="menutabs-panels" style="display:grid;gap:32px">
+    {tabs.map((tab: any) => (
+      <article style="display:grid;gap:20px;align-items:start;grid-template-columns:1fr 1.2fr;border:1px solid #eee;padding:20px" data-tina-field={tinaField(tab)}>
+        <div>
+          <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;opacity:0.5" data-tina-field={tinaField(tab, 'tag')}>{tab.tag}</p>
+          <h3 style="margin:6px 0 8px;font-size:1.3rem" data-tina-field={tinaField(tab, 'heading')}>{tab.heading}</h3>
+          <p style="opacity:0.7;line-height:1.6" data-tina-field={tinaField(tab, 'text')}>{tab.text}</p>
+          <p style="font-size:11px;opacity:0.4;margin-top:8px">ID: {tab.id} — Label: {tab.label}</p>
+        </div>
+        {tab?.image ? (
+          <img src={tab.image} alt={tab.heading ?? tab.label ?? ''} style="width:100%;aspect-ratio:4/3;object-fit:cover" loading="lazy" data-tina-field={tinaField(tab, 'image')} />
+        ) : (
+          <div style="aspect-ratio:4/3;background:#f3f3f3;display:grid;place-items:center;font-size:12px;opacity:0.5">No image — click to upload</div>
+        )}
+      </article>
+    ))}
+  </div>
+
+  <style>
+    /* In the live site, JS hides inactive tabs — in Tina iframe show all */
+    :global(.is-tina-edit) .block-menutabs .menutabs-panels { display: grid !important; }
+  </style>
+</section>
+<script is:inline>
+  // Simple tabs for live site — hidden tabs are still in DOM for Tina to edit
+  (function(){
+    const root = document.currentScript?.closest('.block-menutabs');
+    if(!root) return;
+    const btns = root.querySelectorAll('[data-tab-btn]');
+    const panels = root.querySelectorAll('.menutabs-panels > article');
+    // In Tina editor, keep all visible
+    try { if (window.self !== window.top) return; } catch(e) { return; }
+    if(!btns.length || !panels.length) return;
+    function show(id){
+      btns.forEach(b=> b.style.opacity = b.getAttribute('data-tab-btn')===id ? '1' : '0.5');
+      panels.forEach(p=> p.style.display = p.querySelector(`[data-tina-field*="${id}"]`) || p.textContent.includes(id) ? '' : 'none');
+      // fallback by index if id match fails
+      const idx = Array.from(btns).findIndex(b=> b.getAttribute('data-tab-btn')===id);
+      if(idx>=0){ panels.forEach((p,i)=> p.style.display = i===idx ? '' : 'none'); }
+    }
+    // Show first by default on live site
+    show(btns[0].getAttribute('data-tab-btn'));
+    btns.forEach(b=> b.addEventListener('click', ()=> show(b.getAttribute('data-tab-btn'))));
+  })();
+</script>

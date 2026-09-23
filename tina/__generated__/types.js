@@ -88,6 +88,20 @@ export const PagePartsFragmentDoc = gql`
         alt
       }
     }
+    ... on PageBlocksMenuTabs {
+      eyebrow
+      headline
+      description
+      tabs {
+        __typename
+        id
+        label
+        tag
+        heading
+        text
+        image
+      }
+    }
   }
 }
     `;
@@ -330,7 +344,7 @@ const generateRequester = (client) => {
 export const ExperimentalGetTinaClient = () => getSdk(
   generateRequester(
     createClient({
-      url: "https://content.tinajs.io/3.0/content/028e674c-8b03-47a6-9e0c-a5e6c31c2ef6/github/master",
+      url: "http://localhost:4001/graphql",
       queries
     })
   )
