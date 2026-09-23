@@ -26,7 +26,7 @@ const tabs = (data?.tabs ?? []).filter(Boolean);
           <p style="font-size:11px;opacity:0.4;margin-top:8px">ID: {tab.id} — Label: {tab.label}</p>
         </div>
         {tab?.image ? (
-          <img src={tab.image} alt={tab.heading ?? tab.label ?? ''} style="width:100%;aspect-ratio:4/3;object-fit:cover" loading="lazy" data-tina-field={tinaField(tab, 'image')} />
+          <img src={tab.image} alt={tab.heading ?? tab.label ?? ''} style="width:100%;aspect-ratio:4/3;object-fit:cover" loading="lazy" data-tina-field={tinaField(tab, 'image')} onerror="this.onerror=null; if(this.src.includes('assets.tina.io')) this.src=this.src.split('/__file/').pop() ? '/'+this.src.split('/__file/').pop().replace(/^\/+/,'') : '/shots/figma-2.png'; else this.src='/shots/figma-2.png'" />
         ) : (
           <div style="aspect-ratio:4/3;background:#f3f3f3;display:grid;place-items:center;font-size:12px;opacity:0.5">No image — click to upload</div>
         )}

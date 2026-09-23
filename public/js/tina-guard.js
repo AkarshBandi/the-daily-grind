@@ -17,6 +17,22 @@
     });
   }
   revealAll();
+  // Fallback for TinaCloud staging images that 404 — use local public copy
+  document.addEventListener('error', function (e) {
+    var t = e.target;
+    if (t && t.tagName === 'IMG' && t.src && t.src.indexOf('assets.tina.io') !== -1) {
+      var local = t.src.split('/__file/').pop();
+      if (local) {
+        local = '/' + local.replace(/^\/+/, '');
+        // shots are under /shots/, images under /images/
+        if (local.indexOf('/shots/') === -1 && local.indexOf('/images/') === -1) {
+          local = '/shots/' + local.split('/').pop();
+        }
+        t.onerror = null;
+        t.src = local;
+      }
+    }
+  }, true);
   new MutationObserver(function (muts) {
     var needs = false;
     muts.forEach(function (m) { if (m.addedNodes && m.addedNodes.length) needs = true; });
