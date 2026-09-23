@@ -1,0 +1,39 @@
+---
+import { tinaField } from '@tinacms/astro/tina-field';
+import Hero from './Hero.astro';
+import RichText from './RichText.astro';
+import Media from './Media.astro';
+import Cta from './Cta.astro';
+import Gallery from './Gallery.astro';
+import Accordion from './Accordion.astro';
+import Stats from './Stats.astro';
+import Testimonial from './Testimonial.astro';
+
+const { data } = Astro.props as { data: any };
+const blocks = (data?.blocks ?? []).filter(Boolean);
+---
+{blocks.map((block: any) => {
+  const rendered = (() => {
+    switch (block?.__typename) {
+      case 'PageBlocksHero':
+        return <Hero data={block} />;
+      case 'PageBlocksRichText':
+        return <RichText data={block} />;
+      case 'PageBlocksMedia':
+        return <Media data={block} />;
+      case 'PageBlocksCta':
+        return <Cta data={block} />;
+      case 'PageBlocksGallery':
+        return <Gallery data={block} />;
+      case 'PageBlocksAccordion':
+        return <Accordion data={block} />;
+      case 'PageBlocksStats':
+        return <Stats data={block} />;
+      case 'PageBlocksTestimonial':
+        return <Testimonial data={block} />;
+      default:
+        return null;
+    }
+  })();
+  return <div data-tina-field={tinaField(block)}>{rendered}</div>;
+})}

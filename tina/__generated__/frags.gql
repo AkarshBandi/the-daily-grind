@@ -1,0 +1,108 @@
+fragment PageParts on Page {
+  __typename
+  seoTitle
+  blocks {
+    __typename
+    ... on PageBlocksHero {
+      eyebrow
+      headline
+      tagline
+      primaryAction {
+        __typename
+        label
+        link
+      }
+      secondaryAction {
+        __typename
+        label
+        link
+      }
+      image {
+        __typename
+        src
+        alt
+      }
+    }
+    ... on PageBlocksRichText {
+      eyebrow
+      headline
+      body
+    }
+    ... on PageBlocksMedia {
+      image {
+        __typename
+        src
+        alt
+        caption
+      }
+      aspect
+    }
+    ... on PageBlocksCta {
+      headline
+      text
+      primaryLabel
+      primaryLink
+      secondaryLabel
+      secondaryLink
+    }
+    ... on PageBlocksGallery {
+      headline
+      images {
+        __typename
+        src
+        alt
+        caption
+      }
+    }
+    ... on PageBlocksAccordion {
+      headline
+      items {
+        __typename
+        title
+        content
+      }
+    }
+    ... on PageBlocksStats {
+      headline
+      items {
+        __typename
+        value
+        label
+      }
+    }
+    ... on PageBlocksTestimonial {
+      quote
+      author
+      role
+      avatar {
+        __typename
+        src
+        alt
+      }
+    }
+  }
+}
+
+fragment BlogParts on Blog {
+  __typename
+  title
+  description
+  pubDate
+  heroImage
+  body
+}
+
+fragment ConfigParts on Config {
+  __typename
+  seo {
+    __typename
+    title
+    description
+  }
+  nav {
+    __typename
+    title
+    link
+  }
+  footerNote
+}

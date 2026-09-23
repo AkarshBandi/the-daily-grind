@@ -1,12 +1,7 @@
-name = "akarsh-dev"
+name = "the-daily-grind"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
-workers_dev = false
-
-[assets]
-directory = "dist"
-binding = "ASSETS"
-not_found_handling = "404-page"
+workers_dev = true
 
 [[kv_namespaces]]
 binding = "hearth_otp"

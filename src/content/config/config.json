@@ -1,0 +1,12 @@
+{
+  "seo": {
+    "title": "Hearth & Honey",
+    "description": "Your neighborhood spot for coffee and good company"
+  },
+  "nav": [
+    { "title": "Our story", "link": "#story" },
+    { "title": "Menu", "link": "#menu" },
+    { "title": "Visit", "link": "#visit" }
+  ],
+  "footerNote": "© 2026 Hearth & Honey — Fresh pastries half off after 3pm"
+}
