@@ -19,7 +19,8 @@ const seoTitle = home?.seo_title ?? 'Hearth & Honey — Your neighborhood spot f
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/styles/global.css" />
+  <!-- global.css is bundled by Astro into /_astro/*.css; the old /styles/global.css
+       link 404d and logged a console error. -->
 </head>
 <body>
   <TinaIsland name="home" wrapper={islands.home.wrapper} params={{}} primary>

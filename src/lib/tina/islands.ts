@@ -9,7 +9,7 @@ export const islands: IslandRegistry = {
   home: {
     fetch: () => getHome(),
     component: Landing as any,
-    wrapper: { tag: 'div' },
+    wrapper: { tag: 'main' },
     propsFromData: (data) => ({
       d: (data as QueryResult<HomeQuery>).data?.home as any,
     }),
