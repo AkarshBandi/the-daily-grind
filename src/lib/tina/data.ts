@@ -1,13 +1,51 @@
 import { requestWithMetadata } from '@tinacms/astro/data';
 import client from '../../../tina/__generated__/client';
+import { load as yamlLoad } from 'js-yaml';
 
-export const getHome = () =>
-  requestWithMetadata(client.queries.home({ relativePath: 'home.yaml' }), {
-    priority: 'primary',
-  });
+// Bundle the content at build time. When TinaCloud has not indexed the
+// branch yet, client.queries resolves with empty data rather than throwing,
+// and the page renders with no content at all — which silently drops the
+// footer, the CTA buttons and every block. Reading the same file off disk
+// keeps the build honest while the index catches up.
+import homeRaw from '../../content/pages/home.yaml?raw';
+import configRaw from '../../content/config/config.json';
 
-export const getConfig = () =>
-  requestWithMetadata(client.queries.config({ relativePath: 'config.json' }));
+function localHome() {
+  try {
+    const parsed = yamlLoad(homeRaw) as any;
+    return {
+      ...parsed,
+      _sys: { filename: 'home', relativePath: 'home.yaml', path: 'src/content/pages/home.yaml', extension: '.yaml' },
+    };
+  } catch (e) {
+    console.warn('local home.yaml parse failed', e);
+    return null;
+  }
+}
+
+export const getHome = async () => {
+  try {
+    const r = await requestWithMetadata(client.queries.home({ relativePath: 'home.yaml' }), {
+      priority: 'primary',
+    });
+    if (r?.data?.home) return r;
+  } catch {}
+  const home = localHome();
+  return requestWithMetadata(
+    Promise.resolve({ data: { home }, query: '', variables: { relativePath: 'home.yaml' } } as any),
+    { priority: 'primary' },
+  );
+};
+
+export const getConfig = async () => {
+  try {
+    const r = await requestWithMetadata(client.queries.config({ relativePath: 'config.json' }));
+    if (r?.data?.config) return r;
+  } catch {}
+  return requestWithMetadata(
+    Promise.resolve({ data: { config: configRaw }, query: '', variables: {} } as any),
+  );
+};
 
 
 export async function listBlogs() {
