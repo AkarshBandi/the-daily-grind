@@ -162,24 +162,6 @@ var HomeCollection = {
   ]
 };
 
-// tina/collections/blog.ts
-var BlogCollection = {
-  name: "blog",
-  label: "Blog",
-  path: "src/content/blog",
-  format: "mdx",
-  ui: {
-    router: ({ document }) => `/blog/${document._sys.filename}`
-  },
-  fields: [
-    { type: "string", name: "title", label: "Title", isTitle: true, required: true },
-    { name: "description", label: "Description", type: "string", ui: { component: "textarea" } },
-    { name: "pubDate", label: "Publication date", type: "datetime" },
-    { name: "heroImage", label: "Hero image", type: "image" },
-    { type: "rich-text", name: "body", label: "Body", isBody: true }
-  ]
-};
-
 // tina/collections/global.ts
 var GlobalCollection = {
   name: "config",
@@ -218,7 +200,7 @@ var GlobalCollection = {
 };
 
 // tina/config.ts
-var branch = process.env.GITHUB_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || process.env.WORKERS_CI_BRANCH || process.env.CF_PAGES_BRANCH || process.env.HEAD || "master";
+var branch = process.env.GITHUB_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || process.env.WORKERS_CI_BRANCH || process.env.CF_PAGES_BRANCH || process.env.HEAD || "main";
 var config_default = defineConfig({
   branch,
   clientId: process.env.PUBLIC_TINA_CLIENT_ID,
@@ -234,7 +216,7 @@ var config_default = defineConfig({
     }
   },
   schema: {
-    collections: [HomeCollection, BlogCollection, GlobalCollection]
+    collections: [HomeCollection, GlobalCollection]
   }
 });
 export {

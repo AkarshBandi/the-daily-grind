@@ -59,15 +59,12 @@ type Query {
   document(collection: String, relativePath: String): DocumentNode!
   home(relativePath: String): Home!
   homeConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: HomeFilter): HomeConnection!
-  blog(relativePath: String): Blog!
-  blogConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: BlogFilter): BlogConnection!
   config(relativePath: String): Config!
   configConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: ConfigFilter): ConfigConnection!
 }
 
 input DocumentFilter {
   home: HomeFilter
-  blog: BlogFilter
   config: ConfigFilter
 }
 
@@ -94,7 +91,7 @@ type Collection {
   documents(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter, folder: String): DocumentConnection!
 }
 
-union DocumentNode = Home | Blog | Config | Folder
+union DocumentNode = Home | Config | Folder
 
 type HomeBanner {
   enabled: Boolean
@@ -351,50 +348,6 @@ type HomeConnection implements Connection {
   edges: [HomeConnectionEdges]
 }
 
-type Blog implements Node & Document {
-  title: String!
-  description: String
-  pubDate: String
-  heroImage: String
-  body: RichText
-  id: ID!
-  _sys: SystemInfo!
-  _values: JSON!
-}
-
-input DatetimeFilter {
-  after: String
-  before: String
-  eq: String
-  exists: Boolean
-  in: [String]
-}
-
-input RichTextFilter {
-  startsWith: String
-  eq: String
-  exists: Boolean
-}
-
-input BlogFilter {
-  title: StringFilter
-  description: StringFilter
-  pubDate: DatetimeFilter
-  heroImage: ImageFilter
-  body: RichTextFilter
-}
-
-type BlogConnectionEdges {
-  cursor: String!
-  node: Blog
-}
-
-type BlogConnection implements Connection {
-  pageInfo: PageInfo!
-  totalCount: Float!
-  edges: [BlogConnectionEdges]
-}
-
 type ConfigSeo {
   title: String!
   description: String!
@@ -449,22 +402,18 @@ type Mutation {
   createFolder(collection: String, relativePath: String!): DocumentNode!
   updateHome(relativePath: String!, params: HomeMutation!): Home!
   createHome(relativePath: String!, params: HomeMutation!): Home!
-  updateBlog(relativePath: String!, params: BlogMutation!): Blog!
-  createBlog(relativePath: String!, params: BlogMutation!): Blog!
   updateConfig(relativePath: String!, params: ConfigMutation!): Config!
   createConfig(relativePath: String!, params: ConfigMutation!): Config!
 }
 
 input DocumentUpdateMutation {
   home: HomeMutation
-  blog: BlogMutation
   config: ConfigMutation
   relativePath: String
 }
 
 input DocumentMutation {
   home: HomeMutation
-  blog: BlogMutation
   config: ConfigMutation
 }
 
@@ -572,14 +521,6 @@ input HomeMutation {
   testimonials: HomeTestimonialsMutation
   faq: HomeFaqMutation
   contact: HomeContactMutation
-}
-
-input BlogMutation {
-  title: String
-  description: String
-  pubDate: String
-  heroImage: String
-  body: RichText
 }
 
 input ConfigSeoMutation {

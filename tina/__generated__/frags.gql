@@ -92,15 +92,6 @@ fragment HomeParts on Home {
   }
 }
 
-fragment BlogParts on Blog {
-  __typename
-  title
-  description
-  pubDate
-  heroImage
-  body
-}
-
 fragment ConfigParts on Config {
   __typename
   seo {

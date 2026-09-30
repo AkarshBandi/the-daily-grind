@@ -1,6 +1,5 @@
 import { defineConfig } from 'tinacms';
 import { HomeCollection } from './collections/home';
-import { BlogCollection } from './collections/blog';
 import { GlobalCollection } from './collections/global';
 
 const branch =
@@ -9,7 +8,7 @@ const branch =
   process.env.WORKERS_CI_BRANCH ||
   process.env.CF_PAGES_BRANCH ||
   process.env.HEAD ||
-  'master';
+  'main';
 
 export default defineConfig({
   branch,
@@ -26,6 +25,6 @@ export default defineConfig({
     },
   },
   schema: {
-    collections: [HomeCollection, BlogCollection, GlobalCollection],
+    collections: [HomeCollection, GlobalCollection],
   },
 });

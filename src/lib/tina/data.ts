@@ -9,10 +9,6 @@ export const getHome = () =>
 export const getConfig = () =>
   requestWithMetadata(client.queries.config({ relativePath: 'config.json' }));
 
-export const getBlog = (slug: string) =>
-  requestWithMetadata(client.queries.blog({ relativePath: `${slug}.mdx` }), {
-    priority: 'primary',
-  });
 
 export async function listBlogs() {
   const r = await client.queries.blogConnection();
@@ -27,4 +23,3 @@ export async function listBlogs() {
 
 export type CmsHome = Awaited<ReturnType<typeof getHome>>['data']['home'];
 export type CmsConfig = Awaited<ReturnType<typeof getConfig>>['data']['config'];
-export type CmsBlog = Awaited<ReturnType<typeof getBlog>>['data']['blog'];

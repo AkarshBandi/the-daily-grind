@@ -86,8 +86,6 @@ export type Query = {
   document: DocumentNode;
   home: Home;
   homeConnection: HomeConnection;
-  blog: Blog;
-  blogConnection: BlogConnection;
   config: Config;
   configConnection: ConfigConnection;
 };
@@ -129,21 +127,6 @@ export type QueryHomeConnectionArgs = {
 };
 
 
-export type QueryBlogArgs = {
-  relativePath?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryBlogConnectionArgs = {
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Float']['input']>;
-  last?: InputMaybe<Scalars['Float']['input']>;
-  sort?: InputMaybe<Scalars['String']['input']>;
-  filter?: InputMaybe<BlogFilter>;
-};
-
-
 export type QueryConfigArgs = {
   relativePath?: InputMaybe<Scalars['String']['input']>;
 };
@@ -160,7 +143,6 @@ export type QueryConfigConnectionArgs = {
 
 export type DocumentFilter = {
   home?: InputMaybe<HomeFilter>;
-  blog?: InputMaybe<BlogFilter>;
   config?: InputMaybe<ConfigFilter>;
 };
 
@@ -201,7 +183,7 @@ export type CollectionDocumentsArgs = {
   folder?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type DocumentNode = Home | Blog | Config | Folder;
+export type DocumentNode = Home | Config | Folder;
 
 export type HomeBanner = {
   __typename?: 'HomeBanner';
@@ -474,53 +456,6 @@ export type HomeConnection = Connection & {
   edges?: Maybe<Array<Maybe<HomeConnectionEdges>>>;
 };
 
-export type Blog = Node & Document & {
-  __typename?: 'Blog';
-  title: Scalars['String']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  pubDate?: Maybe<Scalars['String']['output']>;
-  heroImage?: Maybe<Scalars['String']['output']>;
-  body?: Maybe<Scalars['RichText']['output']>;
-  id: Scalars['ID']['output'];
-  _sys: SystemInfo;
-  _values: Scalars['JSON']['output'];
-};
-
-export type DatetimeFilter = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  eq?: InputMaybe<Scalars['String']['input']>;
-  exists?: InputMaybe<Scalars['Boolean']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type RichTextFilter = {
-  startsWith?: InputMaybe<Scalars['String']['input']>;
-  eq?: InputMaybe<Scalars['String']['input']>;
-  exists?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type BlogFilter = {
-  title?: InputMaybe<StringFilter>;
-  description?: InputMaybe<StringFilter>;
-  pubDate?: InputMaybe<DatetimeFilter>;
-  heroImage?: InputMaybe<ImageFilter>;
-  body?: InputMaybe<RichTextFilter>;
-};
-
-export type BlogConnectionEdges = {
-  __typename?: 'BlogConnectionEdges';
-  cursor: Scalars['String']['output'];
-  node?: Maybe<Blog>;
-};
-
-export type BlogConnection = Connection & {
-  __typename?: 'BlogConnection';
-  pageInfo: PageInfo;
-  totalCount: Scalars['Float']['output'];
-  edges?: Maybe<Array<Maybe<BlogConnectionEdges>>>;
-};
-
 export type ConfigSeo = {
   __typename?: 'ConfigSeo';
   title: Scalars['String']['output'];
@@ -581,8 +516,6 @@ export type Mutation = {
   createFolder: DocumentNode;
   updateHome: Home;
   createHome: Home;
-  updateBlog: Blog;
-  createBlog: Blog;
   updateConfig: Config;
   createConfig: Config;
 };
@@ -633,18 +566,6 @@ export type MutationCreateHomeArgs = {
 };
 
 
-export type MutationUpdateBlogArgs = {
-  relativePath: Scalars['String']['input'];
-  params: BlogMutation;
-};
-
-
-export type MutationCreateBlogArgs = {
-  relativePath: Scalars['String']['input'];
-  params: BlogMutation;
-};
-
-
 export type MutationUpdateConfigArgs = {
   relativePath: Scalars['String']['input'];
   params: ConfigMutation;
@@ -658,14 +579,12 @@ export type MutationCreateConfigArgs = {
 
 export type DocumentUpdateMutation = {
   home?: InputMaybe<HomeMutation>;
-  blog?: InputMaybe<BlogMutation>;
   config?: InputMaybe<ConfigMutation>;
   relativePath?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type DocumentMutation = {
   home?: InputMaybe<HomeMutation>;
-  blog?: InputMaybe<BlogMutation>;
   config?: InputMaybe<ConfigMutation>;
 };
 
@@ -773,14 +692,6 @@ export type HomeMutation = {
   testimonials?: InputMaybe<HomeTestimonialsMutation>;
   faq?: InputMaybe<HomeFaqMutation>;
   contact?: InputMaybe<HomeContactMutation>;
-};
-
-export type BlogMutation = {
-  title?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  pubDate?: InputMaybe<Scalars['String']['input']>;
-  heroImage?: InputMaybe<Scalars['String']['input']>;
-  body?: InputMaybe<Scalars['RichText']['input']>;
 };
 
 export type ConfigSeoMutation = {
@@ -934,28 +845,6 @@ export type HomeFilter = {
   contact?: HomeContactFilter | null | undefined;
 };
 
-export type DatetimeFilter = {
-  after?: string | null | undefined;
-  before?: string | null | undefined;
-  eq?: string | null | undefined;
-  exists?: boolean | null | undefined;
-  in?: Array<string | null | undefined> | null | undefined;
-};
-
-export type RichTextFilter = {
-  startsWith?: string | null | undefined;
-  eq?: string | null | undefined;
-  exists?: boolean | null | undefined;
-};
-
-export type BlogFilter = {
-  title?: StringFilter | null | undefined;
-  description?: StringFilter | null | undefined;
-  pubDate?: DatetimeFilter | null | undefined;
-  heroImage?: ImageFilter | null | undefined;
-  body?: RichTextFilter | null | undefined;
-};
-
 export type ConfigSeoFilter = {
   title?: StringFilter | null | undefined;
   description?: StringFilter | null | undefined;
@@ -973,8 +862,6 @@ export type ConfigFilter = {
 };
 
 export type HomePartsFragment = { __typename: 'Home', seo_title: string | null, hero_background: string | null, hero_heading: string | null, hero_text: string | null, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null };
-
-export type BlogPartsFragment = { __typename: 'Blog', title: string, description: string | null, pubDate: string | null, heroImage: string | null, body: TinaMarkdownContent | null };
 
 export type ConfigPartsFragment = { __typename: 'Config', footerNote: string | null, seo: { __typename: 'ConfigSeo', title: string, description: string } | null, nav: Array<{ __typename: 'ConfigNav', title: string, link: string } | null> | null };
 
@@ -996,25 +883,6 @@ export type HomeConnectionQueryVariables = Exact<{
 
 
 export type HomeConnectionQuery = { homeConnection: { totalCount: number, pageInfo: { hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges: Array<{ cursor: string, node: { __typename: 'Home', id: string, seo_title: string | null, hero_background: string | null, hero_heading: string | null, hero_text: string | null, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null } | null } | null> | null } };
-
-export type BlogQueryVariables = Exact<{
-  relativePath: string;
-}>;
-
-
-export type BlogQuery = { blog: { __typename: 'Blog', id: string, title: string, description: string | null, pubDate: string | null, heroImage: string | null, body: TinaMarkdownContent | null, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
-
-export type BlogConnectionQueryVariables = Exact<{
-  before?: string | null | undefined;
-  after?: string | null | undefined;
-  first?: number | null | undefined;
-  last?: number | null | undefined;
-  sort?: string | null | undefined;
-  filter?: BlogFilter | null | undefined;
-}>;
-
-
-export type BlogConnectionQuery = { blogConnection: { totalCount: number, pageInfo: { hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges: Array<{ cursor: string, node: { __typename: 'Blog', id: string, title: string, description: string | null, pubDate: string | null, heroImage: string | null, body: TinaMarkdownContent | null, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
 
 export type ConfigQueryVariables = Exact<{
   relativePath: string;
@@ -1130,16 +998,6 @@ export const HomePartsFragmentDoc = gql`
   }
 }
     `;
-export const BlogPartsFragmentDoc = gql`
-    fragment BlogParts on Blog {
-  __typename
-  title
-  description
-  pubDate
-  heroImage
-  body
-}
-    `;
 export const ConfigPartsFragmentDoc = gql`
     fragment ConfigParts on Config {
   __typename
@@ -1213,63 +1071,6 @@ export const HomeConnectionDocument = gql`
   }
 }
     ${HomePartsFragmentDoc}`;
-export const BlogDocument = gql`
-    query blog($relativePath: String!) {
-  blog(relativePath: $relativePath) {
-    ... on Document {
-      _sys {
-        filename
-        basename
-        hasReferences
-        breadcrumbs
-        path
-        relativePath
-        extension
-      }
-      id
-    }
-    ...BlogParts
-  }
-}
-    ${BlogPartsFragmentDoc}`;
-export const BlogConnectionDocument = gql`
-    query blogConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: BlogFilter) {
-  blogConnection(
-    before: $before
-    after: $after
-    first: $first
-    last: $last
-    sort: $sort
-    filter: $filter
-  ) {
-    pageInfo {
-      hasPreviousPage
-      hasNextPage
-      startCursor
-      endCursor
-    }
-    totalCount
-    edges {
-      cursor
-      node {
-        ... on Document {
-          _sys {
-            filename
-            basename
-            hasReferences
-            breadcrumbs
-            path
-            relativePath
-            extension
-          }
-          id
-        }
-        ...BlogParts
-      }
-    }
-  }
-}
-    ${BlogPartsFragmentDoc}`;
 export const ConfigDocument = gql`
     query config($relativePath: String!) {
   config(relativePath: $relativePath) {
@@ -1335,12 +1136,6 @@ export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) 
       },
     homeConnection(variables?: HomeConnectionQueryVariables, options?: C): Promise<{data: HomeConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: HomeConnectionQueryVariables, query: string}> {
         return requester<{data: HomeConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: HomeConnectionQueryVariables, query: string}, HomeConnectionQueryVariables>(HomeConnectionDocument, variables, options);
-      },
-    blog(variables: BlogQueryVariables, options?: C): Promise<{data: BlogQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: BlogQueryVariables, query: string}> {
-        return requester<{data: BlogQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: BlogQueryVariables, query: string}, BlogQueryVariables>(BlogDocument, variables, options);
-      },
-    blogConnection(variables?: BlogConnectionQueryVariables, options?: C): Promise<{data: BlogConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: BlogConnectionQueryVariables, query: string}> {
-        return requester<{data: BlogConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: BlogConnectionQueryVariables, query: string}, BlogConnectionQueryVariables>(BlogConnectionDocument, variables, options);
       },
     config(variables: ConfigQueryVariables, options?: C): Promise<{data: ConfigQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: ConfigQueryVariables, query: string}> {
         return requester<{data: ConfigQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: ConfigQueryVariables, query: string}, ConfigQueryVariables>(ConfigDocument, variables, options);

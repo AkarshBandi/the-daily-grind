@@ -100,16 +100,6 @@ export const HomePartsFragmentDoc = gql`
   }
 }
     `;
-export const BlogPartsFragmentDoc = gql`
-    fragment BlogParts on Blog {
-  __typename
-  title
-  description
-  pubDate
-  heroImage
-  body
-}
-    `;
 export const ConfigPartsFragmentDoc = gql`
     fragment ConfigParts on Config {
   __typename
@@ -183,63 +173,6 @@ export const HomeConnectionDocument = gql`
   }
 }
     ${HomePartsFragmentDoc}`;
-export const BlogDocument = gql`
-    query blog($relativePath: String!) {
-  blog(relativePath: $relativePath) {
-    ... on Document {
-      _sys {
-        filename
-        basename
-        hasReferences
-        breadcrumbs
-        path
-        relativePath
-        extension
-      }
-      id
-    }
-    ...BlogParts
-  }
-}
-    ${BlogPartsFragmentDoc}`;
-export const BlogConnectionDocument = gql`
-    query blogConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: BlogFilter) {
-  blogConnection(
-    before: $before
-    after: $after
-    first: $first
-    last: $last
-    sort: $sort
-    filter: $filter
-  ) {
-    pageInfo {
-      hasPreviousPage
-      hasNextPage
-      startCursor
-      endCursor
-    }
-    totalCount
-    edges {
-      cursor
-      node {
-        ... on Document {
-          _sys {
-            filename
-            basename
-            hasReferences
-            breadcrumbs
-            path
-            relativePath
-            extension
-          }
-          id
-        }
-        ...BlogParts
-      }
-    }
-  }
-}
-    ${BlogPartsFragmentDoc}`;
 export const ConfigDocument = gql`
     query config($relativePath: String!) {
   config(relativePath: $relativePath) {
@@ -304,12 +237,6 @@ export function getSdk(requester) {
     },
     homeConnection(variables, options) {
       return requester(HomeConnectionDocument, variables, options);
-    },
-    blog(variables, options) {
-      return requester(BlogDocument, variables, options);
-    },
-    blogConnection(variables, options) {
-      return requester(BlogConnectionDocument, variables, options);
     },
     config(variables, options) {
       return requester(ConfigDocument, variables, options);
