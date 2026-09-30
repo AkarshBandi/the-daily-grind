@@ -288,6 +288,53 @@ export type HomeContact = {
   phone?: Maybe<Scalars['String']['output']>;
 };
 
+export type HomeCtaButtons = {
+  __typename?: 'HomeCtaButtons';
+  label?: Maybe<Scalars['String']['output']>;
+  href?: Maybe<Scalars['String']['output']>;
+  variant?: Maybe<Scalars['String']['output']>;
+};
+
+export type HomeCta = {
+  __typename?: 'HomeCta';
+  heading?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+  buttons?: Maybe<Array<Maybe<HomeCtaButtons>>>;
+};
+
+export type HomeFooterColumnsLinks = {
+  __typename?: 'HomeFooterColumnsLinks';
+  label?: Maybe<Scalars['String']['output']>;
+  href?: Maybe<Scalars['String']['output']>;
+};
+
+export type HomeFooterColumns = {
+  __typename?: 'HomeFooterColumns';
+  heading?: Maybe<Scalars['String']['output']>;
+  links?: Maybe<Array<Maybe<HomeFooterColumnsLinks>>>;
+};
+
+export type HomeFooterLegal_Links = {
+  __typename?: 'HomeFooterLegal_links';
+  label?: Maybe<Scalars['String']['output']>;
+  href?: Maybe<Scalars['String']['output']>;
+};
+
+export type HomeFooter = {
+  __typename?: 'HomeFooter';
+  wordmark?: Maybe<Scalars['String']['output']>;
+  columns?: Maybe<Array<Maybe<HomeFooterColumns>>>;
+  newsletter_heading?: Maybe<Scalars['String']['output']>;
+  newsletter_text?: Maybe<Scalars['String']['output']>;
+  placeholder?: Maybe<Scalars['String']['output']>;
+  button?: Maybe<Scalars['String']['output']>;
+  fineprint?: Maybe<Scalars['String']['output']>;
+  copyright?: Maybe<Scalars['String']['output']>;
+  legal_links?: Maybe<Array<Maybe<HomeFooterLegal_Links>>>;
+  notice_lead?: Maybe<Scalars['String']['output']>;
+  notice?: Maybe<Scalars['String']['output']>;
+};
+
 export type Home = Node & Document & {
   __typename?: 'Home';
   seo_title?: Maybe<Scalars['String']['output']>;
@@ -303,6 +350,8 @@ export type Home = Node & Document & {
   testimonials?: Maybe<HomeTestimonials>;
   faq?: Maybe<HomeFaq>;
   contact?: Maybe<HomeContact>;
+  cta?: Maybe<HomeCta>;
+  footer?: Maybe<HomeFooter>;
   id: Scalars['ID']['output'];
   _sys: SystemInfo;
   _values: Scalars['JSON']['output'];
@@ -427,6 +476,47 @@ export type HomeContactFilter = {
   phone?: InputMaybe<StringFilter>;
 };
 
+export type HomeCtaButtonsFilter = {
+  label?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+  variant?: InputMaybe<StringFilter>;
+};
+
+export type HomeCtaFilter = {
+  heading?: InputMaybe<StringFilter>;
+  text?: InputMaybe<StringFilter>;
+  buttons?: InputMaybe<HomeCtaButtonsFilter>;
+};
+
+export type HomeFooterColumnsLinksFilter = {
+  label?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+};
+
+export type HomeFooterColumnsFilter = {
+  heading?: InputMaybe<StringFilter>;
+  links?: InputMaybe<HomeFooterColumnsLinksFilter>;
+};
+
+export type HomeFooterLegal_LinksFilter = {
+  label?: InputMaybe<StringFilter>;
+  href?: InputMaybe<StringFilter>;
+};
+
+export type HomeFooterFilter = {
+  wordmark?: InputMaybe<StringFilter>;
+  columns?: InputMaybe<HomeFooterColumnsFilter>;
+  newsletter_heading?: InputMaybe<StringFilter>;
+  newsletter_text?: InputMaybe<StringFilter>;
+  placeholder?: InputMaybe<StringFilter>;
+  button?: InputMaybe<StringFilter>;
+  fineprint?: InputMaybe<StringFilter>;
+  copyright?: InputMaybe<StringFilter>;
+  legal_links?: InputMaybe<HomeFooterLegal_LinksFilter>;
+  notice_lead?: InputMaybe<StringFilter>;
+  notice?: InputMaybe<StringFilter>;
+};
+
 export type HomeFilter = {
   seo_title?: InputMaybe<StringFilter>;
   banner?: InputMaybe<HomeBannerFilter>;
@@ -441,6 +531,8 @@ export type HomeFilter = {
   testimonials?: InputMaybe<HomeTestimonialsFilter>;
   faq?: InputMaybe<HomeFaqFilter>;
   contact?: InputMaybe<HomeContactFilter>;
+  cta?: InputMaybe<HomeCtaFilter>;
+  footer?: InputMaybe<HomeFooterFilter>;
 };
 
 export type HomeConnectionEdges = {
@@ -678,6 +770,47 @@ export type HomeContactMutation = {
   phone?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type HomeCtaButtonsMutation = {
+  label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
+  variant?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type HomeCtaMutation = {
+  heading?: InputMaybe<Scalars['String']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+  buttons?: InputMaybe<Array<InputMaybe<HomeCtaButtonsMutation>>>;
+};
+
+export type HomeFooterColumnsLinksMutation = {
+  label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type HomeFooterColumnsMutation = {
+  heading?: InputMaybe<Scalars['String']['input']>;
+  links?: InputMaybe<Array<InputMaybe<HomeFooterColumnsLinksMutation>>>;
+};
+
+export type HomeFooterLegal_LinksMutation = {
+  label?: InputMaybe<Scalars['String']['input']>;
+  href?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type HomeFooterMutation = {
+  wordmark?: InputMaybe<Scalars['String']['input']>;
+  columns?: InputMaybe<Array<InputMaybe<HomeFooterColumnsMutation>>>;
+  newsletter_heading?: InputMaybe<Scalars['String']['input']>;
+  newsletter_text?: InputMaybe<Scalars['String']['input']>;
+  placeholder?: InputMaybe<Scalars['String']['input']>;
+  button?: InputMaybe<Scalars['String']['input']>;
+  fineprint?: InputMaybe<Scalars['String']['input']>;
+  copyright?: InputMaybe<Scalars['String']['input']>;
+  legal_links?: InputMaybe<Array<InputMaybe<HomeFooterLegal_LinksMutation>>>;
+  notice_lead?: InputMaybe<Scalars['String']['input']>;
+  notice?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type HomeMutation = {
   seo_title?: InputMaybe<Scalars['String']['input']>;
   banner?: InputMaybe<HomeBannerMutation>;
@@ -692,6 +825,8 @@ export type HomeMutation = {
   testimonials?: InputMaybe<HomeTestimonialsMutation>;
   faq?: InputMaybe<HomeFaqMutation>;
   contact?: InputMaybe<HomeContactMutation>;
+  cta?: InputMaybe<HomeCtaMutation>;
+  footer?: InputMaybe<HomeFooterMutation>;
 };
 
 export type ConfigSeoMutation = {
@@ -829,6 +964,47 @@ export type HomeContactFilter = {
   phone?: StringFilter | null | undefined;
 };
 
+export type HomeCtaButtonsFilter = {
+  label?: StringFilter | null | undefined;
+  href?: StringFilter | null | undefined;
+  variant?: StringFilter | null | undefined;
+};
+
+export type HomeCtaFilter = {
+  heading?: StringFilter | null | undefined;
+  text?: StringFilter | null | undefined;
+  buttons?: HomeCtaButtonsFilter | null | undefined;
+};
+
+export type HomeFooterColumnsLinksFilter = {
+  label?: StringFilter | null | undefined;
+  href?: StringFilter | null | undefined;
+};
+
+export type HomeFooterColumnsFilter = {
+  heading?: StringFilter | null | undefined;
+  links?: HomeFooterColumnsLinksFilter | null | undefined;
+};
+
+export type HomeFooterLegal_LinksFilter = {
+  label?: StringFilter | null | undefined;
+  href?: StringFilter | null | undefined;
+};
+
+export type HomeFooterFilter = {
+  wordmark?: StringFilter | null | undefined;
+  columns?: HomeFooterColumnsFilter | null | undefined;
+  newsletter_heading?: StringFilter | null | undefined;
+  newsletter_text?: StringFilter | null | undefined;
+  placeholder?: StringFilter | null | undefined;
+  button?: StringFilter | null | undefined;
+  fineprint?: StringFilter | null | undefined;
+  copyright?: StringFilter | null | undefined;
+  legal_links?: HomeFooterLegal_LinksFilter | null | undefined;
+  notice_lead?: StringFilter | null | undefined;
+  notice?: StringFilter | null | undefined;
+};
+
 export type HomeFilter = {
   seo_title?: StringFilter | null | undefined;
   banner?: HomeBannerFilter | null | undefined;
@@ -843,6 +1019,8 @@ export type HomeFilter = {
   testimonials?: HomeTestimonialsFilter | null | undefined;
   faq?: HomeFaqFilter | null | undefined;
   contact?: HomeContactFilter | null | undefined;
+  cta?: HomeCtaFilter | null | undefined;
+  footer?: HomeFooterFilter | null | undefined;
 };
 
 export type ConfigSeoFilter = {
@@ -861,7 +1039,7 @@ export type ConfigFilter = {
   footerNote?: StringFilter | null | undefined;
 };
 
-export type HomePartsFragment = { __typename: 'Home', seo_title: string | null, hero_background: string | null, hero_heading: string | null, hero_text: string | null, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null };
+export type HomePartsFragment = { __typename: 'Home', seo_title: string | null, hero_background: string | null, hero_heading: string | null, hero_text: string | null, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null, cta: { __typename: 'HomeCta', heading: string | null, text: string | null, buttons: Array<{ __typename: 'HomeCtaButtons', label: string | null, href: string | null, variant: string | null } | null> | null } | null, footer: { __typename: 'HomeFooter', wordmark: string | null, newsletter_heading: string | null, newsletter_text: string | null, placeholder: string | null, button: string | null, fineprint: string | null, copyright: string | null, notice_lead: string | null, notice: string | null, columns: Array<{ __typename: 'HomeFooterColumns', heading: string | null, links: Array<{ __typename: 'HomeFooterColumnsLinks', label: string | null, href: string | null } | null> | null } | null> | null, legal_links: Array<{ __typename: 'HomeFooterLegal_links', label: string | null, href: string | null } | null> | null } | null };
 
 export type ConfigPartsFragment = { __typename: 'Config', footerNote: string | null, seo: { __typename: 'ConfigSeo', title: string, description: string } | null, nav: Array<{ __typename: 'ConfigNav', title: string, link: string } | null> | null };
 
@@ -870,7 +1048,7 @@ export type HomeQueryVariables = Exact<{
 }>;
 
 
-export type HomeQuery = { home: { __typename: 'Home', id: string, seo_title: string | null, hero_background: string | null, hero_heading: string | null, hero_text: string | null, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null } };
+export type HomeQuery = { home: { __typename: 'Home', id: string, seo_title: string | null, hero_background: string | null, hero_heading: string | null, hero_text: string | null, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null, cta: { __typename: 'HomeCta', heading: string | null, text: string | null, buttons: Array<{ __typename: 'HomeCtaButtons', label: string | null, href: string | null, variant: string | null } | null> | null } | null, footer: { __typename: 'HomeFooter', wordmark: string | null, newsletter_heading: string | null, newsletter_text: string | null, placeholder: string | null, button: string | null, fineprint: string | null, copyright: string | null, notice_lead: string | null, notice: string | null, columns: Array<{ __typename: 'HomeFooterColumns', heading: string | null, links: Array<{ __typename: 'HomeFooterColumnsLinks', label: string | null, href: string | null } | null> | null } | null> | null, legal_links: Array<{ __typename: 'HomeFooterLegal_links', label: string | null, href: string | null } | null> | null } | null } };
 
 export type HomeConnectionQueryVariables = Exact<{
   before?: string | null | undefined;
@@ -882,7 +1060,7 @@ export type HomeConnectionQueryVariables = Exact<{
 }>;
 
 
-export type HomeConnectionQuery = { homeConnection: { totalCount: number, pageInfo: { hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges: Array<{ cursor: string, node: { __typename: 'Home', id: string, seo_title: string | null, hero_background: string | null, hero_heading: string | null, hero_text: string | null, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null } | null } | null> | null } };
+export type HomeConnectionQuery = { homeConnection: { totalCount: number, pageInfo: { hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges: Array<{ cursor: string, node: { __typename: 'Home', id: string, seo_title: string | null, hero_background: string | null, hero_heading: string | null, hero_text: string | null, _sys: { filename: string, basename: string, hasReferences: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, banner: { __typename: 'HomeBanner', enabled: boolean | null, heading: string | null, text: string | null, placeholder: string | null, button: string | null } | null, navbar: { __typename: 'HomeNavbar', logo: string | null, cta_label: string | null, cta_href: string | null } | null, hero_buttons: Array<{ __typename: 'HomeHero_buttons', label: string | null, href: string | null } | null> | null, navbar_links: Array<{ __typename: 'HomeNavbar_links', label: string | null, href: string | null, dropdown: Array<string | null> | null } | null> | null, about: { __typename: 'HomeAbout', tagline: string | null, heading: string | null, text: string | null, image: string | null, buttons: Array<{ __typename: 'HomeAboutButtons', label: string | null, href: string | null } | null> | null } | null, menu: { __typename: 'HomeMenu', tag: string | null, heading: string | null, text: string | null, tabs: Array<{ __typename: 'HomeMenuTabs', id: string | null, label: string | null, tag: string | null, heading: string | null, text: string | null, image: string | null } | null> | null } | null, testimonials: { __typename: 'HomeTestimonials', heading: string | null, text: string | null, items: Array<{ __typename: 'HomeTestimonialsItems', quote: string | null, stars: number | null, avatar: string | null, name: string | null, role: string | null } | null> | null } | null, faq: { __typename: 'HomeFaq', heading: string | null, text: string | null, still_heading: string | null, still_text: string | null, still_button: string | null, items: Array<{ __typename: 'HomeFaqItems', q: string | null, a: string | null } | null> | null } | null, contact: { __typename: 'HomeContact', tagline: string | null, heading: string | null, text: string | null, email: string | null, phone: string | null } | null, cta: { __typename: 'HomeCta', heading: string | null, text: string | null, buttons: Array<{ __typename: 'HomeCtaButtons', label: string | null, href: string | null, variant: string | null } | null> | null } | null, footer: { __typename: 'HomeFooter', wordmark: string | null, newsletter_heading: string | null, newsletter_text: string | null, placeholder: string | null, button: string | null, fineprint: string | null, copyright: string | null, notice_lead: string | null, notice: string | null, columns: Array<{ __typename: 'HomeFooterColumns', heading: string | null, links: Array<{ __typename: 'HomeFooterColumnsLinks', label: string | null, href: string | null } | null> | null } | null> | null, legal_links: Array<{ __typename: 'HomeFooterLegal_links', label: string | null, href: string | null } | null> | null } | null } | null } | null> | null } };
 
 export type ConfigQueryVariables = Exact<{
   relativePath: string;
@@ -995,6 +1173,43 @@ export const HomePartsFragmentDoc = gql`
     text
     email
     phone
+  }
+  cta {
+    __typename
+    heading
+    text
+    buttons {
+      __typename
+      label
+      href
+      variant
+    }
+  }
+  footer {
+    __typename
+    wordmark
+    columns {
+      __typename
+      heading
+      links {
+        __typename
+        label
+        href
+      }
+    }
+    newsletter_heading
+    newsletter_text
+    placeholder
+    button
+    fineprint
+    copyright
+    legal_links {
+      __typename
+      label
+      href
+    }
+    notice_lead
+    notice
   }
 }
     `;
@@ -1190,7 +1405,7 @@ export const ExperimentalGetTinaClient = () =>
   getSdk(
     generateRequester(
       createClient({
-        url: "http://localhost:4001/graphql",
+        url: "https://content.tinajs.io/3.0/content/028e674c-8b03-47a6-9e0c-a5e6c31c2ef6/github/main",
         queries,
       })
     )

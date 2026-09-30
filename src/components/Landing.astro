@@ -86,8 +86,18 @@ const footerNewsletterHeading = pick(footerObj,'newsletter_heading','Get in touc
 const footerNewsletterText = pick(footerObj,'newsletter_text','Get the word on new roasts and weekend specials. No noise, just news.');
 const footerPlaceholder = pick(footerObj,'placeholder','Enter your email');
 const footerButton = pick(footerObj,'button','Subscribe');
-const footerFineprint = pick(footerObj,'fineprint','By subscribing you agree to our Privacy Policy');
----
+  const footerFineprint = pick(footerObj,'fineprint','By subscribing you agree to our Privacy Policy');
+  const footerWordmark = pick(footerObj,'wordmark','Hearth & Honey');
+  const footerColumns = Array.isArray(footerObj?.columns) ? footerObj.columns : [];
+  const footerCopyright = pick(footerObj,'copyright','© 2024 Hearth & Honey. All rights reserved.');
+  const footerLegalLinks = Array.isArray(footerObj?.legal_links) ? footerObj.legal_links : [];
+  const footerNoticeLead = pick(footerObj,'notice_lead','Demonstration site.');
+  const footerNotice = pick(footerObj,'notice','Hearth & Honey is a fictional café built as a portfolio piece.');
+  const ctaButtons = Array.isArray(ctaObj?.buttons) ? ctaObj.buttons : [
+    { label: 'Book a Table', href: '#book', variant: 'mustard' },
+    { label: 'See the menu', href: '#menu', variant: 'outline-dark' },
+  ];
+  ---
 <style>
 :root{--green:#1A472C;--peach:#FFECCC;--mustard:#D99E4F;--yellow:#FEC135;--ever:#005B4A;--brown:#916F44;--black:#0A1C11;--cream:#FAF3E3;--white:#fff;}
 .reveal{will-change:transform,opacity}
@@ -502,10 +512,11 @@ img{display:block;max-width:100%}
       <div class="cta-card">
         <h2 data-cms="cta.heading">{ctaHeading}</h2>
         <p data-cms="cta.text">{ctaText}</p>
-        <div class="cta-actions">
-          <a class="btn-mustard" href="#book">Book a Table</a>
-          <a class="btn-outline-dark" style="color:#fff;outline-color:#fff" href="#menu">See the menu</a>
-        </div>
+          <div class="cta-actions" data-tina-field={tinaField(ctaObj, 'buttons')}>
+            {ctaButtons.map((b: any) => (
+              <a class={b.variant === 'outline-dark' ? 'btn-outline-dark' : 'btn-mustard'} style={b.variant === 'outline-dark' ? 'color:#fff;outline-color:#fff' : ''} href={b.href}>{b.label}</a>
+            ))}
+          </div>
       </div>
     </div>
   </section>
@@ -515,10 +526,14 @@ img{display:block;max-width:100%}
     <div class="inner">
       <div class="footer-top">
         <div class="footer-links" style="gap:40px">
-          <div style="flex:1;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:#fff">Hearth & Honey</div>
-          <div class="footer-col"><h4>Join our newsletter</h4><a href="#">Our story</a><a href="#">Menu</a><a href="#">Reservations</a><a href="#">Events</a><a href="#">Contact</a></div>
-          <div class="footer-col"><h4>Visit us</h4><a href="#">Coffee</a><a href="#">Pastries</a><a href="#">Breakfast</a><a href="#">Brunch</a><a href="#">Light meals</a></div>
-          <div class="footer-col"><h4>Our menu</h4><a href="#">Find us</a><a href="#">Careers</a><a href="#">Press</a><a href="#">Gift cards</a><a href="#">Feedback</a></div>
+          <div style="flex:1;font-family:Fraunces,serif;font-weight:600;font-size:20px;color:#fff" data-tina-field={tinaField(footerObj, 'wordmark')}>{footerWordmark}</div>
+              {footerColumns.map((col: any) => (
+                <div class="footer-col" data-tina-field={tinaField(footerObj, 'columns')}>
+                  <h4>{col.heading}</h4>
+                  {(col.links ?? []).map((l: any) => <a href={l.href}>{l.label}</a>)}
+                </div>
+              ))}
+
         </div>
         <div class="news">
           <h4 data-cms="footer.newsletter_heading">{footerNewsletterHeading}</h4>
@@ -531,8 +546,8 @@ img{display:block;max-width:100%}
         <div class="divider"></div>
         <div class="credits">
           <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center">
-            <span style="font-size:14px">© 2024 Hearth & Honey. All rights reserved.</span>
-            <a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookies Settings</a>
+              <span style="font-size:14px" data-tina-field={tinaField(footerObj, 'copyright')}>{footerCopyright}</span>
+              {footerLegalLinks.map((l: any) => <a href={l.href} data-tina-field={tinaField(footerObj, 'legal_links')}>{l.label}</a>)}
           </div>
           <!--
             DEMONSTRATION NOTICE. This was the one site of the three demos with no
@@ -545,13 +560,7 @@ img{display:block;max-width:100%}
             whole portfolio is fictional. It sits in the footer because that is
             where the other two put theirs, so the three read as one system.
           -->
-          <p style="margin:14px 0 0;font-size:12px;line-height:1.6;opacity:0.7;max-width:70ch">
-            <strong>Demonstration site.</strong> Hearth &amp; Honey is a fictional café
-            built as a portfolio piece — there is no business at 12 Hearth Lane and
-            nobody operates this page. Photography is stock. Menu, prices and
-            testimonials are written to show what a site of this shape could carry.
-            No orders are accepted and no data is collected.
-          </p>
+          <p style="margin:14px 0 0;font-size:12px;line-height:1.6;opacity:0.7;max-width:70ch" data-tina-field={tinaField(footerObj, 'notice')}><strong data-tina-field={tinaField(footerObj, 'notice_lead')}>{footerNoticeLead}</strong> {footerNotice}</p>
           <div class="social">
             <a href="#"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 12.3C22 6.74 17.52 2.24 12 2.24C6.47 2.24 2 6.74 2 12.3C2 17.32 5.65 21.48 10.43 22.24V15.21H7.89V12.3H10.43V10.08C10.43 7.56 11.93 6.17 14.21 6.17C15.3 6.17 16.45 6.36 16.45 6.36V8.84H15.19C13.95 8.84 13.56 9.62 13.56 10.41V12.3H16.33L15.89 15.21H13.56V22.24C18.34 21.48 22 17.32 22 12.3Z" fill="white"/></svg></a>
             <a href="#"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 3.24H8C5.23 3.24 3 5.48 3 8.24V16.24C3 19 5.23 21.24 8 21.24H16C18.76 21.24 21 19 21 16.24V8.24C21 5.48 18.76 3.24 16 3.24ZM19.25 16.24C19.24 18.03 17.79 19.48 16 19.49H8C6.2 19.48 4.75 18.03 4.75 16.24V8.24C4.75 6.45 6.2 4.99 8 4.99H16C17.79 4.99 19.24 6.45 19.25 8.24V16.24ZM16.75 8.49C17.3 8.49 17.75 8.04 17.75 7.49C17.75 6.94 17.3 6.49 16.75 6.49C16.19 6.49 15.75 6.94 15.75 7.49C15.75 8.04 16.19 8.49 16.75 8.49ZM12 7.74C9.51 7.74 7.5 9.75 7.5 12.24C7.5 14.72 9.51 16.74 12 16.74C14.48 16.74 16.5 14.72 16.5 12.24C16.5 11.04 16.02 9.9 15.18 9.05C14.34 8.21 13.19 7.74 12 7.74ZM9.25 12.24C9.25 13.76 10.48 14.99 12 14.99C13.51 14.99 14.75 13.76 14.75 12.24C14.75 10.72 13.51 9.49 12 9.49C10.48 9.49 9.25 10.72 9.25 12.24Z" fill="white"/></svg></a>

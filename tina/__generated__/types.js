@@ -98,6 +98,43 @@ export const HomePartsFragmentDoc = gql`
     email
     phone
   }
+  cta {
+    __typename
+    heading
+    text
+    buttons {
+      __typename
+      label
+      href
+      variant
+    }
+  }
+  footer {
+    __typename
+    wordmark
+    columns {
+      __typename
+      heading
+      links {
+        __typename
+        label
+        href
+      }
+    }
+    newsletter_heading
+    newsletter_text
+    placeholder
+    button
+    fineprint
+    copyright
+    legal_links {
+      __typename
+      label
+      href
+    }
+    notice_lead
+    notice
+  }
 }
     `;
 export const ConfigPartsFragmentDoc = gql`
@@ -266,7 +303,7 @@ const generateRequester = (client) => {
 export const ExperimentalGetTinaClient = () => getSdk(
   generateRequester(
     createClient({
-      url: "http://localhost:4001/graphql",
+      url: "https://content.tinajs.io/3.0/content/028e674c-8b03-47a6-9e0c-a5e6c31c2ef6/github/main",
       queries
     })
   )

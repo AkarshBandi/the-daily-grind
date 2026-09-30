@@ -183,6 +183,47 @@ type HomeContact {
   phone: String
 }
 
+type HomeCtaButtons {
+  label: String
+  href: String
+  variant: String
+}
+
+type HomeCta {
+  heading: String
+  text: String
+  buttons: [HomeCtaButtons]
+}
+
+type HomeFooterColumnsLinks {
+  label: String
+  href: String
+}
+
+type HomeFooterColumns {
+  heading: String
+  links: [HomeFooterColumnsLinks]
+}
+
+type HomeFooterLegal_links {
+  label: String
+  href: String
+}
+
+type HomeFooter {
+  wordmark: String
+  columns: [HomeFooterColumns]
+  newsletter_heading: String
+  newsletter_text: String
+  placeholder: String
+  button: String
+  fineprint: String
+  copyright: String
+  legal_links: [HomeFooterLegal_links]
+  notice_lead: String
+  notice: String
+}
+
 type Home implements Node & Document {
   seo_title: String
   banner: HomeBanner
@@ -197,6 +238,8 @@ type Home implements Node & Document {
   testimonials: HomeTestimonials
   faq: HomeFaq
   contact: HomeContact
+  cta: HomeCta
+  footer: HomeFooter
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
@@ -321,6 +364,47 @@ input HomeContactFilter {
   phone: StringFilter
 }
 
+input HomeCtaButtonsFilter {
+  label: StringFilter
+  href: StringFilter
+  variant: StringFilter
+}
+
+input HomeCtaFilter {
+  heading: StringFilter
+  text: StringFilter
+  buttons: HomeCtaButtonsFilter
+}
+
+input HomeFooterColumnsLinksFilter {
+  label: StringFilter
+  href: StringFilter
+}
+
+input HomeFooterColumnsFilter {
+  heading: StringFilter
+  links: HomeFooterColumnsLinksFilter
+}
+
+input HomeFooterLegal_linksFilter {
+  label: StringFilter
+  href: StringFilter
+}
+
+input HomeFooterFilter {
+  wordmark: StringFilter
+  columns: HomeFooterColumnsFilter
+  newsletter_heading: StringFilter
+  newsletter_text: StringFilter
+  placeholder: StringFilter
+  button: StringFilter
+  fineprint: StringFilter
+  copyright: StringFilter
+  legal_links: HomeFooterLegal_linksFilter
+  notice_lead: StringFilter
+  notice: StringFilter
+}
+
 input HomeFilter {
   seo_title: StringFilter
   banner: HomeBannerFilter
@@ -335,6 +419,8 @@ input HomeFilter {
   testimonials: HomeTestimonialsFilter
   faq: HomeFaqFilter
   contact: HomeContactFilter
+  cta: HomeCtaFilter
+  footer: HomeFooterFilter
 }
 
 type HomeConnectionEdges {
@@ -507,6 +593,47 @@ input HomeContactMutation {
   phone: String
 }
 
+input HomeCtaButtonsMutation {
+  label: String
+  href: String
+  variant: String
+}
+
+input HomeCtaMutation {
+  heading: String
+  text: String
+  buttons: [HomeCtaButtonsMutation]
+}
+
+input HomeFooterColumnsLinksMutation {
+  label: String
+  href: String
+}
+
+input HomeFooterColumnsMutation {
+  heading: String
+  links: [HomeFooterColumnsLinksMutation]
+}
+
+input HomeFooterLegal_linksMutation {
+  label: String
+  href: String
+}
+
+input HomeFooterMutation {
+  wordmark: String
+  columns: [HomeFooterColumnsMutation]
+  newsletter_heading: String
+  newsletter_text: String
+  placeholder: String
+  button: String
+  fineprint: String
+  copyright: String
+  legal_links: [HomeFooterLegal_linksMutation]
+  notice_lead: String
+  notice: String
+}
+
 input HomeMutation {
   seo_title: String
   banner: HomeBannerMutation
@@ -521,6 +648,8 @@ input HomeMutation {
   testimonials: HomeTestimonialsMutation
   faq: HomeFaqMutation
   contact: HomeContactMutation
+  cta: HomeCtaMutation
+  footer: HomeFooterMutation
 }
 
 input ConfigSeoMutation {

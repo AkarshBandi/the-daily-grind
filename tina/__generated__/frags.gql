@@ -90,6 +90,43 @@ fragment HomeParts on Home {
     email
     phone
   }
+  cta {
+    __typename
+    heading
+    text
+    buttons {
+      __typename
+      label
+      href
+      variant
+    }
+  }
+  footer {
+    __typename
+    wordmark
+    columns {
+      __typename
+      heading
+      links {
+        __typename
+        label
+        href
+      }
+    }
+    newsletter_heading
+    newsletter_text
+    placeholder
+    button
+    fineprint
+    copyright
+    legal_links {
+      __typename
+      label
+      href
+    }
+    notice_lead
+    notice
+  }
 }
 
 fragment ConfigParts on Config {
