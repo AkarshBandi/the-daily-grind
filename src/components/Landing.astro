@@ -6,7 +6,15 @@ const t = (k:string, fallback:string)=> (f && f[k] != null && f[k] !== '') ? f[k
 const pick = (obj:any, key:string, fallback:string)=> (obj && obj[key] != null && obj[key] !== '') ? obj[key] : fallback;
 // preserve figma exact strings
 const seoTitle = t('seo_title','Hearth & Honey — Your neighborhood spot for coffee and good company');
-const heroBg = f?.hero_background || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1920&q=80';
+const DEFAULT_HERO = 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1920&q=80';
+const heroBg = f?.hero_background || DEFAULT_HERO;
+// An empty field, or one still holding the old third-party default, means
+// "use the self-hosted responsive set" — otherwise the CMS would be pinning
+// every visitor to a 1920px file fetched from Unsplash.
+const customHero = heroBg && heroBg !== DEFAULT_HERO ? heroBg : null;
+const customHeroAlt = typeof f?.hero_background_alt === 'string' && f.hero_background_alt
+  ? f.hero_background_alt
+  : 'Specialty coffee and pastries on the counter at Hearth & Honey';
 const heroHeading = t('hero_heading','Your neighborhood spot for coffee and good company');
 const heroText = t('hero_text','We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile.');
 const heroBtns = f?.hero_buttons || [{label:'Explore Menu',href:'#menu'},{label:'Book a Table',href:'#book'}];
@@ -36,11 +44,11 @@ const menuHeading = pick(menuObj,'heading','What we do well');
 const menuText = pick(menuObj,'text','A few things we make every day. They are simple and they are good.');
 const menuTabs = (menuObj?.tabs && menuObj.tabs.length ? menuObj.tabs : [
   {id:'coffee',label:'Coffee',tag:'Coffee',heading:'The flat white is true and strong',text:'We pull shots from beans roasted two miles away. The milk is steamed clean, no tricks.',image:'/shots/figma-2.png'},
-  {id:'breakfast',label:'Breakfast',tag:'Breakfast',heading:'Morning plates done right',text:'Eggs, sourdough, and seasonal sides — simple and satisfying.',image:'https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=800&q=80'},
-  {id:'brunch',label:'Brunch',tag:'Brunch',heading:'Long table, good coffee',text:'Bring friends. We keep the kitchen open till three.',image:'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80'},
-  {id:'pastries',label:'Pastries',tag:'Pastries',heading:'Baked every morning',text:'Croissants, buns, and half-price after 3 pm.',image:'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=800&q=80'},
-  {id:'light',label:'Light meals',tag:'Light meals',heading:'Soups and salads',text:'Fresh, honest, and quick.',image:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'},
-  {id:'drinks',label:'Drinks',tag:'Drinks',heading:'More than coffee',text:'Tea, juice, and cold brew on tap.',image:'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=80'},
+  {id:'breakfast',label:'Breakfast',tag:'Breakfast',heading:'Morning plates done right',text:'Eggs, sourdough, and seasonal sides — simple and satisfying.',image:'/img/menu-a.webp'},
+  {id:'brunch',label:'Brunch',tag:'Brunch',heading:'Long table, good coffee',text:'Bring friends. We keep the kitchen open till three.',image:'/img/menu-b.webp'},
+  {id:'pastries',label:'Pastries',tag:'Pastries',heading:'Baked every morning',text:'Croissants, buns, and half-price after 3 pm.',image:'/img/menu-c.webp'},
+  {id:'light',label:'Light meals',tag:'Light meals',heading:'Soups and salads',text:'Fresh, honest, and quick.',image:'/img/strip.webp'},
+  {id:'drinks',label:'Drinks',tag:'Drinks',heading:'More than coffee',text:'Tea, juice, and cold brew on tap.',image:'/img/menu-a.webp'},
 ]);
 // Testimonials
 const testiObj = f?.testimonials || {};
@@ -138,7 +146,10 @@ img{display:block;max-width:100%}
 .dropdown-menu a:hover{background:var(--yellow);transform:translateX(2px)}
 .dropdown:hover .nav-link{color:var(--mustard)}
 /* Hero */
-.hero{position:relative;min-height:900px;background:linear-gradient(0deg,rgba(0,0,0,.40),rgba(0,0,0,.40)),url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;display:flex;align-items:stretch;padding:0 64px;overflow:hidden}
+.hero{position:relative;min-height:900px;background:var(--brown);display:flex;align-items:stretch;padding:0 64px;overflow:hidden}
+  .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(0deg,rgba(0,0,0,.40),rgba(0,0,0,.40))}
+  .hero-grid{position:relative;z-index:2}
 .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:stretch;width:100%;padding:112px 0;max-width:1280px;margin:0 auto}
 .hero-grid > div:first-child{align-self:start}
 .hero-right{display:flex;flex-direction:column;gap:24px;justify-content:flex-end;align-self:end;text-align:left}
@@ -247,7 +258,7 @@ img{display:block;max-width:100%}
 .contact-img{height:516px;border-radius:32px;width:100%;object-fit:cover}
 /* CTA */
 .cta{background:var(--peach);padding:24px 64px 64px}
-.cta-card{border-radius:32px;outline:1px solid #000;outline-offset:-1px;background:linear-gradient(0deg,rgba(0,0,0,.40),rgba(0,0,0,.40)),url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=1280&q=80') center/cover no-repeat;padding:48px;display:flex;flex-direction:column;gap:24px;align-items:flex-start}
+.cta-card{border-radius:32px;outline:1px solid #000;outline-offset:-1px;background:linear-gradient(0deg,rgba(0,0,0,.40),rgba(0,0,0,.40)),url('/img/cta-640.webp') center/cover no-repeat;padding:48px;display:flex;flex-direction:column;gap:24px;align-items:flex-start}
 .cta-card h2{font-family:'Fraunces',serif;font-weight:600;font-size:40px;line-height:48px;color:#fff;margin:0;max-width:700px}
 .cta-card p{font-size:18px;line-height:27px;color:#fff;margin:0;max-width:600px}
 .cta-actions{display:flex;gap:16px;flex-wrap:wrap}
@@ -376,7 +387,25 @@ img{display:block;max-width:100%}
   </nav>
 
   <!-- Hero -->
-  <section class="hero" id="home" style={`background: linear-gradient(0deg,rgba(0,0,0,.40),rgba(0,0,0,.40)),url('${heroBg}') center/cover no-repeat`} data-tina-field={tinaField(d, 'hero_background')}>
+  <section class="hero" id="home" data-tina-field={tinaField(d, 'hero_background')}>
+    <!-- Was a CSS background: a 1920px Unsplash file on a 412px phone, with
+         no fetchpriority and nothing for the preload scanner to see, so LCP
+         waited on a third-party round trip. A real <img> with srcset gets
+         high priority, a preload hint and the 20KB file on mobile.
+         An editor-set hero_background still wins — it just renders as a
+         single file instead of the responsive default. -->
+    <img
+      class="hero-img"
+      src={customHero ? customHero : '/img/hero-1280.webp'}
+      srcset={customHero ? undefined : '/img/hero-640.webp 640w, /img/hero-1280.webp 1280w, /img/hero-1920.webp 1920w'}
+      sizes={customHero ? undefined : '100vw'}
+      alt={customHeroAlt}
+      width="1920"
+      height="1280"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
     <div class="inner hero-grid">
       <div><h1 class="reveal" data-cms="hero_heading" data-tina-field={tinaField(d, 'hero_heading')}>{heroHeading}</h1></div>
       <div class="hero-right reveal">

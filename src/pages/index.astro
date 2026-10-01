@@ -16,9 +16,13 @@ const seoTitle = home?.seo_title ?? 'Hearth & Honey — Your neighborhood spot f
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{seoTitle}</title>
   <meta name="description" content={home?.hero_text ?? ''} />
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;500;600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet"/>
+  <!-- Self-hosted instead of four Google Fonts families. The stylesheet was a
+       third-party round trip before first paint and it requested 57 @font-face
+       rules across six subsets; this site is English, so 8 latin files cover
+       it. -->
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/fraunces-600-n-latin.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-400-n-latin.woff2" crossorigin />
+  <link rel="stylesheet" href="/fonts/fonts.css" />
   <!-- global.css is bundled by Astro into /_astro/*.css; the old /styles/global.css
        link 404d and logged a console error. -->
 </head>
