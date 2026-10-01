@@ -43,6 +43,11 @@ jobs:
     name: Build and deploy
     runs-on: ubuntu-latest
 
+    # GitHub's default is NO timeout — a blocked step runs until the 6-hour job
+    # ceiling. `tinacms audit` sat on an invisible stdin prompt for 15 minutes
+    # before I noticed. Any step here that can block must be bounded by hand.
+    timeout-minutes: 10
+
     # Read-only on contents. Nothing here needs to push back to the repo.
     permissions:
       contents: read
@@ -78,12 +83,12 @@ jobs:
           PUBLIC_TINA_CLIENT_ID: ${{ secrets.PUBLIC_TINA_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
 
-      # Informational, not a gate. `tinacms audit` reports schema drift but has
-      # no non-interactive flag, so it may prompt or exit non-zero in CI; either
-      # way we do not block the deploy. A client's change to a headline is not
-      # contingent on a schema check.
-      - name: Report schema drift
-        run: npx tinacms audit --clean || echo "::warning::Tina schema check did not pass. Content is still deployed."
+      # NOTE: there is deliberately no `tinacms audit` step here. It has no
+      # non-interactive flag, so in CI — where there is no TTY — it blocks on a
+      # prompt forever. It hung a deploy for 15 minutes before I removed it. It
+      # also wants to REWRITE files, which has no business in a pipeline. If
+      # schema drift ever needs surfacing, run `tinacms build` WITHOUT
+      # --skip-cloud-checks as its own non-blocking job, not inline here.
 
       - name: Deploy to Cloudflare Workers
         # The adapter writes a deploy-ready config here during the build. See
