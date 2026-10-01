@@ -1,185 +1,171 @@
-seo_title: "Hearth & Honey — Your neighborhood spot for coffee and good company"
+seo_title: Hearth & Honey — Your neighborhood spot for coffee and good company
 banner:
-  enabled: true
-  heading: "Fresh pastries are half off after 3 pm"
-  text: "Join the list for the daily special"
-  placeholder: "Enter your email"
-  button: "Sign up"
+  enabled: false
+  heading: Fresh pastries are half off after 3 pm
+  text: Join the list for the daily special
+  placeholder: Enter your email
+  button: Sign up
 navbar:
-  logo: "Hearth & Honey"
-  cta_label: "Book a Table"
-  cta_href: "#book"
-hero_heading: "Your neighborhood spot for coffee and good company"
-hero_text: "We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile."
+  logo: Hearth & Honey
+  cta_label: Book a Table
+  cta_href: '#book'
+hero_heading: Your neighborhood spot for coffee and good company
+hero_text: 'We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile.'
 hero_buttons:
-  - label: "Explore Menu"
-    href: "#menu"
-  - label: "Book a Table"
-    href: "#book"
+  - label: Explore Menu
+    href: '#menu'
+  - label: Book a Table
+    href: '#book'
 navbar_links:
-  - label: "Our story"
-    href: "#story"
-  - label: "Menu"
-    href: "#menu"
-  - label: "Visit"
-    href: "#visit"
+  - label: Our story
+    href: '#story'
+  - label: Menu
+    href: '#menu'
+  - label: Visit
+    href: '#visit'
     dropdown:
-      - "Hours"
-      - "Location"
-      - "Contact"
+      - Hours
+      - Location
+      - Contact
 about:
-  tagline: "About"
-  heading: "A good café is a clean, well-lighted place"
-  text: "We built Hearth & Honey to be simple and true. Good coffee, honest food, and a room that feels right."
-  image: "/img/about.webp"
+  tagline: About
+  heading: 'A good café is a clean, well-lighted place'
+  text: 'We built Hearth & Honey to be simple and true. Good coffee, honest food, and a room that feels right.'
+  image: /img/about.webp
   buttons:
-    - label: "Explore Menu"
-      href: "#menu"
-    - label: "Reserve Table"
-      href: "#book"
+    - label: Explore Menu
+      href: '#menu'
+    - label: Reserve Table
+      href: '#book'
 menu:
-  tag: "Menu"
-  heading: "What we do well"
-  text: "A few things we make every day. They are simple and they are good."
+  tag: Menu
+  heading: What we do well
+  text: A few things we make every day. They are simple and they are good.
   tabs:
-    - id: "coffee"
-      label: "Coffee"
-      tag: "Coffee"
-      heading: "The flat white is true and strong"
-      text: "We pull shots from beans roasted two miles away. The milk is steamed clean, no tricks."
-      image: "/img/menu-b.webp"
-    - id: "breakfast"
-      label: "Breakfast"
-      tag: "Breakfast"
-      heading: "Morning plates done right"
-      text: "Eggs, sourdough, and seasonal sides — simple and satisfying."
-      image: "/img/menu-a.webp"
-    - id: "brunch"
-      label: "Brunch"
-      tag: "Brunch"
-      heading: "Long table, good coffee"
-      text: "Bring friends. We keep the kitchen open till three."
-      image: "/img/contact.webp"
-    - id: "pastries"
-      label: "Pastries"
-      tag: "Pastries"
-      heading: "Baked every morning"
-      text: "Croissants, buns, and half-price after 3 pm."
-      image: "/img/menu-c.webp"
-    - id: "light"
-      label: "Light meals"
-      tag: "Light meals"
-      heading: "Soups and salads"
-      text: "Fresh, honest, and quick."
-      image: "/img/strip.webp"
-    - id: "drinks"
-      label: "Drinks"
-      tag: "Drinks"
-      heading: "More than coffee"
-      text: "Tea, juice, and cold brew on tap."
-      image: "/img/menu-a.webp"
+    - id: coffee
+      label: Coffee
+      tag: Coffee
+      heading: The flat white is true and strong
+      text: 'We pull shots from beans roasted two miles away. The milk is steamed clean, no tricks.'
+      image: /img/menu-b.webp
+    - id: breakfast
+      label: Breakfast
+      tag: Breakfast
+      heading: Morning plates done right
+      text: 'Eggs, sourdough, and seasonal sides — simple and satisfying.'
+      image: /img/menu-a.webp
+    - id: brunch
+      label: Brunch
+      tag: Brunch
+      heading: 'Long table, good coffee'
+      text: Bring friends. We keep the kitchen open till three.
+      image: /img/contact.webp
+    - id: pastries
+      label: Pastries
+      tag: Pastries
+      heading: Baked every morning
+      text: 'Croissants, buns, and half-price after 3 pm.'
+      image: /img/menu-c.webp
+    - id: light
+      label: Light meals
+      tag: Light meals
+      heading: Soups and salads
+      text: 'Fresh, honest, and quick.'
+      image: /img/strip.webp
+    - id: drinks
+      label: Drinks
+      tag: Drinks
+      heading: More than coffee
+      text: 'Tea, juice, and cold brew on tap.'
+      image: /img/menu-a.webp
 testimonials:
-  heading: "Customer testimonials"
-  text: "Come for the coffee. Stay for the moment."
+  heading: Customer testimonials
+  text: Come for the coffee. Stay for the moment.
   items:
-    - quote: "The espresso is the best in the neighborhood. No argument."
+    - quote: The espresso is the best in the neighborhood. No argument.
       stars: 5
-      avatar: "/img/avatar-0.webp"
-      name: "Maya Chen"
-      role: "Regular"
-    - quote: "A clean, bright room where a man can sit alone with a paper and not be bothered."
+      avatar: /img/avatar-0.webp
+      name: Maya Chen
+      role: Regular
+    - quote: 'A clean, bright room where a man can sit alone with a paper and not be bothered.'
       stars: 5
-      avatar: "/img/avatar-1.webp"
-      name: "Daniel Brooks"
-      role: "Local writer"
-    - quote: "The sourdough toast with eggs is honest food. It does not pretend."
+      avatar: /img/avatar-1.webp
+      name: Daniel Brooks
+      role: Local writer
+    - quote: The sourdough toast with eggs is honest food. It does not pretend.
       stars: 5
-      avatar: "/img/avatar-2.webp"
-      name: "Sarah Kim"
-      role: "Brunch regular"
+      avatar: /img/avatar-2.webp
+      name: Sarah Kim
+      role: Brunch regular
 faq:
-  heading: "FAQs"
-  text: "Find quick answers about your visit to Hearth & Honey"
+  heading: FAQs
+  text: Find quick answers about your visit to Hearth & Honey
   items:
-    - q: "What are your hours?"
-      a: "We are open Monday through Friday from 7 am to 4 pm. Weekends we open at 8 am and close at 3 pm."
-    - q: "Do you have Wi-Fi?"
-      a: "Yes, the Wi-Fi is free and fast. Bring your laptop and settle in."
-    - q: "Do you offer vegan options?"
-      a: "We always have oat and almond milk for coffee. The kitchen keeps a few vegan dishes on the menu each day."
-    - q: "Do I need a reservation?"
-      a: "Walk-ins are always welcome. For groups of six or more, a quick call ahead helps us save you a table."
-    - q: "Is there gluten-free food?"
-      a: "We bake a gluten-free banana bread most mornings. Ask at the counter for what is available that day."
-  still_heading: "Still have questions?"
-  still_text: "Haven't found what you're looking for? Our team is happy to help — ask us anything."
-  still_button: "Get in Touch"
+    - q: What are your hours?
+      a: We are open Monday through Friday from 7 am to 4 pm. Weekends we open at 8 am and close at 3 pm.
+    - q: Do you have Wi-Fi?
+      a: 'Yes, the Wi-Fi is free and fast. Bring your laptop and settle in.'
+    - q: Do you offer vegan options?
+      a: We always have oat and almond milk for coffee. The kitchen keeps a few vegan dishes on the menu each day.
+    - q: Do I need a reservation?
+      a: 'Walk-ins are always welcome. For groups of six or more, a quick call ahead helps us save you a table.'
+    - q: Is there gluten-free food?
+      a: We bake a gluten-free banana bread most mornings. Ask at the counter for what is available that day.
+  still_heading: Still have questions?
+  still_text: Haven't found what you're looking for? Our team is happy to help — ask us anything.
+  still_button: Get in Touch
 contact:
-  tagline: "Visit Us"
-  heading: "Contact us"
-  text: "Find us on Hearth Lane — open daily from 7am. Drop in, call ahead, or send a note."
-  items:
-    - heading: "Email"
-      text: "For general enquiries and catering"
-      link: "hello@hearthandhoney.example"
-      link_text: "hello@hearthandhoney.example"
-    - heading: "Phone"
-      text: "For reservations and takeaway orders"
-      link: "tel:+61290001234"
-      link_text: "+61 2 9000 1234"
-    - heading: "Visit"
-      text: "12 Hearth Lane, Surry Hills NSW 2010 AU"
-      link_text: "Get Directions"
-      link: "#"
-  image: "/img/contact.webp"
+  tagline: Visit Us
+  heading: Contact us
+  text: 'Find us on Hearth Lane — open daily from 7am. Drop in, call ahead, or send a note.'
+  email: ''
 cta:
-  heading: "See you at the counter"
-  text: "Stop by for a coffee or stay for brunch. The kettle is on and the door is open."
-  image: "/img/cta-640.webp"
+  heading: See you at the counter
+  text: Stop by for a coffee or stay for brunch. The kettle is on and the door is open.
   buttons:
-    - label: "Book a Table"
-      href: "#book"
-    - label: "See the menu"
-      href: "#menu"
+    - label: Book a Table
+      href: '#book'
+    - label: See the menu
+      href: '#menu'
 footer:
-  wordmark: "Hearth & Honey"
+  wordmark: Hearth & Honey
   columns:
-    - heading: "Join our newsletter"
+    - heading: Join our newsletter
       links:
-        - label: "Our story"
-          href: "#story"
-        - label: "Menu"
-          href: "#menu"
-        - label: "Reservations"
-          href: "#book"
-    - heading: "Visit us"
+        - label: Our story
+          href: '#story'
+        - label: Menu
+          href: '#menu'
+        - label: Reservations
+          href: '#book'
+    - heading: Visit us
       links:
-        - label: "Coffee"
-          href: "#"
-        - label: "Pastries"
-          href: "#"
-        - label: "Breakfast"
-          href: "#"
-    - heading: "Our menu"
+        - label: Coffee
+          href: '#'
+        - label: Pastries
+          href: '#'
+        - label: Breakfast
+          href: '#'
+    - heading: Our menu
       links:
-        - label: "Find us"
-          href: "#"
-        - label: "Careers"
-          href: "#"
-        - label: "Press"
-          href: "#"
-  newsletter_heading: "Get in touch"
-  newsletter_text: "Get the word on new roasts and weekend specials. No noise, just news."
-  placeholder: "Enter your email"
-  button: "Subscribe"
-  fineprint: "By subscribing you agree to our Privacy Policy"
-  copyright: "© 2024 Hearth & Honey. All rights reserved."
+        - label: Find us
+          href: '#'
+        - label: Careers
+          href: '#'
+        - label: Press
+          href: '#'
+  newsletter_heading: Get in touch
+  newsletter_text: 'Get the word on new roasts and weekend specials. No noise, just news.'
+  placeholder: Enter your email
+  button: Subscribe
+  fineprint: By subscribing you agree to our Privacy Policy
+  copyright: © 2024 Hearth & Honey. All rights reserved.
   legal_links:
-    - label: "Privacy Policy"
-      href: "#"
-    - label: "Terms of Service"
-      href: "#"
-    - label: "Cookies Settings"
-      href: "#"
-  notice_lead: "Demonstration site."
-  notice: "Hearth & Honey is a fictional café built as a portfolio piece — there is no business at 12 Hearth Lane and nobody operates this page. Photography is stock. Menu, prices and testimonials are written to show what a site of this shape could carry. No orders are accepted and no data is collected."
+    - label: Privacy Policy
+      href: '#'
+    - label: Terms of Service
+      href: '#'
+    - label: Cookies Settings
+      href: '#'
+  notice_lead: Demonstration site.
+  notice: 'Hearth & Honey is a fictional café built as a portfolio piece — there is no business at 12 Hearth Lane and nobody operates this page. Photography is stock. Menu, prices and testimonials are written to show what a site of this shape could carry. No orders are accepted and no data is collected.'
