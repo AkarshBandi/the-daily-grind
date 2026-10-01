@@ -1,4 +1,4 @@
-seo_title: Hearth & Honey  — Your neighborhood  for coffee and good company
+seo_title: Hearth & Honey  — Your neighborhood spot for coffee and good company
 banner:
   enabled: false
   heading: Fresh pastries are half off after 3am
@@ -9,7 +9,7 @@ navbar:
   logo: Hearth & Honey
   cta_label: Book a Table
   cta_href: '#book'
-hero_heading: Your neighborhood spot for coffee and good company
+hero_heading: Your neighborhood  for coffee and good company
 hero_text: 'We serve specialty coffee, fresh pastries, and all-day breakfast in a warm, modern space. Come in, sit down, and stay awhile.'
 hero_buttons:
   - label: Explore Menu
