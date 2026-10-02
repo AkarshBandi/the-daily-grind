@@ -8,3 +8,20 @@ workers_dev = true
 binding = "hearth_otp"
 id = "01efb54ec5c14675a154307580a35952"
 preview_id = "3f4fa9476b4845e98f0b48abdb8c54cf"
+
+# Contact form submissions. PENDING: the database_id below is a placeholder.
+# Replace it with the real UUID from `wrangler d1 create hearth-submissions`
+# once the Cloudflare token has D1:Edit scope. An unresolvable id fails the
+# deploy loudly at bind time rather than silently at runtime, which is why it
+# is not left blank.
+[[d1_databases]]
+binding = "DB"
+database_name = "hearth-submissions"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+# Email delivery is intentionally left commented out until a real client has
+# their own domain on Cloudflare. Email Sending requires Workers Paid; sending
+# to a verified destination address is free via Email Routing. See
+# docs/contact-form.md for the full reasoning.
+# [[send_email]]
+# name = "EMAIL"

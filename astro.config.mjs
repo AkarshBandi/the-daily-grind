@@ -4,10 +4,14 @@ import mdx from '@astrojs/mdx';
 import tina from '@tinacms/astro/integration';
 import { tinaAdminDevRedirect } from '@tinacms/astro/vite';
 
-// Keep static for blistering-fast CDN; island route stays dynamic
+// Pages are prerendered and served from the ASSETS binding, so visitors still
+// hit the edge cache. The Worker only wakes up for routes that opt out with
+// `export const prerender = false` — currently /api/contact and the Tina island.
+//
+// This used to be output: 'static', which cannot host a server route at all.
 export default defineConfig({
   site: process.env.SITE_URL || 'http://localhost:4321',
-  output: 'static',
+  output: 'server',
   adapter: cloudflare({ platformProxy: { enabled: true } }),
   integrations: [mdx(), tina()],
   image: {

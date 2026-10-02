@@ -1,4 +1,8 @@
 ---
+// Prerendered so visitors are served from the ASSETS binding and never invoke
+// the Worker. Only routes that opt out (the island, /api/contact) run on it.
+export const prerender = true;
+
 import TinaIsland from '@tinacms/astro/TinaIsland.astro';
 import Landing from '../components/Landing.astro';
 import { getHome } from '../lib/tina/data';
